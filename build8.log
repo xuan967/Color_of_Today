@@ -1,0 +1,285 @@
+=== ohpm install ===
+[32minstall completed in 0s 88ms[39m
+=== hvigorw assembleHap ===
+> hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
+> hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 2 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
+> hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
+> hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 53 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 5 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessShareConfig...  [39m
+> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 4 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@CompileResource...  [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 6 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 3 s 321 ms [39m
+> hvigor [32mFinished :entry:default@ProcessLibs... after 80 ms [39m
+> hvigor [32mFinished :entry:default@DoNativeStrip... after 549 ms [39m
+> hvigor [32mFinished :entry:default@CacheNativeLibs... after 14 ms [39m
+> hvigor [91mERROR: Failed :entry:default@CompileArkTS... [39m
+> hvigor [33mWARN: 
+[33m1 WARN: [33m[33mArkTS:WARN: For details about ArkTS syntax errors, see FAQs[39m[39m
+[33m2 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:40:23
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m3 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:43:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m4 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:44:30
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m5 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:52:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m6 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:53:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m7 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:54:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m8 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:60:24
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m9 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:61:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m10 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:62:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m11 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:81:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m12 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:91:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m13 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:94:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m14 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:98:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m15 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:110:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m16 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:113:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m17 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:117:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m18 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:129:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m19 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:131:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m20 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:142:32
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m21 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:148:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m22 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:148:22
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m23 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:149:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m24 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:149:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m25 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:150:18
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m26 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:150:31
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m27 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:151:16
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m28 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:151:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m29 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:152:18
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m30 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:152:31
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m31 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:153:17
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m32 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:153:30
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m33 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:154:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m34 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:154:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m35 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:155:15
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m36 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:155:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m37 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:156:18
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m38 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:156:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m39 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:19:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m40 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:36:39
+ 'getSupportedOutputCapability' has been deprecated.
+[39m[39m
+[33m41 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CaptureService.ets:24:32
+ To use this API, you need to apply for the permissions: ohos.permission.WRITE_IMAGEVIDEO
+[39m[39m
+[33m42 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:53:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33m43 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:73:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33m44 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:105:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m45 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:105:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33m46 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:110:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m47 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:112:7
+ 'animateTo' has been deprecated.
+[39m[39m
+[33m48 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:118:9
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m49 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:118:22
+ 'showToast' has been deprecated.
+[39m[39m
+[33m50 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:131:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m51 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:131:44
+ 'get' has been deprecated.
+[39m[39m
+[33m52 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:133:23
+ 'getContext' has been deprecated.
+[39m[39m
+[33m53 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:136:9
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m54 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:136:22
+ 'showToast' has been deprecated.
+[39m[39m
+[33m55 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:139:9
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m56 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:139:22
+ 'showToast' has been deprecated.
+[39m[39m
+[33m57 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:161:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33m58 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:164:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m59 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:164:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33m60 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:166:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m61 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:166:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33m62 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:243:24
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33m63 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:282:18
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33m64 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:324:32
+ 'showToast' has been deprecated.
+[39m[39m
+[33m65 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:36:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33m66 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:36:18
+ 'showToast' has been deprecated.
+[39m[39m
+[33m67 WARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:52:22
+ 'back' has been deprecated.
+[39m[39m[39m
+> hvigor [91mERROR: ArkTS Compiler Error
+[31m1 ERROR: [31m10605008 ArkTS Compiler Error
+Error Message: Use explicit types instead of "any", "unknown" (arkts-no-any-unknown) At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CaptureService.ets:43:13
+[39m
+[39m
+[31m2 ERROR: [31m10605008 ArkTS Compiler Error
+Error Message: Use explicit types instead of "any", "unknown" (arkts-no-any-unknown) At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:85:11
+[39m
+[39m
+[31m3 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Namespace 'camera' has no exported member 'CameraProfile'. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:37:30
+[39m
+[39m
+[31m4 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Expected 1 arguments, but got 0. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:57:35
+[39m
+[39m
+[31m5 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Property 'release' does not exist on type 'CameraInput'. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:83:26
+[39m
+[39m
+[31m6 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Property 'pack' does not exist on type 'ImagePacker'. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CaptureService.ets:43:35
+[39m
+[39m
+[31m7 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Argument of type 'Context' is not assignable to parameter of type 'UIAbilityContext'.
+  Type 'Context' is missing the following properties from type 'UIAbilityContext': abilityInfo, currentHapModuleInfo, config, windowStage, and 35 more. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:79:64
+[39m
+[39m
+[31m8 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Property 'getXcomponentSurfaceId' does not exist on type 'XComponentController'. Did you mean 'getXComponentSurfaceId'? At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:85:44
+[39m
+[39m
+[31m9 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Argument of type 'Context' is not assignable to parameter of type 'UIAbilityContext'.
+  Type 'Context' is missing the following properties from type 'UIAbilityContext': abilityInfo, currentHapModuleInfo, config, windowStage, and 35 more. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:93:48
+[39m
+[39m
+[31m10 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Argument of type 'Context' is not assignable to parameter of type 'UIAbilityContext'.
+  Type 'Context' is missing the following properties from type 'UIAbilityContext': abilityInfo, currentHapModuleInfo, config, windowStage, and 35 more. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:134:62
+[39m
+[39m
+[31m11 ERROR: [31m10505001 ArkTS Compiler Error
+Error Message: Argument of type 'Context' is not assignable to parameter of type 'UIAbilityContext'.
+  Type 'Context' is missing the following properties from type 'UIAbilityContext': abilityInfo, currentHapModuleInfo, config, windowStage, and 35 more. At File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:162:50
+[39m
+[39m
+[31mCOMPILE RESULT:FAIL {ERROR:12 WARN:67}[39m
+
+[31m* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+[39m
+> hvigor [91mERROR: BUILD FAILED in 14 s 360 ms [39m
+=== BUILD FAILED ===

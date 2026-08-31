@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "今日限定色主模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "今日限定色"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "今日限定色"
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "用于实时预览并拍摄今日限定色彩的照片"
+    }
+  ]
+}

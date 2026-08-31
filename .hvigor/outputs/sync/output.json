@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "ohos-module-entry": {
+    "SELECT_TARGET": "default",
+    "MODULE_BUILD_DIR": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build",
+    "TARGETS": {
+      "default": {
+        "SOURCE_ROOT": "D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main",
+        "RESOURCES_PATH": [
+          "D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\outputs\\default",
+          "INTERMEDIA_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates",
+          "JS_ASSETS_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\loader_out\\default",
+          "JS_LITE_ASSETS_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\loader_out_lite\\default",
+          "RES_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default",
+          "RES_PROFILE_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default\\resources\\base\\profile",
+          "ETS_SUPER_VISUAL_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\cache\\default\\default@CompileArkTS\\esmodule",
+          "JS_SUPER_VISUAL_PATH": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\cache\\default\\default@CompileJS\\jsbundle",
+          "WORKER_LOADER": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\loader\\default\\loader.json",
+          "MANIFEST_JSON": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\manifest\\default",
+          "OUTPUT_METADATA_JSON": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\hap_metadata\\default\\output_metadata.json",
+          "SOURCE_MAP_DIR": "D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\source_map\\default"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      }
+    },
+    "BUILD_OPTION": {
+      "default-default": {
+        "debuggable": true,
+        "copyFrom": "default",
+        "strictMode": {
+          "caseSensitiveCheck": true,
+          "useNormalizedOHMUrl": true
+        },
+        "externalNativeOptions": {
+          "path": "./src/main/cpp/CMakeLists.txt",
+          "arguments": "",
+          "cppFlags": "",
+          "abiFilters": [
+            "arm64-v8a",
+            "x86_64"
+          ]
+        },
+        "resOptions": {
+          "copyCodeResource": {
+            "enable": false
+          }
+        }
+      }
+    },
+    "BUILD_PROFILE_OPT": {
+      "apiType": "stageMode",
+      "buildOption": {
+        "externalNativeOptions": {
+          "path": "./src/main/cpp/CMakeLists.txt",
+          "arguments": "",
+          "cppFlags": "",
+          "abiFilters": [
+            "arm64-v8a",
+            "x86_64"
+          ]
+        },
+        "resOptions": {
+          "copyCodeResource": {
+            "enable": false
+          }
+        }
+      },
+      "targets": [
+        {
+          "name": "default",
+          "runtimeOS": "HarmonyOS"
+        }
+      ]
+    },
+    "BUILD_CACHE_DIR": ""
+  },
+  "ohos-project": {
+    "SELECT_PRODUCT_NAME": "default",
+    "MODULE_BUILD_DIR": "D:\\DevEcoProjects\\ColorOfToday\\build",
+    "BUNDLE_NAME": "com.coloroftoday.app",
+    "VERSION_CODE": 1000000,
+    "VERSION_NAME": "1.0.0",
+    "BUILD_PATH": {
+      "OUTPUT_PATH": "D:\\DevEcoProjects\\ColorOfToday\\build\\outputs\\default"
+    },
+    "MODULES": [
+      {
+        "name": "entry",
+        "srcPath": "D:\\DevEcoProjects\\ColorOfToday\\entry",
+        "belongProjectPath": "D:\\DevEcoProjects\\ColorOfToday"
+      }
+    ],
+    "PROFILE_OPT": {
+      "app": {
+        "signingConfigs": [
+          {
+            "name": "default",
+            "type": "HarmonyOS",
+            "material": {
+              "certpath": "C:\\Users\\杨贵鑫\\.ohos\\config\\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.cer",
+              "keyAlias": "debugKey",
+              "keyPassword": "0000001B9A37EED321AD259B602A15AE4780283295BA05F339CF3178631065E42867B9B3F6878F406D0466",
+              "profile": "C:\\Users\\杨贵鑫\\.ohos\\config\\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.p7b",
+              "signAlg": "SHA256withECDSA",
+              "storeFile": "C:\\Users\\杨贵鑫\\.ohos\\config\\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.p12",
+              "storePassword": "0000001B94AD00FD81181B23F16C4FE77C8B1336D7AAD50625655748E3F477E6F08A3421F27B14ADBC676D"
+            }
+          }
+        ],
+        "products": [
+          {
+            "name": "default",
+            "signingConfig": "default",
+            "targetSdkVersion": "5.0.0(12)",
+            "compatibleSdkVersion": "5.0.0(12)",
+            "runtimeOS": "HarmonyOS",
+            "buildOption": {
+              "strictMode": {
+                "caseSensitiveCheck": true,
+                "useNormalizedOHMUrl": true
+              }
+            }
+          }
+        ],
+        "buildModeSet": [
+          {
+            "name": "debug"
+          },
+          {
+            "name": "release"
+          }
+        ]
+      },
+      "modules": [
+        {
+          "name": "entry",
+          "srcPath": "./entry"
+        }
+      ]
+    },
+    "CONFIG_PROPERTIES": {
+      "enableSignTask": true,
+      "skipNativeIncremental": false,
+      "hvigor.keepDependency": true
+    },
+    "OVERALL_PROJECT_PATHS": [
+      "D:\\DevEcoProjects\\ColorOfToday"
+    ],
+    "BUILD_CACHE_DIR": ""
+  }
+}

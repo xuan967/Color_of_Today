@@ -1,0 +1,48 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\杨贵鑫\\.ohos\\config\\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B9A37EED321AD259B602A15AE4780283295BA05F339CF3178631065E42867B9B3F6878F406D0466",
+          "profile": "C:\\Users\\杨贵鑫\\.ohos\\config\\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\杨贵鑫\\.ohos\\config\\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.p12",
+          "storePassword": "0000001B94AD00FD81181B23F16C4FE77C8B1336D7AAD50625655748E3F477E6F08A3421F27B14ADBC676D"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "5.0.0(12)",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry"
+    }
+  ]
+}

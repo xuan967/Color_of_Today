@@ -1,0 +1,2174 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚÚ0if (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+import display from '@ohos.display';
+import image from '@ohos.multimedia.image';
+import componentSnapshot from '@ohos.arkui.componentSnapshot';
+import promptAction from '@ohos.promptAction';
+import router from '@ohos.router';
+import vibrator from '@ohos.vibrator';
+import colorFilter from 'libentry.so';
+import { COLOR_PRESETS } from '../model/ColorPreset';
+import { DailyColorManager } from '../manager/DailyColorManager';
+import { PhotoDao } from '../model/PhotoDao';
+import { CameraService } from '../service/CameraService';
+import { CaptureService } from '../service/CaptureService';
+import { CollectionService } from '../service/CollectionService';
+import { EchoService } from '../service/EchoService';
+import { ColorPaletteSheet } from '../components/ColorPalette';
+class Index extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.__today = new ObservedPropertyObjectPU(COLOR_PRESETS[0], this, "today");
+        this.__photoCount = new ObservedPropertySimplePU(0, this, "photoCount");
+        this.__latestThumb = new ObservedPropertySimplePU('', this, "latestThumb");
+        this.__flashOpacity = new ObservedPropertySimplePU(0, this, "flashOpacity");
+        this.__capturedPm = new ObservedPropertyObjectPU(null, this, "capturedPm");
+        this.__showCapture = new ObservedPropertySimplePU(false, this, "showCapture");
+        this.__camError = new ObservedPropertySimplePU('', this, "camError");
+        this.__starting = new ObservedPropertySimplePU(true, this, "starting");
+        this.__canSwitch = new ObservedPropertySimplePU(false, this, "canSwitch");
+        this.__gridOn = new ObservedPropertySimplePU(false, this, "gridOn");
+        this.__paletteOpen = new ObservedPropertySimplePU(false, this, "paletteOpen");
+        this.__focusX = new ObservedPropertySimplePU(0, this, "focusX");
+        this.__focusY = new ObservedPropertySimplePU(0, this, "focusY");
+        this.__focusShow = new ObservedPropertySimplePU(false, this, "focusShow");
+        this.__zoomRatio = new ObservedPropertySimplePU(1, this, "zoomRatio");
+        this.__zoomText = new ObservedPropertySimplePU('', this, "zoomText");
+        this.__echoLine = new ObservedPropertySimplePU('', this, "echoLine");
+        this.__echoNumber = new ObservedPropertySimplePU(0, this, "echoNumber");
+        this.__displayNumber = new ObservedPropertySimplePU(0, this, "displayNumber");
+        this.__echoReady = new ObservedPropertySimplePU(false, this, "echoReady");
+        this.xcController = new XComponentController();
+        this.cameraService = new CameraService();
+        this.pipelineStarted = false;
+        this.capBusy = false;
+        this.switching = false;
+        this.currentPhotoPath = '';
+        this.zoomMin = 1;
+        this.zoomMax = 1;
+        this.pinchStartRatio = 1;
+        this.focusTimer = -1;
+        this.zoomTimer = -1;
+        this.echoTimer = -1;
+        this.setInitiallyProvidedValue(params);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+        if (params.today !== undefined) {
+            this.today = params.today;
+        }
+        if (params.photoCount !== undefined) {
+            this.photoCount = params.photoCount;
+        }
+        if (params.latestThumb !== undefined) {
+            this.latestThumb = params.latestThumb;
+        }
+        if (params.flashOpacity !== undefined) {
+            this.flashOpacity = params.flashOpacity;
+        }
+        if (params.capturedPm !== undefined) {
+            this.capturedPm = params.capturedPm;
+        }
+        if (params.showCapture !== undefined) {
+            this.showCapture = params.showCapture;
+        }
+        if (params.camError !== undefined) {
+            this.camError = params.camError;
+        }
+        if (params.starting !== undefined) {
+            this.starting = params.starting;
+        }
+        if (params.canSwitch !== undefined) {
+            this.canSwitch = params.canSwitch;
+        }
+        if (params.gridOn !== undefined) {
+            this.gridOn = params.gridOn;
+        }
+        if (params.paletteOpen !== undefined) {
+            this.paletteOpen = params.paletteOpen;
+        }
+        if (params.focusX !== undefined) {
+            this.focusX = params.focusX;
+        }
+        if (params.focusY !== undefined) {
+            this.focusY = params.focusY;
+        }
+        if (params.focusShow !== undefined) {
+            this.focusShow = params.focusShow;
+        }
+        if (params.zoomRatio !== undefined) {
+            this.zoomRatio = params.zoomRatio;
+        }
+        if (params.zoomText !== undefined) {
+            this.zoomText = params.zoomText;
+        }
+        if (params.echoLine !== undefined) {
+            this.echoLine = params.echoLine;
+        }
+        if (params.echoNumber !== undefined) {
+            this.echoNumber = params.echoNumber;
+        }
+        if (params.displayNumber !== undefined) {
+            this.displayNumber = params.displayNumber;
+        }
+        if (params.echoReady !== undefined) {
+            this.echoReady = params.echoReady;
+        }
+        if (params.xcController !== undefined) {
+            this.xcController = params.xcController;
+        }
+        if (params.cameraService !== undefined) {
+            this.cameraService = params.cameraService;
+        }
+        if (params.pipelineStarted !== undefined) {
+            this.pipelineStarted = params.pipelineStarted;
+        }
+        if (params.capBusy !== undefined) {
+            this.capBusy = params.capBusy;
+        }
+        if (params.switching !== undefined) {
+            this.switching = params.switching;
+        }
+        if (params.currentPhotoPath !== undefined) {
+            this.currentPhotoPath = params.currentPhotoPath;
+        }
+        if (params.zoomMin !== undefined) {
+            this.zoomMin = params.zoomMin;
+        }
+        if (params.zoomMax !== undefined) {
+            this.zoomMax = params.zoomMax;
+        }
+        if (params.pinchStartRatio !== undefined) {
+            this.pinchStartRatio = params.pinchStartRatio;
+        }
+        if (params.focusTimer !== undefined) {
+            this.focusTimer = params.focusTimer;
+        }
+        if (params.zoomTimer !== undefined) {
+            this.zoomTimer = params.zoomTimer;
+        }
+        if (params.echoTimer !== undefined) {
+            this.echoTimer = params.echoTimer;
+        }
+    }
+    updateStateVars(params) {
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__today.purgeDependencyOnElmtId(rmElmtId);
+        this.__photoCount.purgeDependencyOnElmtId(rmElmtId);
+        this.__latestThumb.purgeDependencyOnElmtId(rmElmtId);
+        this.__flashOpacity.purgeDependencyOnElmtId(rmElmtId);
+        this.__capturedPm.purgeDependencyOnElmtId(rmElmtId);
+        this.__showCapture.purgeDependencyOnElmtId(rmElmtId);
+        this.__camError.purgeDependencyOnElmtId(rmElmtId);
+        this.__starting.purgeDependencyOnElmtId(rmElmtId);
+        this.__canSwitch.purgeDependencyOnElmtId(rmElmtId);
+        this.__gridOn.purgeDependencyOnElmtId(rmElmtId);
+        this.__paletteOpen.purgeDependencyOnElmtId(rmElmtId);
+        this.__focusX.purgeDependencyOnElmtId(rmElmtId);
+        this.__focusY.purgeDependencyOnElmtId(rmElmtId);
+        this.__focusShow.purgeDependencyOnElmtId(rmElmtId);
+        this.__zoomRatio.purgeDependencyOnElmtId(rmElmtId);
+        this.__zoomText.purgeDependencyOnElmtId(rmElmtId);
+        this.__echoLine.purgeDependencyOnElmtId(rmElmtId);
+        this.__echoNumber.purgeDependencyOnElmtId(rmElmtId);
+        this.__displayNumber.purgeDependencyOnElmtId(rmElmtId);
+        this.__echoReady.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__today.aboutToBeDeleted();
+        this.__photoCount.aboutToBeDeleted();
+        this.__latestThumb.aboutToBeDeleted();
+        this.__flashOpacity.aboutToBeDeleted();
+        this.__capturedPm.aboutToBeDeleted();
+        this.__showCapture.aboutToBeDeleted();
+        this.__camError.aboutToBeDeleted();
+        this.__starting.aboutToBeDeleted();
+        this.__canSwitch.aboutToBeDeleted();
+        this.__gridOn.aboutToBeDeleted();
+        this.__paletteOpen.aboutToBeDeleted();
+        this.__focusX.aboutToBeDeleted();
+        this.__focusY.aboutToBeDeleted();
+        this.__focusShow.aboutToBeDeleted();
+        this.__zoomRatio.aboutToBeDeleted();
+        this.__zoomText.aboutToBeDeleted();
+        this.__echoLine.aboutToBeDeleted();
+        this.__echoNumber.aboutToBeDeleted();
+        this.__displayNumber.aboutToBeDeleted();
+        this.__echoReady.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get today() {
+        return this.__today.get();
+    }
+    set today(newValue) {
+        this.__today.set(newValue);
+    }
+    get photoCount() {
+        return this.__photoCount.get();
+    }
+    set photoCount(newValue) {
+        this.__photoCount.set(newValue);
+    }
+    get latestThumb() {
+        return this.__latestThumb.get();
+    }
+    set latestThumb(newValue) {
+        this.__latestThumb.set(newValue);
+    }
+    get flashOpacity() {
+        return this.__flashOpacity.get();
+    }
+    set flashOpacity(newValue) {
+        this.__flashOpacity.set(newValue);
+    }
+    get capturedPm() {
+        return this.__capturedPm.get();
+    }
+    set capturedPm(newValue) {
+        this.__capturedPm.set(newValue);
+    }
+    get showCapture() {
+        return this.__showCapture.get();
+    }
+    set showCapture(newValue) {
+        this.__showCapture.set(newValue);
+    }
+    get camError() {
+        return this.__camError.get();
+    }
+    set camError(newValue) {
+        this.__camError.set(newValue);
+    }
+    get starting() {
+        return this.__starting.get();
+    }
+    set starting(newValue) {
+        this.__starting.set(newValue);
+    }
+    get canSwitch() {
+        return this.__canSwitch.get();
+    }
+    set canSwitch(newValue) {
+        this.__canSwitch.set(newValue);
+    }
+    get gridOn() {
+        return this.__gridOn.get();
+    }
+    set gridOn(newValue) {
+        this.__gridOn.set(newValue);
+    }
+    get paletteOpen() {
+        return this.__paletteOpen.get();
+    }
+    set paletteOpen(newValue) {
+        this.__paletteOpen.set(newValue);
+    }
+    get focusX() {
+        return this.__focusX.get();
+    }
+    set focusX(newValue) {
+        this.__focusX.set(newValue);
+    }
+    get focusY() {
+        return this.__focusY.get();
+    }
+    set focusY(newValue) {
+        this.__focusY.set(newValue);
+    }
+    get focusShow() {
+        return this.__focusShow.get();
+    }
+    set focusShow(newValue) {
+        this.__focusShow.set(newValue);
+    }
+    get zoomRatio() {
+        return this.__zoomRatio.get();
+    }
+    set zoomRatio(newValue) {
+        this.__zoomRatio.set(newValue);
+    }
+    get zoomText() {
+        return this.__zoomText.get();
+    }
+    set zoomText(newValue) {
+        this.__zoomText.set(newValue);
+    }
+    get echoLine() {
+        return this.__echoLine.get();
+    }
+    set echoLine(newValue) {
+        this.__echoLine.set(newValue);
+    }
+    get echoNumber() {
+        return this.__echoNumber.get();
+    }
+    set echoNumber(newValue) {
+        this.__echoNumber.set(newValue);
+    }
+    get displayNumber() {
+        return this.__displayNumber.get();
+    }
+    set displayNumber(newValue) {
+        this.__displayNumber.set(newValue);
+    }
+    get echoReady() {
+        return this.__echoReady.get();
+    }
+    set echoReady(newValue) {
+        this.__echoReady.set(newValue);
+    }
+    aboutToAppear() {
+        this.loadData();
+    }
+    aboutToDisappear() {
+        if (this.echoTimer >= 0) {
+            clearInterval(this.echoTimer);
+        }
+        this.cameraService.stop();
+        colorFilter.releaseRenderer();
+    }
+    onPageShow() {
+        this.refreshStats();
+    }
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async loadData() {
+        const context = getContext(this);
+        await DailyColorManager.getInstance().init(context);
+        await PhotoDao.getInstance().init(context);
+        this.today = DailyColorManager.getInstance().getActiveColor();
+        colorFilter.setColor(this.today.hue, this.today.threshold, this.today.saturationBoost);
+        this.refreshStats();
+        this.refreshEcho();
+    }
+    /** æ—¶ç©ºå›žå£°ï¼šè‡ªç„¶ + è‡ªæˆ‘ï¼Œæ·¡å…¥å‘ˆçŽ°ï¼Œæ•°å­—æ»šåŠ¨ */
+    async refreshEcho() {
+        const context = getContext(this);
+        const result = await EchoService.build(context, this.today.name);
+        this.echoNumber = result.number;
+        this.echoReady = false;
+        if (result.number > 0) {
+            this.displayNumber = 0;
+            this.echoLine = result.text.replace('{n}', `${this.displayNumber}`);
+            Context.animateTo({ duration: 900, curve: Curve.EaseInOut }, () => {
+                this.echoReady = true;
+            });
+            let step = 0;
+            const steps = 14;
+            if (this.echoTimer >= 0) {
+                clearInterval(this.echoTimer);
+            }
+            this.echoTimer = setInterval(() => {
+                step++;
+                const eased = Math.round(result.number * (step / steps) * (2 - step / steps));
+                this.displayNumber = Math.max(1, eased);
+                this.echoLine = result.text.replace('{n}', `${this.displayNumber}`);
+                if (step >= steps) {
+                    if (this.echoTimer >= 0) {
+                        clearInterval(this.echoTimer);
+                        this.echoTimer = -1;
+                    }
+                }
+            }, 55);
+        }
+        else {
+            this.echoLine = result.text;
+            Context.animateTo({ duration: 900, curve: Curve.EaseInOut }, () => {
+                this.echoReady = true;
+            });
+        }
+    }
+    async refreshStats() {
+        const dateKey = DailyColorManager.getDateKey(new Date());
+        this.photoCount = await PhotoDao.getInstance().countByDate(dateKey);
+        const latest = await PhotoDao.getInstance().queryLatestByDate(dateKey);
+        this.latestThumb = latest !== null ? latest.localPath : '';
+    }
+    async startPipeline() {
+        if (this.pipelineStarted) {
+            return;
+        }
+        this.pipelineStarted = true;
+        const context = getContext(this);
+        await DailyColorManager.getInstance().init(context);
+        await PhotoDao.getInstance().init(context);
+        this.today = DailyColorManager.getInstance().getActiveColor();
+        colorFilter.setColor(this.today.hue, this.today.threshold, this.today.saturationBoost);
+        const granted = await CameraService.ensureCameraPermission(context);
+        if (!granted) {
+            this.camError = 'éœ€è¦ç›¸æœºæƒé™æ‰èƒ½å–æ™¯ï¼Œè¯·åœ¨è®¾ç½®ä¸­å¼€å¯';
+            this.starting = false;
+            return;
+        }
+        // è·¯å¾„ä¸€ï¼šXComponent ç”Ÿå‘½å‘¨æœŸå›žè°ƒï¼ˆç»„ä»¶ onLoad åŽ attach ä¸€æ¬¡ï¼Œè¦†ç›–æ³¨å…¥æ—¶åºå·®å¼‚ï¼‰
+        colorFilter.attachXComponent();
+        let ready = false;
+        for (let i = 0; i < 20 && !ready; i++) {
+            await this.sleep(200);
+            ready = colorFilter.isRendererReady();
+            if (!ready && i === 5) {
+                colorFilter.attachXComponent();
+            }
+        }
+        // è·¯å¾„äºŒå…œåº•ï¼šsurfaceId ç›´æŽ¥åˆ›å»º NativeWindowï¼ˆå®˜æ–¹æŽ¨èè·¯å¾„ï¼Œéƒ¨åˆ†è®¾å¤‡å›žè°ƒæ³¨å…¥å¼‚å¸¸æ—¶å¯ç”¨ï¼‰
+        if (!ready) {
+            const sid = await this.xcController.getXComponentSurfaceId();
+            ready = colorFilter.initFromSurfaceId(Number(sid));
+            for (let i = 0; i < 15 && !ready; i++) {
+                await this.sleep(200);
+                ready = colorFilter.isRendererReady();
+            }
+        }
+        if (!ready) {
+            this.camError = 'æ¸²æŸ“ç®¡çº¿åˆå§‹åŒ–å¤±è´¥';
+            this.starting = false;
+            return;
+        }
+        colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+        const camSurfaceId = colorFilter.getCameraSurfaceId();
+        const err = await this.cameraService.start(context, camSurfaceId, () => { });
+        this.starting = false;
+        this.canSwitch = this.cameraService.canSwitch();
+        const range = this.cameraService.zoomRange();
+        this.zoomMin = range[0];
+        this.zoomMax = range[1];
+        if (err !== null) {
+            this.camError = `ç›¸æœºå¯åŠ¨å¤±è´¥ï¼š${err}`;
+        }
+    }
+    /** å‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢ */
+    async doSwitchCamera() {
+        if (this.switching) {
+            return;
+        }
+        this.switching = true;
+        const context = getContext(this);
+        const err = await this.cameraService.switchTo(context, () => { });
+        this.switching = false;
+        if (err !== null) {
+            promptAction.showToast({ message: `åˆ‡æ¢å¤±è´¥ï¼š${err}` });
+            return;
+        }
+        colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+        this.zoomRatio = 1;
+    }
+    /** ç‚¹å‡»å¯¹ç„¦ï¼šå½’ä¸€åŒ–åæ ‡ä¸‹å‘ç›¸æœº + æ˜¾ç¤ºå¯¹ç„¦çŽ¯ */
+    handleTapFocus(e) {
+        const w = Number(px2vp(display.getDefaultDisplaySync().width));
+        const h = Number(px2vp(display.getDefaultDisplaySync().height));
+        this.cameraService.tapFocus(e.x / w, e.y / h);
+        this.focusX = e.x;
+        this.focusY = e.y;
+        this.focusShow = true;
+        if (this.focusTimer >= 0) {
+            clearTimeout(this.focusTimer);
+        }
+        this.focusTimer = setTimeout(() => {
+            this.focusShow = false;
+        }, 900);
+    }
+    showZoomTip() {
+        this.zoomText = `${this.zoomRatio.toFixed(1)}x`;
+        if (this.zoomTimer >= 0) {
+            clearTimeout(this.zoomTimer);
+        }
+        this.zoomTimer = setTimeout(() => {
+            this.zoomText = '';
+        }, 900);
+    }
+    async doCapture() {
+        if (this.capBusy || this.showCapture) {
+            return;
+        }
+        if (this.camError !== '') {
+            promptAction.showToast({ message: this.camError });
+            return;
+        }
+        this.capBusy = true;
+        try {
+            vibrator.startVibration({ type: 'time', duration: 40 }, { id: 0, usage: 'touch' });
+            this.flashOpacity = 0.9;
+            Context.animateTo({ duration: 280, curve: Curve.EaseOut }, () => {
+                this.flashOpacity = 0;
+            });
+            const frame = colorFilter.captureFrame();
+            if (frame === null || frame.data.byteLength === 0) {
+                promptAction.showToast({ message: 'æ‹ç…§å¤±è´¥ï¼Œè¯·ç¨åŽé‡è¯•' });
+                return;
+            }
+            const options = {
+                size: { width: frame.width, height: frame.height },
+                srcPixelFormat: image.PixelMapFormat.BGRA_8888
+            };
+            const pm = await image.createPixelMap(frame.data, options);
+            // æ˜¾ç¤ºæµ®å±‚ï¼ˆç…§ç‰‡ + æ°´å°ï¼‰ï¼Œç­‰å¾…æ¸²æŸ“åŽæ•´ä½“æˆªå›¾åˆæˆ
+            this.capturedPm = pm;
+            this.showCapture = true;
+            await this.sleep(380);
+            const snap = await componentSnapshot.get('captureOverlay');
+            const context = getContext(this);
+            const localPath = await CaptureService.persistSnapshot(context, snap, this.today.name);
+            if (localPath === null) {
+                promptAction.showToast({ message: 'ä¿å­˜å¤±è´¥' });
+            }
+            else {
+                this.currentPhotoPath = localPath;
+                await CaptureService.recordPhoto(localPath, '', frame.width, frame.height);
+                // å›¾é‰´æ”¶é›†ï¼šæŒ‰å½“å‰å–æ™¯è‰²ç›¸åŒ¹é…ä¼ ç»Ÿè‰²ï¼Œé¦–æ¬¡å‘½ä¸­å³ç‚¹äº®
+                const unlockedColor = await CollectionService.onPhotoCaptured(context, this.today.hue, DailyColorManager.getDateKey(new Date()));
+                if (unlockedColor !== null) {
+                    promptAction.showToast({ message: `ç‚¹äº®å›¾é‰´ Â· ${unlockedColor.name}`, duration: 2400 });
+                }
+                this.refreshStats();
+                // æµ®å±‚å¸¸é©»ï¼šç”±ç”¨æˆ·é€‰æ‹©â€œå­˜å…¥ç›¸å†Œâ€(SaveButton å®‰å…¨æŽ§ä»¶) æˆ–â€œå®Œæˆâ€
+            }
+        }
+        finally {
+            this.capBusy = false;
+        }
+    }
+    /** é€šè¿‡ SaveButton å®‰å…¨æŽ§ä»¶ä¸´æ—¶æŽˆæƒå†™å…¥ç³»ç»Ÿç›¸å†Œï¼ˆåˆè§„å…æƒé™è·¯å¾„ï¼‰ */
+    async doSaveToAlbum() {
+        if (this.currentPhotoPath === '') {
+            return;
+        }
+        const context = getContext(this);
+        const uri = await CaptureService.saveToAlbum(context, this.currentPhotoPath);
+        if (uri !== null) {
+            promptAction.showToast({ message: 'å·²ä¿å­˜åˆ°ç³»ç»Ÿç›¸å†Œ' });
+        }
+        else {
+            promptAction.showToast({ message: 'ä¿å­˜åˆ°ç›¸å†Œå¤±è´¥' });
+        }
+    }
+    closeCapture() {
+        this.showCapture = false;
+        this.capturedPm = null;
+        this.currentPhotoPath = '';
+    }
+    /** è°ƒè‰²ç›˜ï¼šæ‹–åŠ¨å®žæ—¶é¢„è§ˆï¼ˆä¸æŒä¹…åŒ–ï¼‰ */
+    applyLiveColor(p) {
+        this.today = p;
+        colorFilter.setColor(p.hue, p.threshold, p.saturationBoost);
+    }
+    /** è°ƒè‰²ç›˜ï¼šåº”ç”¨å¹¶æŒä¹…åŒ–è‡ªå®šä¹‰é¢œè‰² */
+    async applyPersistColor(p) {
+        this.applyLiveColor(p);
+        const context = getContext(this);
+        await DailyColorManager.getInstance().setCustomColor(context, p);
+        promptAction.showToast({ message: 'å·²åº”ç”¨è‡ªå®šä¹‰é™å®šè‰²' });
+    }
+    /** æ¢å¤æ¯æ—¥éšæœºé™å®šè‰² */
+    async restoreDailyColor() {
+        const context = getContext(this);
+        await DailyColorManager.getInstance().clearCustomColor();
+        this.applyLiveColor(DailyColorManager.getInstance().getColor());
+        promptAction.showToast({ message: 'å·²æ¢å¤ä»Šæ—¥é™å®šè‰²' });
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Stack.create();
+            Stack.width('100%');
+            Stack.height('100%');
+            Stack.backgroundColor(Color.Black);
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // é¢„è§ˆçª—ï¼šå›ºå®š 16:9ï¼ˆä¸Žç›¸æœºæµä¸€è‡´ï¼‰ï¼Œåˆå§‹å¸ƒå±€å³æœ€ç»ˆå¸ƒå±€ï¼Œè§„é¿ surface å°ºå¯¸åŒæ­¥é—®é¢˜
+            Column.create();
+            // é¢„è§ˆçª—ï¼šå›ºå®š 16:9ï¼ˆä¸Žç›¸æœºæµä¸€è‡´ï¼‰ï¼Œåˆå§‹å¸ƒå±€å³æœ€ç»ˆå¸ƒå±€ï¼Œè§„é¿ surface å°ºå¯¸åŒæ­¥é—®é¢˜
+            Column.width('100%');
+            // é¢„è§ˆçª—ï¼šå›ºå®š 16:9ï¼ˆä¸Žç›¸æœºæµä¸€è‡´ï¼‰ï¼Œåˆå§‹å¸ƒå±€å³æœ€ç»ˆå¸ƒå±€ï¼Œè§„é¿ surface å°ºå¯¸åŒæ­¥é—®é¢˜
+            Column.height('100%');
+            // é¢„è§ˆçª—ï¼šå›ºå®š 16:9ï¼ˆä¸Žç›¸æœºæµä¸€è‡´ï¼‰ï¼Œåˆå§‹å¸ƒå±€å³æœ€ç»ˆå¸ƒå±€ï¼Œè§„é¿ surface å°ºå¯¸åŒæ­¥é—®é¢˜
+            Column.padding({ top: 46 });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            XComponent.create({ id: 'cameraPreview', type: 'surface', libraryname: 'entry', controller: this.xcController }, "com.coloroftoday.app/entry");
+            XComponent.width('100%');
+            XComponent.aspectRatio(9 / 16);
+            XComponent.borderRadius(18);
+            XComponent.clip(true);
+            XComponent.onClick((e) => {
+                this.handleTapFocus(e);
+            });
+            Gesture.create(GesturePriority.Low);
+            PinchGesture.create({ fingers: 2 });
+            PinchGesture.onActionStart(() => {
+                this.pinchStartRatio = this.zoomRatio;
+            });
+            PinchGesture.onActionUpdate((event) => {
+                const next = Math.min(this.zoomMax, Math.max(this.zoomMin, this.pinchStartRatio * event.scale));
+                if (Math.abs(next - this.zoomRatio) > 0.05) {
+                    this.zoomRatio = next;
+                    this.cameraService.setZoom(next);
+                    this.showZoomTip();
+                }
+            });
+            PinchGesture.pop();
+            Gesture.pop();
+            XComponent.onAreaChange((_oldArea, newArea) => {
+                // 16:9 çª—å£é¦–æ¬¡å¸ƒå±€å³ç¨³å®šï¼›åŒæ­¥ buffer å‡ ä½•ä¿è¯å„è®¾å¤‡ä¸€è‡´
+                const density = display.getDefaultDisplaySync().densityPixels;
+                const wPx = Math.round(Number(newArea.width) * density);
+                const hPx = Math.round(Number(newArea.height) * density);
+                if (wPx > 0 && hPx > 0) {
+                    colorFilter.setSurfaceGeometry(wPx, hPx);
+                }
+            });
+            XComponent.onLoad(() => {
+                this.startPipeline();
+            });
+            XComponent.onDestroy(() => {
+                colorFilter.releaseRenderer();
+            });
+        }, XComponent);
+        // é¢„è§ˆçª—ï¼šå›ºå®š 16:9ï¼ˆä¸Žç›¸æœºæµä¸€è‡´ï¼‰ï¼Œåˆå§‹å¸ƒå±€å³æœ€ç»ˆå¸ƒå±€ï¼Œè§„é¿ surface å°ºå¯¸åŒæ­¥é—®é¢˜
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // ä¹å®«æ ¼æž„å›¾çº¿
+            if (this.gridOn) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.width('100%');
+                        Column.height('100%');
+                        Column.hitTestBehavior(HitTestMode.None);
+                    }, Column);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Blank.create();
+                        Blank.layoutWeight(1);
+                    }, Blank);
+                    Blank.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Divider.create();
+                        Divider.strokeWidth(0.8);
+                        Divider.color('rgba(255,255,255,0.35)');
+                    }, Divider);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Blank.create();
+                        Blank.layoutWeight(1);
+                    }, Blank);
+                    Blank.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Divider.create();
+                        Divider.strokeWidth(0.8);
+                        Divider.color('rgba(255,255,255,0.35)');
+                    }, Divider);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Blank.create();
+                        Blank.layoutWeight(1);
+                    }, Blank);
+                    Blank.pop();
+                    Column.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Row.create();
+                        Row.width('100%');
+                        Row.height('100%');
+                        Row.hitTestBehavior(HitTestMode.None);
+                    }, Row);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Blank.create();
+                        Blank.layoutWeight(1);
+                    }, Blank);
+                    Blank.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Divider.create();
+                        Divider.vertical(true);
+                        Divider.strokeWidth(0.8);
+                        Divider.color('rgba(255,255,255,0.35)');
+                    }, Divider);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Blank.create();
+                        Blank.layoutWeight(1);
+                    }, Blank);
+                    Blank.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Divider.create();
+                        Divider.vertical(true);
+                        Divider.strokeWidth(0.8);
+                        Divider.color('rgba(255,255,255,0.35)');
+                    }, Divider);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Blank.create();
+                        Blank.layoutWeight(1);
+                    }, Blank);
+                    Blank.pop();
+                    Row.pop();
+                });
+            }
+            // å¯¹ç„¦çŽ¯
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // å¯¹ç„¦çŽ¯
+            if (this.focusShow) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Context.animation({ duration: 180, curve: Curve.EaseOut });
+                        Column.width(64);
+                        Column.height(64);
+                        Column.borderRadius(32);
+                        Column.border({ width: 2, color: 'rgba(255,215,0,0.95)' });
+                        Column.position({ x: this.focusX - 32, y: this.focusY - 32 });
+                        Context.animation(null);
+                        Column.hitTestBehavior(HitTestMode.None);
+                    }, Column);
+                    Column.pop();
+                });
+            }
+            // æ‹ç…§ç™½é—ª
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // æ‹ç…§ç™½é—ª
+            Column.create();
+            // æ‹ç…§ç™½é—ª
+            Column.width('100%');
+            // æ‹ç…§ç™½é—ª
+            Column.height('100%');
+            // æ‹ç…§ç™½é—ª
+            Column.backgroundColor(Color.White);
+            // æ‹ç…§ç™½é—ª
+            Column.opacity(this.flashOpacity);
+            // æ‹ç…§ç™½é—ª
+            Column.hitTestBehavior(HitTestMode.None);
+        }, Column);
+        // æ‹ç…§ç™½é—ª
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // å–æ™¯æµ®å±‚ï¼ˆé”™è¯¯æç¤º / åŠ è½½ä¸­ï¼‰
+            if (this.starting || this.camError !== '') {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create({ space: 10 });
+                        Column.width('100%');
+                        Column.padding({ left: 40, right: 40 });
+                    }, Column);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        If.create();
+                        if (this.starting) {
+                            this.ifElseBranchUpdateFunction(0, () => {
+                                this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                    LoadingProgress.create();
+                                    LoadingProgress.width(36);
+                                    LoadingProgress.height(36);
+                                    LoadingProgress.color(Color.White);
+                                }, LoadingProgress);
+                                this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                    Text.create('æ­£åœ¨å”¤é†’ç›¸æœºâ€¦');
+                                    Text.fontSize(13);
+                                    Text.fontColor('rgba(255,255,255,0.85)');
+                                }, Text);
+                                Text.pop();
+                            });
+                        }
+                        else {
+                            this.ifElseBranchUpdateFunction(1, () => {
+                                this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                    Text.create(this.camError);
+                                    Text.fontSize(14);
+                                    Text.fontColor('rgba(255,255,255,0.9)');
+                                    Text.textAlign(TextAlign.Center);
+                                }, Text);
+                                Text.pop();
+                            });
+                        }
+                    }, If);
+                    If.pop();
+                    Column.pop();
+                });
+            }
+            // å˜ç„¦æç¤º
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // å˜ç„¦æç¤º
+            if (this.zoomText !== '') {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Text.create(this.zoomText);
+                        Text.fontSize(15);
+                        Text.fontColor(Color.White);
+                        Text.padding({ left: 14, right: 14, top: 6, bottom: 6 });
+                        Text.backgroundColor('rgba(0,0,0,0.35)');
+                        Text.borderRadius(16);
+                        Text.margin({ top: 132 });
+                        Text.hitTestBehavior(HitTestMode.None);
+                    }, Text);
+                    Text.pop();
+                });
+            }
+            // é¡¶éƒ¨è‰²å¡ HUDï¼ˆç‚¹æŒ‰æ‰“å¼€è°ƒè‰²ç›˜ï¼‰
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // é¡¶éƒ¨è‰²å¡ HUDï¼ˆç‚¹æŒ‰æ‰“å¼€è°ƒè‰²ç›˜ï¼‰
+            Column.create({ space: 8 });
+            // é¡¶éƒ¨è‰²å¡ HUDï¼ˆç‚¹æŒ‰æ‰“å¼€è°ƒè‰²ç›˜ï¼‰
+            Column.width('100%');
+            // é¡¶éƒ¨è‰²å¡ HUDï¼ˆç‚¹æŒ‰æ‰“å¼€è°ƒè‰²ç›˜ï¼‰
+            Column.padding({ top: 64 });
+            // é¡¶éƒ¨è‰²å¡ HUDï¼ˆç‚¹æŒ‰æ‰“å¼€è°ƒè‰²ç›˜ï¼‰
+            Column.hitTestBehavior(HitTestMode.None);
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create({ space: 8 });
+            Row.padding({ left: 16, right: 12, top: 9, bottom: 9 });
+            Row.backgroundColor('rgba(0,0,0,0.28)');
+            Row.borderRadius(22);
+            Row.onClick(() => {
+                this.paletteOpen = true;
+            });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Circle.create({ width: 13, height: 13 });
+            Circle.fill(this.today.hex);
+            Circle.border({ width: 1.5, color: 'rgba(255,255,255,0.9)' });
+        }, Circle);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(this.today.name);
+            Text.fontSize(18);
+            Text.fontWeight(FontWeight.Medium);
+            Text.fontColor(Color.White);
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('â€º');
+            Text.fontSize(16);
+            Text.fontColor('rgba(255,255,255,0.6)');
+        }, Text);
+        Text.pop();
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(this.echoLine);
+            Text.fontSize(12.5);
+            Text.fontColor('rgba(255,255,255,0.82)');
+            Text.maxLines(2);
+            Text.textAlign(TextAlign.Center);
+            Text.opacity(this.echoReady ? 1 : 0);
+            Text.translate({ y: this.echoReady ? 0 : 6 });
+            Text.shadow({ radius: 6, color: 'rgba(0,0,0,0.45)' });
+        }, Text);
+        Text.pop();
+        // é¡¶éƒ¨è‰²å¡ HUDï¼ˆç‚¹æŒ‰æ‰“å¼€è°ƒè‰²ç›˜ï¼‰
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+            Stack.create();
+            // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+            Stack.width(24);
+            // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+            Stack.height(24);
+            // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+            Stack.opacity(this.gridOn ? 1 : 0.55);
+            // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+            Stack.position({ x: '100%', y: 120 });
+            // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+            Stack.translate({ x: '-160%' });
+            // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+            Stack.onClick(() => {
+                this.gridOn = !this.gridOn;
+            });
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Line.create();
+            Line.startPoint([8, 2]);
+            Line.endPoint([8, 22]);
+            Line.stroke('rgba(255,255,255,0.9)');
+            Line.strokeWidth(1.6);
+        }, Line);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Line.create();
+            Line.startPoint([16, 2]);
+            Line.endPoint([16, 22]);
+            Line.stroke('rgba(255,255,255,0.9)');
+            Line.strokeWidth(1.6);
+        }, Line);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Line.create();
+            Line.startPoint([2, 8]);
+            Line.endPoint([22, 8]);
+            Line.stroke('rgba(255,255,255,0.9)');
+            Line.strokeWidth(1.6);
+        }, Line);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Line.create();
+            Line.startPoint([2, 16]);
+            Line.endPoint([22, 16]);
+            Line.stroke('rgba(255,255,255,0.9)');
+            Line.strokeWidth(1.6);
+        }, Line);
+        // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+        Stack.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.create({ space: 12 });
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.width('calc(100% - 40vp)');
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.padding({ left: 20, right: 20, top: 14, bottom: 14 });
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.backgroundColor('rgba(0,0,0,0.30)');
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.borderRadius(40);
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.backdropBlur(12);
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.position({ x: 20, y: '100%' });
+            // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+            Row.translate({ y: '-130%' });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // å·¦ï¼šç¼©ç•¥å›¾ + ä»Šæ—¥è®¡æ•°è§’æ ‡
+            Stack.create({ alignContent: Alignment.TopEnd });
+            // å·¦ï¼šç¼©ç•¥å›¾ + ä»Šæ—¥è®¡æ•°è§’æ ‡
+            Stack.width(56);
+            // å·¦ï¼šç¼©ç•¥å›¾ + ä»Šæ—¥è®¡æ•°è§’æ ‡
+            Stack.height(56);
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            if (this.latestThumb !== '') {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Image.create(`file://${this.latestThumb}`);
+                        Image.width(50);
+                        Image.height(50);
+                        Image.borderRadius(14);
+                        Image.objectFit(ImageFit.Cover);
+                        Image.border({ width: 1.5, color: 'rgba(255,255,255,0.85)' });
+                        Image.onClick(() => {
+                            router.pushUrl({ url: 'pages/Gallery' });
+                        });
+                    }, Image);
+                });
+            }
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.width(50);
+                        Column.height(50);
+                        Column.borderRadius(14);
+                        Column.backgroundColor('rgba(255,255,255,0.10)');
+                        Column.border({ width: 1.5, color: 'rgba(255,255,255,0.4)' });
+                        Column.onClick(() => {
+                            router.pushUrl({ url: 'pages/Gallery' });
+                        });
+                    }, Column);
+                    Column.pop();
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(`${this.photoCount}`);
+            Text.fontSize(11);
+            Text.fontColor(Color.White);
+            Text.padding({ left: 6, right: 6, top: 1, bottom: 1 });
+            Text.backgroundColor(this.today.hex);
+            Text.borderRadius(9);
+            Text.translate({ x: 6, y: -6 });
+        }, Text);
+        Text.pop();
+        // å·¦ï¼šç¼©ç•¥å›¾ + ä»Šæ—¥è®¡æ•°è§’æ ‡
+        Stack.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+        }, Blank);
+        Blank.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // ä¸­ï¼šå¿«é—¨
+            Column.create();
+            Context.animation({ duration: 120, curve: Curve.EaseOut });
+            // ä¸­ï¼šå¿«é—¨
+            Column.width(74);
+            // ä¸­ï¼šå¿«é—¨
+            Column.height(74);
+            // ä¸­ï¼šå¿«é—¨
+            Column.borderRadius(37);
+            // ä¸­ï¼šå¿«é—¨
+            Column.backgroundColor('rgba(255,255,255,0.14)');
+            // ä¸­ï¼šå¿«é—¨
+            Column.border({ width: 3, color: Color.White });
+            // ä¸­ï¼šå¿«é—¨
+            Column.scale({ x: this.capBusy ? 0.92 : 1, y: this.capBusy ? 0.92 : 1 });
+            Context.animation(null);
+            // ä¸­ï¼šå¿«é—¨
+            Column.onClick(() => {
+                this.doCapture();
+            });
+        }, Column);
+        // ä¸­ï¼šå¿«é—¨
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+        }, Blank);
+        Blank.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+            Column.create();
+            // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+            Column.width(56);
+            // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+            Column.height(56);
+            // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+            Column.justifyContent(FlexAlign.Center);
+            // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+            Column.opacity(this.canSwitch ? 1 : 0.35);
+            // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+            Column.onClick(() => {
+                this.doSwitchCamera();
+            });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('âŸ³');
+            Text.fontSize(22);
+            Text.fontColor(Color.White);
+            Text.width(50);
+            Text.height(50);
+            Text.textAlign(TextAlign.Center);
+            Text.backgroundColor('rgba(255,255,255,0.10)');
+            Text.borderRadius(25);
+            Text.border({ width: 1.2, color: 'rgba(255,255,255,0.55)' });
+        }, Text);
+        Text.pop();
+        // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+        Column.pop();
+        // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // è°ƒè‰²ç›˜åº•éƒ¨é¢æ¿
+            if (this.paletteOpen) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.width('100%');
+                        Column.height('100%');
+                        Column.backgroundColor('rgba(0,0,0,0.45)');
+                        Column.onClick(() => {
+                            this.paletteOpen = false;
+                        });
+                    }, Column);
+                    Column.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.width('100%');
+                        Column.position({ x: 0, y: '100%' });
+                        Column.translate({ y: '-100%' });
+                    }, Column);
+                    {
+                        this.observeComponentCreation2((elmtId, isInitialRender) => {
+                            if (isInitialRender) {
+                                let componentCall = new ColorPaletteSheet(this, {
+                                    activeColor: this.today,
+                                    isCustom: DailyColorManager.getInstance().isCustomActive(),
+                                    onLive: (p) => {
+                                        this.applyLiveColor(p);
+                                    },
+                                    onApply: (p) => {
+                                        this.applyPersistColor(p);
+                                    },
+                                    onRestoreDaily: () => {
+                                        this.restoreDailyColor();
+                                    },
+                                    onOpenCollection: () => {
+                                        this.paletteOpen = false;
+                                        router.pushUrl({ url: 'pages/Collection' });
+                                    },
+                                    onClose: () => {
+                                        this.paletteOpen = false;
+                                    }
+                                }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/Index.ets", line: 591, col: 11 });
+                                ViewPU.create(componentCall);
+                                let paramsLambda = () => {
+                                    return {
+                                        activeColor: this.today,
+                                        isCustom: DailyColorManager.getInstance().isCustomActive(),
+                                        onLive: (p) => {
+                                            this.applyLiveColor(p);
+                                        },
+                                        onApply: (p) => {
+                                            this.applyPersistColor(p);
+                                        },
+                                        onRestoreDaily: () => {
+                                            this.restoreDailyColor();
+                                        },
+                                        onOpenCollection: () => {
+                                            this.paletteOpen = false;
+                                            router.pushUrl({ url: 'pages/Collection' });
+                                        },
+                                        onClose: () => {
+                                            this.paletteOpen = false;
+                                        }
+                                    };
+                                };
+                                componentCall.paramsGenerator_ = paramsLambda;
+                            }
+                            else {
+                                this.updateStateVarsOfChildByElmtId(elmtId, {});
+                            }
+                        }, { name: "ColorPaletteSheet" });
+                    }
+                    Column.pop();
+                });
+            }
+            // æ‹ç…§æµ®å±‚ï¼ˆæˆªå›¾åˆæˆæ ¹èŠ‚ç‚¹ = captureOverlayï¼Œä¸Žé¢„è§ˆçª—åŒä¸º 16:9ï¼‰
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // æ‹ç…§æµ®å±‚ï¼ˆæˆªå›¾åˆæˆæ ¹èŠ‚ç‚¹ = captureOverlayï¼Œä¸Žé¢„è§ˆçª—åŒä¸º 16:9ï¼‰
+            if (this.showCapture && this.capturedPm !== null) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Stack.create();
+                        Stack.width('100%');
+                        Stack.height('100%');
+                        Stack.backgroundColor(Color.Black);
+                    }, Stack);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.width('100%');
+                        Column.height('100%');
+                        Column.padding({ top: 46 });
+                    }, Column);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Stack.create({ alignContent: Alignment.BottomStart });
+                        Stack.id('captureOverlay');
+                        Stack.width('100%');
+                        Stack.aspectRatio(9 / 16);
+                        Stack.borderRadius(18);
+                        Stack.clip(true);
+                    }, Stack);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Image.create(this.capturedPm);
+                        Image.width('100%');
+                        Image.height('100%');
+                        Image.objectFit(ImageFit.Cover);
+                    }, Image);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create({ space: 3 });
+                        Column.padding({ left: 18, bottom: 16 });
+                    }, Column);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Text.create(`${this.today.name} Â· ${this.today.hex}`);
+                        Text.fontSize(15);
+                        Text.fontWeight(FontWeight.Medium);
+                        Text.fontColor(Color.White);
+                        Text.shadow({ radius: 8, color: 'rgba(0,0,0,0.6)' });
+                    }, Text);
+                    Text.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Text.create(`ä»Šæ—¥é™å®šè‰² Â· ${this.formatNow()}`);
+                        Text.fontSize(11);
+                        Text.fontColor('rgba(255,255,255,0.9)');
+                        Text.shadow({ radius: 8, color: 'rgba(0,0,0,0.6)' });
+                    }, Text);
+                    Text.pop();
+                    Column.pop();
+                    Stack.pop();
+                    Column.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        // æµ®å±‚æŽ§ä»¶ï¼ˆä¸è¿›å…¥æˆªå›¾ï¼‰
+                        Row.create({ space: 14 });
+                        // æµ®å±‚æŽ§ä»¶ï¼ˆä¸è¿›å…¥æˆªå›¾ï¼‰
+                        Row.width('100%');
+                        // æµ®å±‚æŽ§ä»¶ï¼ˆä¸è¿›å…¥æˆªå›¾ï¼‰
+                        Row.padding({ left: 22, right: 22, bottom: 54 });
+                        // æµ®å±‚æŽ§ä»¶ï¼ˆä¸è¿›å…¥æˆªå›¾ï¼‰
+                        Row.position({ x: 0, y: '100%' });
+                        // æµ®å±‚æŽ§ä»¶ï¼ˆä¸è¿›å…¥æˆªå›¾ï¼‰
+                        Row.translate({ y: '-100%' });
+                    }, Row);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        SaveButton.create({ text: SaveDescription.SAVE_IMAGE, buttonType: ButtonType.Capsule });
+                        SaveButton.onClick((event, result) => {
+                            if (result === SaveButtonOnClickResult.SUCCESS) {
+                                this.doSaveToAlbum();
+                            }
+                            else {
+                                promptAction.showToast({ message: 'æœªæŽˆæƒä¿å­˜åˆ°ç›¸å†Œ' });
+                            }
+                        });
+                    }, SaveButton);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Blank.create();
+                    }, Blank);
+                    Blank.pop();
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Text.create('å®Œæˆ');
+                        Text.fontSize(15);
+                        Text.fontColor(Color.White);
+                        Text.height(40);
+                        Text.padding({ left: 20, right: 20 });
+                        Text.textAlign(TextAlign.Center);
+                        Text.backgroundColor('rgba(0,0,0,0.35)');
+                        Text.borderRadius(20);
+                        Text.onClick(() => {
+                            this.closeCapture();
+                        });
+                    }, Text);
+                    Text.pop();
+                    // æµ®å±‚æŽ§ä»¶ï¼ˆä¸è¿›å…¥æˆªå›¾ï¼‰
+                    Row.pop();
+                    Stack.pop();
+                });
+            }
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        Stack.pop();
+    }
+    formatNow() {
+        const d = new Date();
+        const p = (n) => `${n}`.padStart(2, '0');
+        return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+    static getEntryName() {
+        return "Index";
+    }
+}
+registerNamedRoute(() => new Index(undefined, {}), "", { bundleName: "com.coloroftoday.app", moduleName: "entry", pagePath: "pages/Index", pageFullPath: "entry/src/main/ets/pages/Index", integratedHsp: "false", moduleType: "followWithHap" });
+//# sourceMappingURL=Index.js.mapÂŸÙR hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.display.d.tsÙ[ hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.multimedia.image.d.tsÙb hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.arkui.componentSnapshot.d.tsÙW hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.promptAction.d.tsÙQ hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.router.d.tsÙS hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.vibrator.d.tsº hvigor_ignore_libentry.soÙGD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\model\ColorPreset.etsÙOD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\manager\DailyColorManager.etsÙDD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\model\PhotoDao.etsÙKD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\CameraService.etsÙLD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\CaptureService.etsÙOD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\CollectionService.etsÙID:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\EchoService.etsÙMD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\components\ColorPalette.etsÙAD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\pages\Index.etsÔrB›ªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo°belongModulePath§checker¬shouldEmitJs¥entryÃÂÙ$D:\DevEcoProjects\ColorOfToday\entry¾D:\DevEcoProjects\ColorOfToday¥entry¥1.0.0Ô  Ù$D:\DevEcoProjects\ColorOfToday\entryÔrCÜ ®¬getNodeCount²getIdentifierCount®getSymbolCount¬getTypeCountµgetInstantiationCountµgetRelationCacheSizes±isUndefinedSymbol±isArgumentsSymbol¯isUnknownSymbol¯getMergedSymbol®getDiagnostics´getGlobalDiagnostics´getRecursionIdentity¶getUnmatchedProperties¹getTypeOfSymbolAtLocation¯getTypeOfSymbolÙ(getSymbolsOfParameterPropertyDeclaration·getDeclaredTypeOfSymbol³getPropertiesOfType±getPropertyOfTypeÙ"getPrivateIdentifierPropertyOfType·getTypeOfPropertyOfType²getIndexInfoOfType³getIndexInfosOfTypeºgetIndexInfosOfIndexSymbol³getSignaturesOfType²getIndexTypeOfType¬getIndexType¬getBaseTypes¸getBaseTypeOfLiteralType®getWidenedType³getTypeFromTypeNode°getParameterTypeÙ$getParameterIdentifierNameAtPosition¸getPromisedTypeOfPromise®getAwaitedType¸getReturnTypeOfSignature®isNullableType¯getNullableType²getNonNullableType²getNonOptionalType°getTypeArguments®typeToTypeNodeÙ$indexInfoToIndexSignatureDeclaration¿signatureToSignatureDeclaration²symbolToEntityName²symbolToExpression¬symbolToNodeÙ!symbolToTypeParameterDeclarations¼symbolToParameterDeclarationºtypeParameterToDeclaration±getSymbolsInScope³getSymbolAtLocation·getIndexInfosAtLocationÙ!getShorthandAssignmentValueSymbolÙ#getExportSpecifierLocalTargetSymbol·getExportSymbolOfSymbol±getTypeAtLocationºgetTypeAtLocationForLinterÙ tryGetTypeAtLocationWithoutCheckºgetTypeOfAssignmentPatternÙ*getPropertySymbolOfDestructuringAssignment±signatureToString¬typeToString®symbolToStringµtypePredicateToString®writeSignature©writeType«writeSymbol²writeTypePredicate¼getAugmentedPropertiesOfType®getRootSymbols²getSymbolOfExpando±getContextualTypeÙ(getContextualTypeForObjectLiteralElementÙ#getContextualTypeForArgumentAtIndexÙ getContextualTypeForJsxAttribute²isContextSensitiveÙ!getTypeOfPropertyOfContextualTypeµgetFullyQualifiedNameÙ#tryGetResolvedSignatureWithoutCheck´getResolvedSignatureÙ/getResolvedSignatureForStringLiteralCompletionsÙ$getResolvedSignatureForSignatureHelpµgetExpandedParameters¹hasEffectiveRestParameterºcontainsArgumentsReference°getConstantValueµisValidPropertyAccessÙ#isValidPropertyAccessForCompletions»getSignatureFromDeclarationºisImplementationOfOverload¹getImmediateAliasedSymbol°getAliasedSymbol¯getEmitResolver²getExportsOfModule¿getExportsAndPropertiesOfModuleÙ forEachExportAndPropertyOfModule¯getSymbolWalker±getAmbientModules¹getJsxIntrinsicTagNamesAt³isOptionalParameter»tryGetMemberInModuleExportsÙ(tryGetMemberInModuleExportsAndProperties´tryFindAmbientModuleÙ(tryFindAmbientModuleWithoutAugmentations¯getApparentType¬getUnionType²isTypeAssignableTo³createAnonymousType¯createSignature¬createSymbol¯createIndexInfoªgetAnyType­getStringType­getNumberType±createPromiseType¯createArrayType¹getElementTypeOfArrayType®getBooleanType¬getFalseType«getTrueType«getVoidType°getUndefinedType«getNullType¯getESSymbolType¬getNeverType¯getOptionalType®getPromiseType²getPromiseLikeType´getAsyncIterableType²isSymbolAccessible«isArrayType«isTupleType¯isArrayLikeTypeÙ#isTypeInvalidDueToUnionDiscriminantºgetExactOptionalProperties¿getAllPossiblePropertiesOfTypesÙ(getSuggestedSymbolForNonexistentPropertyÙ#getSuggestionForNonexistentPropertyÙ,getSuggestedSymbolForNonexistentJSXAttributeÙ&getSuggestedSymbolForNonexistentSymbolÙ!getSuggestionForNonexistentSymbolÙ&getSuggestedSymbolForNonexistentModuleÙ!getSuggestionForNonexistentExportÙ+getSuggestedSymbolForNonexistentClassMember·getBaseConstraintOfType»getDefaultFromTypeParameter«resolveName¯getJsxNamespaceµgetJsxFragmentFactory¸getAccessibleSymbolChain»getTypePredicateOfSignature¹resolveExternalModuleName»resolveExternalModuleSymbol°tryGetThisTypeAt¹getTypeArgumentConstraint¸getSuggestionDiagnostics¸runWithCancellationTokenÙ3getLocalTypeParametersOfClassOrInterfaceOrTypeAlias´isDeclarationVisible´isPropertyAccessible»getTypeOnlyAliasDeclaration¿getMemberOverrideModifierStatusÙ!isTypeParameterPossiblyReferenced²getConstEnumRelate´clearConstEnumRelateµdeleteConstEnumRelateÙ$getTypeArgumentsForResolvedSignatureµgetCheckedSourceFilesÙ"collectHaveTsNoCheckFilesForLinter·clearQualifiedNameCache®isStaticRecord²isStaticSourceFileÔ  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  ÃÃÚ]½import common from '@ohos.app.ability.common';
+import display from '@ohos.display';
+import image from '@ohos.multimedia.image';
+import componentSnapshot from '@ohos.arkui.componentSnapshot';
+import promptAction from '@ohos.promptAction';
+import router from '@ohos.router';
+import vibrator from '@ohos.vibrator';
+import colorFilter from 'libentry.so';
+import { COLOR_PRESETS, ColorPreset } from '../model/ColorPreset';
+import { DailyColorManager } from '../manager/DailyColorManager';
+import { PhotoDao } from '../model/PhotoDao';
+import { CameraService } from '../service/CameraService';
+import { CaptureService } from '../service/CaptureService';
+import { CollectionService } from '../service/CollectionService';
+import { EchoService, EchoResult } from '../service/EchoService';
+import { ColorPaletteSheet } from '../components/ColorPalette';
+
+/**
+ * ç›¸æœºå–æ™¯é¡µï¼ˆApp ä¸»é¡µï¼‰ï¼š
+ * å…¨å±å®žæ—¶é¢œè‰²éš”ç¦»å–æ™¯ï¼›é¡¶éƒ¨ä»Šæ—¥è‰²å¡ï¼ˆç‚¹æŒ‰å¼€è°ƒè‰²ç›˜ï¼‰ï¼Œåº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ã€‚
+ * è¾…åŠ©åŠŸèƒ½ï¼šä¹å®«æ ¼æž„å›¾çº¿ã€ç‚¹å‡»å¯¹ç„¦ã€åŒæŒ‡å˜ç„¦ã€å‰åŽç½®åˆ‡æ¢ã€‚
+ */
+@Entry
+@Component
+struct Index {
+  @State today: ColorPreset = COLOR_PRESETS[0];
+  @State photoCount: number = 0;
+  @State latestThumb: string = '';
+  @State flashOpacity: number = 0;
+  @State capturedPm: image.PixelMap | null = null;
+  @State showCapture: boolean = false;
+  @State camError: string = '';
+  @State starting: boolean = true;
+  @State canSwitch: boolean = false;
+  @State gridOn: boolean = false;
+  @State paletteOpen: boolean = false;
+  @State focusX: number = 0;
+  @State focusY: number = 0;
+  @State focusShow: boolean = false;
+  @State zoomRatio: number = 1;
+  @State zoomText: string = '';
+  @State echoLine: string = '';
+  @State echoNumber: number = 0;
+  @State displayNumber: number = 0;
+  @State echoReady: boolean = false;
+
+  private xcController: XComponentController = new XComponentController();
+  private cameraService: CameraService = new CameraService();
+  private pipelineStarted: boolean = false;
+  private capBusy: boolean = false;
+  private switching: boolean = false;
+  private currentPhotoPath: string = '';
+  private zoomMin: number = 1;
+  private zoomMax: number = 1;
+  private pinchStartRatio: number = 1;
+  private focusTimer: number = -1;
+  private zoomTimer: number = -1;
+  private echoTimer: number = -1;
+
+  aboutToAppear(): void {
+    this.loadData();
+  }
+
+  aboutToDisappear(): void {
+    if (this.echoTimer >= 0) {
+      clearInterval(this.echoTimer);
+    }
+    this.cameraService.stop();
+    colorFilter.releaseRenderer();
+  }
+
+  onPageShow(): void {
+    this.refreshStats();
+  }
+
+  private sleep(ms: number): Promise<void> {
+    return new Promise<void>(resolve => setTimeout(resolve, ms));
+  }
+
+  private async loadData(): Promise<void> {
+    const context = getContext(this);
+    await DailyColorManager.getInstance().init(context);
+    await PhotoDao.getInstance().init(context);
+    this.today = DailyColorManager.getInstance().getActiveColor();
+    colorFilter.setColor(this.today.hue, this.today.threshold, this.today.saturationBoost);
+    this.refreshStats();
+    this.refreshEcho();
+  }
+
+  /** æ—¶ç©ºå›žå£°ï¼šè‡ªç„¶ + è‡ªæˆ‘ï¼Œæ·¡å…¥å‘ˆçŽ°ï¼Œæ•°å­—æ»šåŠ¨ */
+  private async refreshEcho(): Promise<void> {
+    const context = getContext(this);
+    const result: EchoResult = await EchoService.build(context, this.today.name);
+    this.echoNumber = result.number;
+    this.echoReady = false;
+    if (result.number > 0) {
+      this.displayNumber = 0;
+      this.echoLine = result.text.replace('{n}', `${this.displayNumber}`);
+      animateTo({ duration: 900, curve: Curve.EaseInOut }, () => {
+        this.echoReady = true;
+      });
+      let step = 0;
+      const steps = 14;
+      if (this.echoTimer >= 0) {
+        clearInterval(this.echoTimer);
+      }
+      this.echoTimer = setInterval(() => {
+        step++;
+        const eased = Math.round(result.number * (step / steps) * (2 - step / steps));
+        this.displayNumber = Math.max(1, eased);
+        this.echoLine = result.text.replace('{n}', `${this.displayNumber}`);
+        if (step >= steps) {
+          if (this.echoTimer >= 0) {
+            clearInterval(this.echoTimer);
+            this.echoTimer = -1;
+          }
+        }
+      }, 55);
+    } else {
+      this.echoLine = result.text;
+      animateTo({ duration: 900, curve: Curve.EaseInOut }, () => {
+        this.echoReady = true;
+      });
+    }
+  }
+
+  private async refreshStats(): Promise<void> {
+    const dateKey = DailyColorManager.getDateKey(new Date());
+    this.photoCount = await PhotoDao.getInstance().countByDate(dateKey);
+    const latest = await PhotoDao.getInstance().queryLatestByDate(dateKey);
+    this.latestThumb = latest !== null ? latest.localPath : '';
+  }
+
+  private async startPipeline(): Promise<void> {
+    if (this.pipelineStarted) {
+      return;
+    }
+    this.pipelineStarted = true;
+    const context = getContext(this);
+    await DailyColorManager.getInstance().init(context);
+    await PhotoDao.getInstance().init(context);
+    this.today = DailyColorManager.getInstance().getActiveColor();
+    colorFilter.setColor(this.today.hue, this.today.threshold, this.today.saturationBoost);
+
+    const granted = await CameraService.ensureCameraPermission(context);
+    if (!granted) {
+      this.camError = 'éœ€è¦ç›¸æœºæƒé™æ‰èƒ½å–æ™¯ï¼Œè¯·åœ¨è®¾ç½®ä¸­å¼€å¯';
+      this.starting = false;
+      return;
+    }
+
+    // è·¯å¾„ä¸€ï¼šXComponent ç”Ÿå‘½å‘¨æœŸå›žè°ƒï¼ˆç»„ä»¶ onLoad åŽ attach ä¸€æ¬¡ï¼Œè¦†ç›–æ³¨å…¥æ—¶åºå·®å¼‚ï¼‰
+    colorFilter.attachXComponent();
+    let ready = false;
+    for (let i = 0; i < 20 && !ready; i++) {
+      await this.sleep(200);
+      ready = colorFilter.isRendererReady();
+      if (!ready && i === 5) {
+        colorFilter.attachXComponent();
+      }
+    }
+    // è·¯å¾„äºŒå…œåº•ï¼šsurfaceId ç›´æŽ¥åˆ›å»º NativeWindowï¼ˆå®˜æ–¹æŽ¨èè·¯å¾„ï¼Œéƒ¨åˆ†è®¾å¤‡å›žè°ƒæ³¨å…¥å¼‚å¸¸æ—¶å¯ç”¨ï¼‰
+    if (!ready) {
+      const sid: string = await this.xcController.getXComponentSurfaceId();
+      ready = colorFilter.initFromSurfaceId(Number(sid));
+      for (let i = 0; i < 15 && !ready; i++) {
+        await this.sleep(200);
+        ready = colorFilter.isRendererReady();
+      }
+    }
+    if (!ready) {
+      this.camError = 'æ¸²æŸ“ç®¡çº¿åˆå§‹åŒ–å¤±è´¥';
+      this.starting = false;
+      return;
+    }
+
+    colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+    const camSurfaceId = colorFilter.getCameraSurfaceId();
+    const err = await this.cameraService.start(context, camSurfaceId, () => {});
+    this.starting = false;
+    this.canSwitch = this.cameraService.canSwitch();
+    const range = this.cameraService.zoomRange();
+    this.zoomMin = range[0];
+    this.zoomMax = range[1];
+    if (err !== null) {
+      this.camError = `ç›¸æœºå¯åŠ¨å¤±è´¥ï¼š${err}`;
+    }
+  }
+
+  /** å‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢ */
+  private async doSwitchCamera(): Promise<void> {
+    if (this.switching) {
+      return;
+    }
+    this.switching = true;
+    const context = getContext(this);
+    const err = await this.cameraService.switchTo(context, () => {});
+    this.switching = false;
+    if (err !== null) {
+      promptAction.showToast({ message: `åˆ‡æ¢å¤±è´¥ï¼š${err}` });
+      return;
+    }
+    colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+    this.zoomRatio = 1;
+  }
+
+  /** ç‚¹å‡»å¯¹ç„¦ï¼šå½’ä¸€åŒ–åæ ‡ä¸‹å‘ç›¸æœº + æ˜¾ç¤ºå¯¹ç„¦çŽ¯ */
+  private handleTapFocus(e: ClickEvent): void {
+    const w = Number(px2vp(display.getDefaultDisplaySync().width));
+    const h = Number(px2vp(display.getDefaultDisplaySync().height));
+    this.cameraService.tapFocus(e.x / w, e.y / h);
+    this.focusX = e.x;
+    this.focusY = e.y;
+    this.focusShow = true;
+    if (this.focusTimer >= 0) {
+      clearTimeout(this.focusTimer);
+    }
+    this.focusTimer = setTimeout(() => {
+      this.focusShow = false;
+    }, 900);
+  }
+
+  private showZoomTip(): void {
+    this.zoomText = `${this.zoomRatio.toFixed(1)}x`;
+    if (this.zoomTimer >= 0) {
+      clearTimeout(this.zoomTimer);
+    }
+    this.zoomTimer = setTimeout(() => {
+      this.zoomText = '';
+    }, 900);
+  }
+
+  private async doCapture(): Promise<void> {
+    if (this.capBusy || this.showCapture) {
+      return;
+    }
+    if (this.camError !== '') {
+      promptAction.showToast({ message: this.camError });
+      return;
+    }
+    this.capBusy = true;
+    try {
+      vibrator.startVibration({ type: 'time', duration: 40 }, { id: 0, usage: 'touch' });
+      this.flashOpacity = 0.9;
+      animateTo({ duration: 280, curve: Curve.EaseOut }, () => {
+        this.flashOpacity = 0;
+      });
+
+      const frame = colorFilter.captureFrame();
+      if (frame === null || frame.data.byteLength === 0) {
+        promptAction.showToast({ message: 'æ‹ç…§å¤±è´¥ï¼Œè¯·ç¨åŽé‡è¯•' });
+        return;
+      }
+      const options: image.InitializationOptions = {
+        size: { width: frame.width, height: frame.height },
+        srcPixelFormat: image.PixelMapFormat.BGRA_8888
+      };
+      const pm = await image.createPixelMap(frame.data, options);
+
+      // æ˜¾ç¤ºæµ®å±‚ï¼ˆç…§ç‰‡ + æ°´å°ï¼‰ï¼Œç­‰å¾…æ¸²æŸ“åŽæ•´ä½“æˆªå›¾åˆæˆ
+      this.capturedPm = pm;
+      this.showCapture = true;
+      await this.sleep(380);
+      const snap = await componentSnapshot.get('captureOverlay');
+
+      const context = getContext(this);
+      const localPath = await CaptureService.persistSnapshot(context, snap, this.today.name);
+      if (localPath === null) {
+        promptAction.showToast({ message: 'ä¿å­˜å¤±è´¥' });
+      } else {
+        this.currentPhotoPath = localPath;
+        await CaptureService.recordPhoto(localPath, '', frame.width, frame.height);
+        // å›¾é‰´æ”¶é›†ï¼šæŒ‰å½“å‰å–æ™¯è‰²ç›¸åŒ¹é…ä¼ ç»Ÿè‰²ï¼Œé¦–æ¬¡å‘½ä¸­å³ç‚¹äº®
+        const unlockedColor = await CollectionService.onPhotoCaptured(context,
+          this.today.hue, DailyColorManager.getDateKey(new Date()));
+        if (unlockedColor !== null) {
+          promptAction.showToast({ message: `ç‚¹äº®å›¾é‰´ Â· ${unlockedColor.name}`, duration: 2400 });
+        }
+        this.refreshStats();
+        // æµ®å±‚å¸¸é©»ï¼šç”±ç”¨æˆ·é€‰æ‹©â€œå­˜å…¥ç›¸å†Œâ€(SaveButton å®‰å…¨æŽ§ä»¶) æˆ–â€œå®Œæˆâ€
+      }
+    } finally {
+      this.capBusy = false;
+    }
+  }
+
+  /** é€šè¿‡ SaveButton å®‰å…¨æŽ§ä»¶ä¸´æ—¶æŽˆæƒå†™å…¥ç³»ç»Ÿç›¸å†Œï¼ˆåˆè§„å…æƒé™è·¯å¾„ï¼‰ */
+  private async doSaveToAlbum(): Promise<void> {
+    if (this.currentPhotoPath === '') {
+      return;
+    }
+    const context = getContext(this);
+    const uri = await CaptureService.saveToAlbum(context, this.currentPhotoPath);
+    if (uri !== null) {
+      promptAction.showToast({ message: 'å·²ä¿å­˜åˆ°ç³»ç»Ÿç›¸å†Œ' });
+    } else {
+      promptAction.showToast({ message: 'ä¿å­˜åˆ°ç›¸å†Œå¤±è´¥' });
+    }
+  }
+
+  private closeCapture(): void {
+    this.showCapture = false;
+    this.capturedPm = null;
+    this.currentPhotoPath = '';
+  }
+
+  /** è°ƒè‰²ç›˜ï¼šæ‹–åŠ¨å®žæ—¶é¢„è§ˆï¼ˆä¸æŒä¹…åŒ–ï¼‰ */
+  private applyLiveColor(p: ColorPreset): void {
+    this.today = p;
+    colorFilter.setColor(p.hue, p.threshold, p.saturationBoost);
+  }
+
+  /** è°ƒè‰²ç›˜ï¼šåº”ç”¨å¹¶æŒä¹…åŒ–è‡ªå®šä¹‰é¢œè‰² */
+  private async applyPersistColor(p: ColorPreset): Promise<void> {
+    this.applyLiveColor(p);
+    const context = getContext(this);
+    await DailyColorManager.getInstance().setCustomColor(context, p);
+    promptAction.showToast({ message: 'å·²åº”ç”¨è‡ªå®šä¹‰é™å®šè‰²' });
+  }
+
+  /** æ¢å¤æ¯æ—¥éšæœºé™å®šè‰² */
+  private async restoreDailyColor(): Promise<void> {
+    const context = getContext(this);
+    await DailyColorManager.getInstance().clearCustomColor();
+    this.applyLiveColor(DailyColorManager.getInstance().getColor());
+    promptAction.showToast({ message: 'å·²æ¢å¤ä»Šæ—¥é™å®šè‰²' });
+  }
+
+  build() {
+    Stack() {
+      // é¢„è§ˆçª—ï¼šå›ºå®š 16:9ï¼ˆä¸Žç›¸æœºæµä¸€è‡´ï¼‰ï¼Œåˆå§‹å¸ƒå±€å³æœ€ç»ˆå¸ƒå±€ï¼Œè§„é¿ surface å°ºå¯¸åŒæ­¥é—®é¢˜
+      Column() {
+        XComponent({ id: 'cameraPreview', type: 'surface', libraryname: 'entry', controller: this.xcController })
+          .width('100%')
+          .aspectRatio(9 / 16)
+          .borderRadius(18)
+          .clip(true)
+          .onClick((e: ClickEvent) => {
+            this.handleTapFocus(e);
+          })
+          .gesture(
+            PinchGesture({ fingers: 2 })
+              .onActionStart(() => {
+                this.pinchStartRatio = this.zoomRatio;
+              })
+              .onActionUpdate((event: GestureEvent) => {
+                const next = Math.min(this.zoomMax, Math.max(this.zoomMin, this.pinchStartRatio * event.scale));
+                if (Math.abs(next - this.zoomRatio) > 0.05) {
+                  this.zoomRatio = next;
+                  this.cameraService.setZoom(next);
+                  this.showZoomTip();
+                }
+              })
+          )
+          .onAreaChange((_oldArea: Area, newArea: Area) => {
+            // 16:9 çª—å£é¦–æ¬¡å¸ƒå±€å³ç¨³å®šï¼›åŒæ­¥ buffer å‡ ä½•ä¿è¯å„è®¾å¤‡ä¸€è‡´
+            const density = display.getDefaultDisplaySync().densityPixels;
+            const wPx = Math.round(Number(newArea.width) * density);
+            const hPx = Math.round(Number(newArea.height) * density);
+            if (wPx > 0 && hPx > 0) {
+              colorFilter.setSurfaceGeometry(wPx, hPx);
+            }
+          })
+          .onLoad(() => {
+            this.startPipeline();
+          })
+          .onDestroy(() => {
+            colorFilter.releaseRenderer();
+          })
+      }
+      .width('100%')
+      .height('100%')
+      .padding({ top: 46 })
+
+      // ä¹å®«æ ¼æž„å›¾çº¿
+      if (this.gridOn) {
+        Column() {
+          Blank().layoutWeight(1)
+          Divider().strokeWidth(0.8).color('rgba(255,255,255,0.35)')
+          Blank().layoutWeight(1)
+          Divider().strokeWidth(0.8).color('rgba(255,255,255,0.35)')
+          Blank().layoutWeight(1)
+        }
+        .width('100%')
+        .height('100%')
+        .hitTestBehavior(HitTestMode.None)
+
+        Row() {
+          Blank().layoutWeight(1)
+          Divider().vertical(true).strokeWidth(0.8).color('rgba(255,255,255,0.35)')
+          Blank().layoutWeight(1)
+          Divider().vertical(true).strokeWidth(0.8).color('rgba(255,255,255,0.35)')
+          Blank().layoutWeight(1)
+        }
+        .width('100%')
+        .height('100%')
+        .hitTestBehavior(HitTestMode.None)
+      }
+
+      // å¯¹ç„¦çŽ¯
+      if (this.focusShow) {
+        Column()
+          .width(64)
+          .height(64)
+          .borderRadius(32)
+          .border({ width: 2, color: 'rgba(255,215,0,0.95)' })
+          .position({ x: this.focusX - 32, y: this.focusY - 32 })
+          .animation({ duration: 180, curve: Curve.EaseOut })
+          .hitTestBehavior(HitTestMode.None)
+      }
+
+      // æ‹ç…§ç™½é—ª
+      Column()
+        .width('100%')
+        .height('100%')
+        .backgroundColor(Color.White)
+        .opacity(this.flashOpacity)
+        .hitTestBehavior(HitTestMode.None)
+
+      // å–æ™¯æµ®å±‚ï¼ˆé”™è¯¯æç¤º / åŠ è½½ä¸­ï¼‰
+      if (this.starting || this.camError !== '') {
+        Column({ space: 10 }) {
+          if (this.starting) {
+            LoadingProgress().width(36).height(36).color(Color.White)
+            Text('æ­£åœ¨å”¤é†’ç›¸æœºâ€¦').fontSize(13).fontColor('rgba(255,255,255,0.85)')
+          } else {
+            Text(this.camError).fontSize(14).fontColor('rgba(255,255,255,0.9)').textAlign(TextAlign.Center)
+          }
+        }
+        .width('100%')
+        .padding({ left: 40, right: 40 })
+      }
+
+      // å˜ç„¦æç¤º
+      if (this.zoomText !== '') {
+        Text(this.zoomText)
+          .fontSize(15)
+          .fontColor(Color.White)
+          .padding({ left: 14, right: 14, top: 6, bottom: 6 })
+          .backgroundColor('rgba(0,0,0,0.35)')
+          .borderRadius(16)
+          .margin({ top: 132 })
+          .hitTestBehavior(HitTestMode.None)
+      }
+
+      // é¡¶éƒ¨è‰²å¡ HUDï¼ˆç‚¹æŒ‰æ‰“å¼€è°ƒè‰²ç›˜ï¼‰
+      Column({ space: 8 }) {
+        Row({ space: 8 }) {
+          Circle({ width: 13, height: 13 })
+            .fill(this.today.hex)
+            .border({ width: 1.5, color: 'rgba(255,255,255,0.9)' })
+          Text(this.today.name)
+            .fontSize(18)
+            .fontWeight(FontWeight.Medium)
+            .fontColor(Color.White)
+          Text('â€º')
+            .fontSize(16)
+            .fontColor('rgba(255,255,255,0.6)')
+        }
+        .padding({ left: 16, right: 12, top: 9, bottom: 9 })
+        .backgroundColor('rgba(0,0,0,0.28)')
+        .borderRadius(22)
+        .onClick(() => {
+          this.paletteOpen = true;
+        })
+
+        Text(this.echoLine)
+          .fontSize(12.5)
+          .fontColor('rgba(255,255,255,0.82)')
+          .maxLines(2)
+          .textAlign(TextAlign.Center)
+          .opacity(this.echoReady ? 1 : 0)
+          .translate({ y: this.echoReady ? 0 : 6 })
+          .shadow({ radius: 6, color: 'rgba(0,0,0,0.45)' })
+      }
+      .width('100%')
+      .padding({ top: 64 })
+      .hitTestBehavior(HitTestMode.None)
+
+      // å³ä¸Šè§’ï¼šæž„å›¾çº¿å¼€å…³
+      Stack() {
+        Line().startPoint([8, 2]).endPoint([8, 22])
+          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
+        Line().startPoint([16, 2]).endPoint([16, 22])
+          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
+        Line().startPoint([2, 8]).endPoint([22, 8])
+          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
+        Line().startPoint([2, 16]).endPoint([22, 16])
+          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
+      }
+      .width(24)
+      .height(24)
+      .opacity(this.gridOn ? 1 : 0.55)
+      .position({ x: '100%', y: 120 })
+      .translate({ x: '-160%' })
+      .onClick(() => {
+        this.gridOn = !this.gridOn;
+      })
+
+      // åº•éƒ¨çŽ»ç’ƒæŽ§åˆ¶æ¡ï¼šç¼©ç•¥å›¾ | å¿«é—¨ | å‰åŽç½®åˆ‡æ¢
+      Row({ space: 12 }) {
+        // å·¦ï¼šç¼©ç•¥å›¾ + ä»Šæ—¥è®¡æ•°è§’æ ‡
+        Stack({ alignContent: Alignment.TopEnd }) {
+          if (this.latestThumb !== '') {
+            Image(`file://${this.latestThumb}`)
+              .width(50)
+              .height(50)
+              .borderRadius(14)
+              .objectFit(ImageFit.Cover)
+              .border({ width: 1.5, color: 'rgba(255,255,255,0.85)' })
+              .onClick(() => {
+                router.pushUrl({ url: 'pages/Gallery' });
+              })
+          } else {
+            Column()
+              .width(50)
+              .height(50)
+              .borderRadius(14)
+              .backgroundColor('rgba(255,255,255,0.10)')
+              .border({ width: 1.5, color: 'rgba(255,255,255,0.4)' })
+              .onClick(() => {
+                router.pushUrl({ url: 'pages/Gallery' });
+              })
+          }
+          Text(`${this.photoCount}`)
+            .fontSize(11)
+            .fontColor(Color.White)
+            .padding({ left: 6, right: 6, top: 1, bottom: 1 })
+            .backgroundColor(this.today.hex)
+            .borderRadius(9)
+            .translate({ x: 6, y: -6 })
+        }
+        .width(56)
+        .height(56)
+
+        Blank()
+
+        // ä¸­ï¼šå¿«é—¨
+        Column()
+          .width(74)
+          .height(74)
+          .borderRadius(37)
+          .backgroundColor('rgba(255,255,255,0.14)')
+          .border({ width: 3, color: Color.White })
+          .scale({ x: this.capBusy ? 0.92 : 1, y: this.capBusy ? 0.92 : 1 })
+          .animation({ duration: 120, curve: Curve.EaseOut })
+          .onClick(() => {
+            this.doCapture();
+          })
+
+        Blank()
+
+        // å³ï¼šå‰åŽç½®æ‘„åƒå¤´åˆ‡æ¢
+        Column() {
+          Text('âŸ³')
+            .fontSize(22)
+            .fontColor(Color.White)
+            .width(50)
+            .height(50)
+            .textAlign(TextAlign.Center)
+            .backgroundColor('rgba(255,255,255,0.10)')
+            .borderRadius(25)
+            .border({ width: 1.2, color: 'rgba(255,255,255,0.55)' })
+        }
+        .width(56)
+        .height(56)
+        .justifyContent(FlexAlign.Center)
+        .opacity(this.canSwitch ? 1 : 0.35)
+        .onClick(() => {
+          this.doSwitchCamera();
+        })
+      }
+      .width('calc(100% - 40vp)')
+      .padding({ left: 20, right: 20, top: 14, bottom: 14 })
+      .backgroundColor('rgba(0,0,0,0.30)')
+      .borderRadius(40)
+      .backdropBlur(12)
+      .position({ x: 20, y: '100%' })
+      .translate({ y: '-130%' })
+
+      // è°ƒè‰²ç›˜åº•éƒ¨é¢æ¿
+      if (this.paletteOpen) {
+        Column()
+          .width('100%')
+          .height('100%')
+          .backgroundColor('rgba(0,0,0,0.45)')
+          .onClick(() => {
+            this.paletteOpen = false;
+          })
+        Column() {
+          ColorPaletteSheet({
+            activeColor: this.today,
+            isCustom: DailyColorManager.getInstance().isCustomActive(),
+            onLive: (p: ColorPreset) => {
+              this.applyLiveColor(p);
+            },
+            onApply: (p: ColorPreset) => {
+              this.applyPersistColor(p);
+            },
+            onRestoreDaily: () => {
+              this.restoreDailyColor();
+            },
+            onOpenCollection: () => {
+              this.paletteOpen = false;
+              router.pushUrl({ url: 'pages/Collection' });
+            },
+            onClose: () => {
+              this.paletteOpen = false;
+            }
+          })
+        }
+        .width('100%')
+        .position({ x: 0, y: '100%' })
+        .translate({ y: '-100%' })
+      }
+
+      // æ‹ç…§æµ®å±‚ï¼ˆæˆªå›¾åˆæˆæ ¹èŠ‚ç‚¹ = captureOverlayï¼Œä¸Žé¢„è§ˆçª—åŒä¸º 16:9ï¼‰
+      if (this.showCapture && this.capturedPm !== null) {
+        Stack() {
+          Column() {
+            Stack({ alignContent: Alignment.BottomStart }) {
+              Image(this.capturedPm)
+                .width('100%')
+                .height('100%')
+                .objectFit(ImageFit.Cover)
+
+              Column({ space: 3 }) {
+                Text(`${this.today.name} Â· ${this.today.hex}`)
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(Color.White)
+                  .shadow({ radius: 8, color: 'rgba(0,0,0,0.6)' })
+                Text(`ä»Šæ—¥é™å®šè‰² Â· ${this.formatNow()}`)
+                  .fontSize(11)
+                  .fontColor('rgba(255,255,255,0.9)')
+                  .shadow({ radius: 8, color: 'rgba(0,0,0,0.6)' })
+              }
+              .padding({ left: 18, bottom: 16 })
+            }
+            .id('captureOverlay')
+            .width('100%')
+            .aspectRatio(9 / 16)
+            .borderRadius(18)
+            .clip(true)
+          }
+          .width('100%')
+          .height('100%')
+          .padding({ top: 46 })
+
+          // æµ®å±‚æŽ§ä»¶ï¼ˆä¸è¿›å…¥æˆªå›¾ï¼‰
+          Row({ space: 14 }) {
+            SaveButton({ text: SaveDescription.SAVE_IMAGE, buttonType: ButtonType.Capsule })
+              .onClick((event: ClickEvent, result: SaveButtonOnClickResult) => {
+                if (result === SaveButtonOnClickResult.SUCCESS) {
+                  this.doSaveToAlbum();
+                } else {
+                  promptAction.showToast({ message: 'æœªæŽˆæƒä¿å­˜åˆ°ç›¸å†Œ' });
+                }
+              })
+            Blank()
+            Text('å®Œæˆ')
+              .fontSize(15)
+              .fontColor(Color.White)
+              .height(40)
+              .padding({ left: 20, right: 20 })
+              .textAlign(TextAlign.Center)
+              .backgroundColor('rgba(0,0,0,0.35)')
+              .borderRadius(20)
+              .onClick(() => {
+                this.closeCapture();
+              })
+          }
+          .width('100%')
+          .padding({ left: 22, right: 22, bottom: 54 })
+          .position({ x: 0, y: '100%' })
+          .translate({ y: '-100%' })
+        }
+        .width('100%')
+        .height('100%')
+        .backgroundColor(Color.Black)
+      }
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor(Color.Black)
+  }
+
+  private formatNow(): string {
+    const d = new Date();
+    const p = (n: number) => `${n}`.padStart(2, '0');
+    return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  }
+}
+ÀÔrDŸ­@ohos.display¶@ohos.multimedia.image½@ohos.arkui.componentSnapshot²@ohos.promptAction¬@ohos.router®@ohos.vibrator«libentry.so¸../service/CameraService¼../manager/DailyColorManager±../model/PhotoDao´../model/ColorPreset¼../service/CollectionServiceº../components/ColorPalette¹../service/CaptureService¶../service/EchoServiceÔrE—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙR hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.display.d.tsÔrF‘¯hostModulesInfo‘ÔrG’²hostDependencyName®hostModuleName­@ohos.display¥entryÃªoh-resolveÂEAÃÙ[ hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.multimedia.image.d.tsF•G¶@ohos.multimedia.image¥entryG¶@ohos.multimedia.image¥entryG¶@ohos.multimedia.image¥entryG¶@ohos.multimedia.image¥entryG¶@ohos.multimedia.image¥entryÃªoh-resolveÂEAÃÙb hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.arkui.componentSnapshot.d.tsF‘G½@ohos.arkui.componentSnapshot¥entryÃªoh-resolveÂEAÃÙW hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.promptAction.d.tsF”G²@ohos.promptAction¥entryG²@ohos.promptAction¥entryG²@ohos.promptAction¥entryG²@ohos.promptAction¥entryÃªoh-resolveÂEAÃÙQ hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.router.d.tsF”G¬@ohos.router¥entryG¬@ohos.router¥entryG¬@ohos.router¥entryG¬@ohos.router¥entryÃªoh-resolveÂEAÃÙS hvigor_ignore_D:_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.vibrator.d.tsF‘G®@ohos.vibrator¥entryÃªoh-resolveÂEAÃº hvigor_ignore_libentry.soF’G«libentry.so¥entryG«libentry.so¥entryÃªoh-resolveÂEAÂÙKD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\CameraService.etsAÃªoh-resolveÂEAÂÙOD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\manager\DailyColorManager.etsAÃªoh-resolveÂEAÂÙDD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\model\PhotoDao.etsAÃªoh-resolveÂEAÂÙGD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\model\ColorPreset.etsAÃªoh-resolveÂEAÂÙOD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\CollectionService.etsAÃªoh-resolveÂEAÂÙMD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\components\ColorPalette.etsAÃªoh-resolveÂEAÂÙLD:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\CaptureService.etsAÃªoh-resolveÂEAÂÙID:\DevEcoProjects\ColorOfToday\entry\src\main\ets\service\EchoService.etsAÃªoh-resolveÂ“ÔrH–§version¤fileªsourceRoot§sources¥names¨mappings¨Index.js ‘©Index.etsÜï–”   ” ” ” ”# #”$ $–”   ” ” ” ”* *”+ +–”   ” ” ” ”= =”> >–”   ” ” ” ”- -”. .–”   ” ” ” ”! !”" "–”   ” ” ” ”% %”& &–”   ” ” ” ”% %”& &˜”   ” ”	 	” ” %” +”4 ÌA”5 ÌB˜”  	 ” 	”	 		” 	” 	”" 	"”Ì@ 	Ì@”ÌA 	ÌA˜”  
+ ” 
+”	 
+	” 
+” 
+” 
+”, 
+,”- 
+-˜”   ” ”	 	” ” ” ”8 8”9 9˜”   ” ”	 	” ” ” ”: :”; ;˜”   ” ”	 	” ” ”" "”Ì@ Ì@”ÌA ÌA˜”   ” ”	 	” ” "” (”4 Ì@”5 ÌA˜”   ” ”	 	” ” ”" "”> >”? ?’” ” ‘”  •”4 ”ÌA +”ÌB ,”ÌC -”ÌD .’”9 ”: ’”: ”< !’”;  ”< !’”9 -”= 1’”:  ”? %’”7 ”9 ’”7  ”;  !’”8 !”= !#’”5 "”: " ’”: # ”? #%’”5 $”6 $’”5 %”6 %’”8 &”= &#’”8 '”9 '’”7 (”9 (’”7 )”9 )’”9 *”: *’”< +!”= +"’”8 ,”= ,#”” ./”  .3”4 .ÌG”6 .ÌI”” /)”! /-”. /:”0 /<’” 0%”$ 0*’” 1” 1"’” 2” 2$’”  3%”" 3'’” 4” 4’” 5” 5’” 6$”  6%“” 7” 7 ” 7!“” 8” 8” 8 “” 9” 9” 9 ‘” ?’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’”  	”  ’”  	”  ’” !	” !’” !	” !’” "	” "’” "	” "’” #	” #’” #	” #’” $	” $’” $	” $’” %	” %’” %	” %’” &	” &’” &	” &’” '	” '’” '	” '’” (	” (’” (	” (’” )	” )’” )	” )’” *	” *’” *	” *’” +	” +’” +	” +’” ,	” ,’” ,	” ,’” ;” ;–” <” <” <	” <” <” <’” =” =’” ?” ?˜” Ì@” Ì@” Ì@” Ì@” Ì@” Ì@” Ì@”! Ì@˜” ÌA” ÌA” ÌA” ÌA” ÌA”( ÌA"”) ÌA#”* ÌA$‘”	 ÌB˜” ÌC” ÌC” ÌC	” ÌC” ÌC” ÌC”! ÌC”" ÌC–” ÌD” ÌD” ÌD”# ÌD”% ÌD!”& ÌD"’” ÌE” ÌE’” ÌG” ÌG–” ÌH” ÌH” ÌH	” ÌH” ÌH” ÌH’” ÌI” ÌI”” ÌK
+”	 ÌK”
+ ÌK” ÌKÜ ” ÌL” ÌL” ÌL” ÌL” ÌL”" ÌL$”# ÌL%”% ÌL'”& ÌL(”0 ÌL2”1 ÌL3”8 ÌL:”: ÌL<”< ÌL>”= ÌL?”> ÌLÌ@”? ÌLÌA’” ÌM” ÌM”” ÌO
+”	 ÌO”
+ ÌO” ÌO™” ÌP” ÌP
+” ÌP” ÌP”" ÌP”# ÌP”' ÌP#”( ÌP$”) ÌP%œ” ÌQ” ÌQ
+” ÌQ”  ÌQ”+ ÌQ'”- ÌQ)”. ÌQ*”2 ÌQ.”3 ÌQ/”: ÌQ6”; ÌQ7”< ÌQ8œ” ÌR” ÌR
+” ÌR” ÌR”" ÌR”$ ÌR ”% ÌR!”) ÌR%”* ÌR&”1 ÌR-”2 ÌR.”3 ÌR/” ÌS” ÌS” ÌS	” ÌS” ÌS”& ÌS"”' ÌS#”2 ÌS.”4 ÌS0”5 ÌS1”ÌC ÌS?”ÌE ÌSÌA”ÌF ÌSÌBÜ ” ÌT” ÌT” ÌT” ÌT” ÌT”! ÌT”" ÌT”' ÌT#”( ÌT$”+ ÌT'”- ÌT)”1 ÌT-”2 ÌT.”7 ÌT3”8 ÌT4”ÌA ÌT=”ÌC ÌT?”ÌG ÌTÌC”ÌH ÌTÌD”ÌM ÌTÌI”ÌN ÌTÌJ”Ì] ÌTÌY”Ì^ ÌTÌZ”Ì_ ÌTÌ[–” ÌU” ÌU” ÌU	” ÌU” ÌU” ÌU–” ÌV” ÌV” ÌV	” ÌV” ÌV” ÌV’” ÌW” ÌW’” ÌY”! ÌY”” ÌZ
+”	 ÌZ”
+ ÌZ” ÌZ™” Ì[” Ì[
+” Ì[” Ì[”" Ì[”# Ì[”' Ì[#”( Ì[$”) Ì[%Ü ” Ì\” Ì\
+” Ì\” Ì\” Ì\%”( Ì\0”) Ì\1”. Ì\6”/ Ì\7”6 Ì\>”8 Ì\Ì@”< Ì\ÌD”= Ì\ÌE”ÌB Ì\ÌJ”ÌC Ì\ÌK”ÌG Ì\ÌO”ÌH Ì\ÌP”ÌI Ì\ÌQ™” Ì]” Ì]” Ì]	” Ì]” Ì]”  Ì]”! Ì]”' Ì]#”( Ì]$—” Ì^” Ì^” Ì^	” Ì^” Ì^” Ì^” Ì^˜” Ì_” Ì_” Ì_” Ì_” Ì_” Ì_” Ì_” Ì_—” Ì`” Ì`
+” Ì`” Ì`”! Ì`”" Ì`”# Ì`Ü ” Ìa” Ìa
+” Ìa” Ìa” Ìa”" Ìa”# Ìa”' Ìa!”( Ìa"”/ Ìa)”0 Ìa*”5 Ìa/”7 Ìa1”: Ìa4”> Ìa8”? Ìa9”ÌL ÌaÌF”ÌN ÌaÌH”ÌO ÌaÌI”ÌP ÌaÌJÜ ” Ìb” Ìb”  Ìb”( Ìb”* Ìb”- Ìb”/ Ìb!”4 Ìb&”6 Ìb(”; Ìb-”< Ìb.”ÌE Ìb7”ÌG Ìb9”ÌI Ìb;”ÌL Ìb>”ÌN ÌbÌ@—” Ìc” Ìc” Ìc” Ìc”! Ìc”% Ìc”& Ìc”” Ìd” Ìd” Ìd” Ìd	–” Ìe” Ìe
+” Ìe” Ìe” Ìe” Ìe–” Ìf” Ìf” Ìf” Ìf” Ìf” Ìf˜” Ìg” Ìg
+” Ìg” Ìg” Ìg”" Ìg”# Ìg”% Ìg˜” Ìh” Ìh” Ìh”" Ìh”# Ìh”, Ìh$”- Ìh%”. Ìh&‘” Ìi™” Ìj” Ìj
+” Ìj” Ìj” Ìj”( Ìj"”) Ìj#”, Ìj&”. Ìj(”” Ìk” Ìk” Ìk” ÌkÜ ” Ìl” Ìl” Ìl” Ìl”" Ìl”# Ìl”( Ìl ”) Ìl!”/ Ìl'”0 Ìl(”6 Ìl.”9 Ìl1”: Ìl2”> Ìl6”ÌA Ìl9”ÌF Ìl>”ÌG Ìl?”ÌJ ÌlÌB”ÌK ÌlÌC”ÌL ÌlÌD”ÌO ÌlÌG”ÌS ÌlÌK”ÌV ÌlÌN”Ì[ ÌlÌS”Ì\ ÌlÌT”Ì] ÌlÌU”Ì^ ÌlÌVž” Ìm” Ìm” Ìm”" Ìm”% Ìm”) Ìm!”* Ìm"”- Ìm%”. Ìm&”/ Ìm'”1 Ìm)”6 Ìm.”7 Ìm/”8 Ìm0Ü ” Ìn” Ìn” Ìn” Ìn”  Ìn”& Ìn”' Ìn”+ Ìn#”, Ìn$”3 Ìn+”4 Ìn,”9 Ìn1”; Ìn3”> Ìn6”ÌB Ìn:”ÌC Ìn;”ÌP ÌnÌH”ÌR ÌnÌJ”ÌS ÌnÌK”ÌT ÌnÌL–” Ìo” Ìo” Ìo” Ìo”! Ìo”# Ìo˜” Ìp
+” Ìp” Ìp” Ìp”& Ìp”* Ìp ”+ Ìp!”- Ìp#˜” Ìq”% Ìq”& Ìq”* Ìq”+ Ìq”4 Ìq(”5 Ìq)”6 Ìq*˜” Ìr” Ìr” Ìr”& Ìr”) Ìr”* Ìr”+ Ìr”, Ìr ‘” Ìs‘” Ìt	–” Ìu” Ìu” Ìu	” Ìu” Ìu” Ìu‘”	 Ìv‘” Ìv™” Ìw” Ìw
+” Ìw” Ìw” Ìw”" Ìw”# Ìw”' Ìw!”( Ìw"Ü ” Ìx” Ìx”  Ìx”( Ìx”* Ìx”- Ìx”/ Ìx!”4 Ìx&”6 Ìx(”; Ìx-”< Ìx.”ÌE Ìx7”ÌG Ìx9”ÌI Ìx;”ÌL Ìx>”ÌN ÌxÌ@—” Ìy” Ìy” Ìy” Ìy”! Ìy”% Ìy”& Ìy”” Ìz” Ìz” Ìz” Ìz	‘”	 Ì{’” Ì|” Ì|”” Ì~
+”	 Ì~”
+ Ì~” Ì~” Ì” Ì
+” Ì” Ì”) Ì%”* Ì&”4 Ì0”5 Ì1”9 Ì5”= Ì9”? Ì;”Ì@ Ì<”ÌA Ì=Ü ” Ì€” Ì€” Ì€	” Ì€” Ì€”  Ì€”( Ì€$”) Ì€%”4 Ì€0”6 Ì€2”7 Ì€3”ÌB Ì€>”ÌC Ì€?”ÌJ Ì€ÌF”ÌK Ì€ÌG”ÌL Ì€ÌHŸ” Ì” Ì
+” Ì” Ì” Ì”% Ì!”& Ì"”1 Ì-”3 Ì/”4 Ì0”ÌE ÌÌA”ÌF ÌÌB”ÌM ÌÌI”ÌN ÌÌJ”ÌO ÌÌKÜ ” Ì‚” Ì‚” Ì‚	” Ì‚” Ì‚”! Ì‚”& Ì‚"”* Ì‚&”+ Ì‚'”, Ì‚(”- Ì‚)”3 Ì‚/”4 Ì‚0”= Ì‚9”> Ì‚:”? Ì‚;”Ì@ Ì‚<”ÌB Ì‚>”ÌC Ì‚?’” Ìƒ” Ìƒ”” Ì…
+”	 Ì…”
+ Ì…” Ì…–” Ì†” Ì†” Ì†” Ì†”  Ì†”" Ì†’” Ì‡” Ì‡‘”	 Ìˆ—” Ì‰” Ì‰” Ì‰	” Ì‰” Ì‰”# Ì‰”$ Ì‰ ™” ÌŠ” ÌŠ
+” ÌŠ” ÌŠ”" ÌŠ”# ÌŠ”' ÌŠ#”( ÌŠ$”) ÌŠ%œ” Ì‹” Ì‹
+” Ì‹”  Ì‹”+ Ì‹'”- Ì‹)”. Ì‹*”2 Ì‹.”3 Ì‹/”: Ì‹6”; Ì‹7”< Ì‹8œ” ÌŒ” ÌŒ
+” ÌŒ” ÌŒ”" ÌŒ”$ ÌŒ ”% ÌŒ!”) ÌŒ%”* ÌŒ&”1 ÌŒ-”2 ÌŒ.”3 ÌŒ/” Ì” Ì” Ì	” Ì” Ì”& Ì"”' Ì#”2 Ì.”4 Ì0”5 Ì1”ÌC Ì?”ÌE ÌÌA”ÌF ÌÌBÜ ” ÌŽ” ÌŽ” ÌŽ” ÌŽ” ÌŽ”! ÌŽ”" ÌŽ”' ÌŽ#”( ÌŽ$”+ ÌŽ'”- ÌŽ)”1 ÌŽ-”2 ÌŽ.”7 ÌŽ3”8 ÌŽ4”ÌA ÌŽ=”ÌC ÌŽ?”ÌG ÌŽÌC”ÌH ÌŽÌD”ÌM ÌŽÌI”ÌN ÌŽÌJ”Ì] ÌŽÌY”Ì^ ÌŽÌZ”Ì_ ÌŽÌ[œ” Ì” Ì
+” Ì” Ì” Ì”+ Ì'”, Ì(”ÌB Ì>”ÌC Ì?”ÌJ ÌÌF”ÌK ÌÌG”ÌL ÌÌH•” Ì‘” Ì‘” Ì‘	” Ì‘” Ì‘—” Ì’” Ì’
+” Ì’” Ì’” Ì’”0 Ì’*”1 Ì’+—” Ì“” Ì“
+” Ì“” Ì“” Ì“”! Ì“”" Ì“’” Ì”” Ì”‘”	 Ì•’” Ì—”Ì@ Ì—<–” Ì˜” Ì˜” Ì˜”$ Ì˜ ”& Ì˜"”' Ì˜#–” Ì™” Ì™” Ì™” Ì™” Ì™” Ì™Ü ” Ìš” Ìš	” Ìš” Ìš” Ìš” Ìš” Ìš” Ìš” Ìš” Ìš”" Ìš”# Ìš”( Ìš$”* Ìš&”+ Ìš'”- Ìš)”/ Ìš+™” Ì›” Ì›” Ì›” Ì›” Ì›” Ì›”  Ì›”! Ì›”" Ì›˜” Ìœ” Ìœ” Ìœ” Ìœ”  Ìœ”/ Ìœ)”1 Ìœ+”2 Ìœ,™” Ì” Ì
+” Ì” Ì” Ì” Ì”  Ì”! Ì”# Ì–” Ìž” Ìž” Ìž”, Ìž$”. Ìž&”/ Ìž'‘” ÌŸ‘”	 Ì ’” Ì¡”ÌB Ì¡>•” Ì¢” Ì¢” Ì¢	” Ì¢” Ì¢œ” Ì£” Ì£” Ì£” Ì£” Ì£ ”" Ì£$”# Ì£%”/ Ì£1”0 Ì£2”ÌF Ì£ÌH”ÌH Ì£ÌJ”ÌI Ì£ÌK” Ì¤” Ì¤” Ì¤” Ì¤”  Ì¤”1 Ì¤+”2 Ì¤,”8 Ì¤2”9 Ì¤3”< Ì¤6”= Ì¤7”> Ì¤8”? Ì¤9Ü ” Ì¥” Ì¥” Ì¥” Ì¥” Ì¥” Ì¥” Ì¥” Ì¥”  Ì¥”" Ì¥”& Ì¥ ”' Ì¥!”, Ì¥&”. Ì¥(”/ Ì¥)”1 Ì¥+”3 Ì¥-™” Ì¦” Ì¦” Ì¦” Ì¦”  Ì¦”! Ì¦”$ Ì¦”% Ì¦”& Ì¦˜” Ì§” Ì§” Ì§”# Ì§”$ Ì§”3 Ì§+”5 Ì§-”6 Ì§.‘” Ì¨‘”	 Ì©•” Ìª” Ìª” Ìª	” Ìª” Ìª—” Ì«” Ì«
+” Ì«” Ì«” Ì«”' Ì«!”( Ì«"—” Ì¬” Ì¬
+” Ì¬” Ì¬” Ì¬”! Ì¬”" Ì¬’” Ì­” Ì­‘”	 Ì®Ü ” Ì°” Ì°” Ì°” Ì°” Ì°”" Ì°”# Ì°”0 Ì°,”1 Ì°-”8 Ì°4”: Ì°6”; Ì°7”< Ì°8”= Ì°9”> Ì°:”? Ì°;”Ì@ Ì°<”ÌA Ì°=”ÌB Ì°>”ÌC Ì°?”ÌD Ì°Ì@™” Ì±” Ì±
+” Ì±” Ì±”( Ì±$”) Ì±%”; Ì±7”= Ì±9”> Ì±:Ü ” Ì²” Ì²
+” Ì²” Ì²” Ì²” Ì²” Ì²”, Ì²(”- Ì²)”2 Ì².”3 Ì²/”: Ì²6”< Ì²8”ÌH Ì²ÌD”ÌJ Ì²ÌF”ÌM Ì²ÌI”ÌO Ì²ÌK”ÌR Ì²ÌM”ÌS Ì²ÌN”ÌT Ì²ÌO”ÌU Ì²ÌP—” Ì³” Ì³” Ì³	” Ì³” Ì³” Ì³” Ì³œ” Ì´” Ì´” Ì´	” Ì´” Ì´” Ì´” Ì´”+ Ì´'”, Ì´(”5 Ì´1”7 Ì´3”8 Ì´4›” Ìµ” Ìµ
+” Ìµ” Ìµ” Ìµ” Ìµ”( Ìµ$”) Ìµ%”2 Ìµ.”4 Ìµ0”5 Ìµ1š” Ì¶” Ì¶” Ì¶	” Ì¶” Ì¶” Ì¶” Ì¶” Ì¶” Ì¶”  Ì¶š” Ì·” Ì·” Ì·	” Ì·” Ì·” Ì·” Ì·” Ì·” Ì·”  Ì·–” Ì¸” Ì¸” Ì¸” Ì¸” Ì¸” Ì¸™” Ì¹” Ì¹
+” Ì¹” Ì¹” Ì¹”& Ì¹ ”) Ì¹#”+ Ì¹%”, Ì¹&‘”	 Ìº’” Ì»” Ì»’” Ì½” Ì½”” Ì¾
+”	 Ì¾”
+ Ì¾” Ì¾–” Ì¿” Ì¿” Ì¿” Ì¿” Ì¿” Ì¿’” ÌÀ” ÌÀ‘”	 ÌÁ—” ÌÂ” ÌÂ” ÌÂ	” ÌÂ” ÌÂ” ÌÂ” ÌÂ™” ÌÃ” ÌÃ
+” ÌÃ” ÌÃ”" ÌÃ”# ÌÃ”' ÌÃ#”( ÌÃ$”) ÌÃ%Ü ” ÌÄ” ÌÄ
+” ÌÄ” ÌÄ” ÌÄ” ÌÄ” ÌÄ”, ÌÄ(”- ÌÄ)”5 ÌÄ1”6 ÌÄ2”= ÌÄ9”? ÌÄ;”ÌB ÌÄ>”ÌD ÌÄÌ@”ÌG ÌÄÌB”ÌH ÌÄÌC”ÌI ÌÄÌD”ÌJ ÌÄÌE—” ÌÅ” ÌÅ” ÌÅ	” ÌÅ” ÌÅ” ÌÅ” ÌÅ–” ÌÆ” ÌÆ” ÌÆ” ÌÆ” ÌÆ” ÌÆž” ÌÇ” ÌÇ” ÌÇ”" ÌÇ”# ÌÇ”% ÌÇ”, ÌÇ&”. ÌÇ(”6 ÌÇ0”9 ÌÇ3”; ÌÇ5”= ÌÇ7”> ÌÇ8”? ÌÇ9’” ÌÈ” ÌÈ‘”	 ÌÉÜ ” ÌÊ” ÌÊ” ÌÊ” ÌÊ” ÌÊ”" ÌÊ”# ÌÊ”0 ÌÊ,”1 ÌÊ-”8 ÌÊ4”: ÌÊ6”; ÌÊ7”< ÌÊ8”= ÌÊ9”> ÌÊ:”? ÌÊ;”Ì@ ÌÊ<”ÌA ÌÊ=”ÌB ÌÊ>”ÌC ÌÊ?”ÌD ÌÊÌ@—” ÌË” ÌË” ÌË	” ÌË” ÌË” ÌË” ÌË’” ÌÌ” ÌÌ’” ÌÎ”! ÌÎ”” ÌÏ
+” ÌÏ” ÌÏ” ÌÏ&Ü ” ÌÐ” ÌÐ
+” ÌÐ” ÌÐ” ÌÐ” ÌÐ” ÌÐ” ÌÐ”& ÌÐ"”' ÌÐ#”< ÌÐ8”> ÌÐ:”? ÌÐ;”ÌD ÌÐÌ@”ÌE ÌÐÌA”ÌF ÌÐÌB”ÌG ÌÐÌCÜ ” ÌÑ” ÌÑ
+” ÌÑ” ÌÑ” ÌÑ” ÌÑ” ÌÑ” ÌÑ”& ÌÑ"”' ÌÑ#”< ÌÑ8”> ÌÑ:”? ÌÑ;”ÌE ÌÑÌA”ÌF ÌÑÌB”ÌG ÌÑÌC”ÌH ÌÑÌDÜ ” ÌÒ” ÌÒ” ÌÒ	” ÌÒ” ÌÒ”# ÌÒ”$ ÌÒ ”% ÌÒ!”& ÌÒ"”' ÌÒ#”* ÌÒ&”+ ÌÒ'”- ÌÒ)”. ÌÒ*”/ ÌÒ+”0 ÌÒ,”3 ÌÒ/”4 ÌÒ0”5 ÌÒ1”6 ÌÒ2™” ÌÓ” ÌÓ” ÌÓ	” ÌÓ” ÌÓ” ÌÓ” ÌÓ” ÌÓ” ÌÓ™” ÌÔ” ÌÔ” ÌÔ	” ÌÔ” ÌÔ” ÌÔ” ÌÔ” ÌÔ” ÌÔ—” ÌÕ” ÌÕ” ÌÕ	” ÌÕ” ÌÕ” ÌÕ” ÌÕ˜” ÌÖ” ÌÖ” ÌÖ” ÌÖ” ÌÖ” ÌÖ”  ÌÖ”" ÌÖ˜” Ì×” Ì×” Ì×” Ì×” Ì×”( Ì×"”) Ì×#”* Ì×$‘”	 ÌØ™” ÌÙ” ÌÙ” ÌÙ	” ÌÙ” ÌÙ”$ ÌÙ ”% ÌÙ!”( ÌÙ$”* ÌÙ&—” ÌÚ” ÌÚ
+” ÌÚ” ÌÚ” ÌÚ”" ÌÚ”# ÌÚ–” ÌÛ”	 ÌÛ” ÌÛ” ÌÛ
+” ÌÛ” ÌÛ’” ÌÜ” ÌÜ’” ÌÞ
+” ÌÞÜ ” Ìß” Ìß” Ìß	” Ìß” Ìß” Ìß” Ìß”  Ìß”) Ìß%”* Ìß&”1 Ìß-”2 Ìß.”3 Ìß/”4 Ìß0”7 Ìß3”8 Ìß4˜” Ìà” Ìà” Ìà” Ìà” Ìà” Ìà” Ìà”! Ìà˜” Ìá” Ìá” Ìá” Ìá” Ìá”' Ìá!”( Ìá"”) Ìá#‘”	 Ìâ™” Ìã” Ìã” Ìã	” Ìã” Ìã”# Ìã”$ Ìã ”' Ìã#”) Ìã%—” Ìä” Ìä
+” Ìä” Ìä” Ìä” Ìä” Ìä–” Ìå”	 Ìå” Ìå” Ìå
+” Ìå” Ìå’” Ìæ” Ìæ”” Ìè
+”	 Ìè”
+ Ìè” Ìèš” Ìé” Ìé” Ìé” Ìé” Ìé” Ìé”  Ìé”! Ìé”, Ìé(”. Ìé*’” Ìê” Ìê‘”	 Ìë˜” Ìì” Ìì” Ìì” Ìì” Ìì” Ìì”  Ìì”" Ììž” Ìí” Ìí” Ìí”" Ìí”# Ìí”% Ìí”, Ìí&”. Ìí(”2 Ìí,”3 Ìí-”; Ìí5”= Ìí7”> Ìí8”? Ìí9’” Ìî” Ìî‘”	 Ìï—” Ìð” Ìð” Ìð	” Ìð” Ìð” Ìð” Ìð’” Ìñ” ÌñÜ ” Ìò” Ìò” Ìò”# Ìò”$ Ìò”& Ìò ”* Ìò$”, Ìò&”2 Ìò,”4 Ìò.”< Ìò6”> Ìò8”Ì@ Ìò:”ÌB Ìò<”ÌD Ìò>”ÌF ÌòÌ@”ÌH ÌòÌB”ÌJ ÌòÌD”ÌK ÌòÌE”ÌM ÌòÌG”ÌR ÌòÌL”ÌT ÌòÌN”Ì[ ÌòÌU”Ì] ÌòÌW”Ì^ ÌòÌX”Ì_ ÌòÌY—” Ìó” Ìó
+” Ìó” Ìó”  Ìó”# Ìó”$ ÌóÜ ” Ìô” Ìô”  Ìô”( Ìô”* Ìô”- Ìô”/ Ìô!”4 Ìô&”6 Ìô(”; Ìô-”< Ìô.”ÌC Ìô5”ÌE Ìô7”ÌG Ìô9”ÌJ Ìô<”ÌL Ìô>—” Ìõ” Ìõ” Ìõ”! Ìõ”$ Ìõ”% Ìõ”& Ìõ”” Ìö” Ìö” Ìö” Ìö	™” Ìø” Ìø” Ìø” Ìø”% Ìø”& Ìø ”2 Ìø,”4 Ìø.”5 Ìø/ž” Ìù” Ìù
+” Ìù” Ìù” Ìù”" Ìù”' Ìù!”( Ìù"”, Ìù&”- Ìù'”7 Ìù1”< Ìù6”= Ìù7”? Ìù9œ” Ìú” Ìú” Ìú”& Ìú”' Ìú”) Ìú!”0 Ìú(”2 Ìú*”> Ìú6”Ì@ Ìú8”ÌA Ìú9”ÌB Ìú:’” Ìû” Ìû‘” Ìü”” Ìý” Ìý” Ìý” Ìý3Ü ” Ìþ” Ìþ” Ìþ” Ìþ” Ìþ” Ìþ”$ Ìþ”% Ìþ”* Ìþ"”, Ìþ$”2 Ìþ*”4 Ìþ,”9 Ìþ1”: Ìþ2”Ì@ Ìþ8”ÌB Ìþ:˜” Ìÿ” Ìÿ”  Ìÿ”% Ìÿ”& Ìÿ”4 Ìÿ,”5 Ìÿ-”> Ìÿ6’” Í ” Í Ü ” Í” Í” Í” Í” Í”" Í”# Í”1 Í+”2 Í,”7 Í1”8 Í2”< Í6”> Í8”ÌE Í?”ÌF ÍÌ@”ÌG ÍÌA’” Í”( Í"—” Í” Í
+” Í” Í” Í”  Í”! Í—” Í” Í
+” Í” Í” Í”# Í”$ Í™” Í” Í” Í” Í” Í” Í”  Í”! Í”" Íœ” Í” Í” Í” Í” Í”0 Í*”1 Í+”4 Í.”5 Í/”ÌE Í?”ÌF ÍÌ@”ÌG ÍÌA™” Í	” Í	” Í	” Í	”& Í	 ”' Í	!”+ Í	%”, Í	&”- Í	'Ü ” Í
+” Í
+” Í
+” Í
+”$ Í
+”2 Í
+,”3 Í
+-”ÌB Í
+<”ÌC Í
+=”ÌJ Í
+ÌD”ÌL Í
+ÌF”ÌP Í
+ÌJ”ÌR Í
+ÌL”ÌV Í
+ÌP”ÌW Í
+ÌQ”Ì\ Í
+ÌV”Ì] Í
+ÌW”Ìa Í
+Ì[”Ìb Í
+Ì\”Ìc Í
+Ì]–” Í” Í
+” Í” Í”" Í”$ Íœ” Í” Í” Í”& Í”' Í”) Í!”0 Í(”2 Í*”8 Í0”: Í2”; Í3”< Í4‘” Í‘” Í—” Í” Í” Í”% Í”( Í ”1 Í)”2 Í*Ü ” Í” Í”$ Í”% Í”0 Í(”1 Í)”: Í2”< Í4”> Í6”Ì@ Í8”ÌE Í=”ÌF Í>”ÌK ÍÌC”ÌM ÍÌE”ÌR ÍÌJ”ÌS ÍÌK”ÌY ÍÌQ”ÌZ ÍÌR”Ì[ ÍÌS’” Í”, Í$Ü ” Í” Í”# Í”& Í”, Í$”= Í5”> Í6”ÌM ÍÌE”ÌN ÍÌF”ÌU ÍÌM”ÌW Í
+”Ì[ Í”Ì\ Í”Ìa Í”Ìb Í”Ìe Í”Ìg Í”Ìx Í+”Ìy Í,”Ìƒ Í6”Ì„ Í7”Ìˆ Í;”ÌŒ Í?”ÌŽ ÍÌA”Ì ÍÌB”Ì ÍÌC”Ì‘ ÍÌD–” Í” Í”! Í”& Í”* Í"”, Í$Ü ” Í
+”  Í”! Í”* Í ”+ Í!”- Í#”4 Í*”6 Í,”Ì@ Í6”ÌM ÍÌC”ÌN ÍÌD”ÌR ÍÌH”ÌT ÍÌJ”ÌV ÍÌL”Ì^ ÍÌT”Ì` ÍÌV”Ìd ÍÌZ”Ìf ÍÌ\”Ìg ÍÌ]”Ìh ÍÌ^‘” Í	–” Í” Í” Í”! Í”# Í”$ Í’” Í”: Í2‘” Í‘”	 Í‘” Í—” Í” Í
+” Í” Í” Í”  Í”! Í‘”	 Í’” Í” Í’” Í”0 Í.”” Í
+”	 Í”
+ Í” Í˜” Í ” Í ” Í ” Í ”! Í ”& Í "”( Í $”* Í &’” Í!” Í!‘”	 Í"™” Í#” Í#
+” Í#” Í#”" Í#”# Í#”' Í##”( Í#$”) Í#%Ü ” Í$” Í$
+” Í$” Í$” Í$”( Í$$”) Í$%”4 Í$0”5 Í$1”< Í$8”> Í$:”ÌB Í$>”ÌC Í$?”ÌS Í$ÌO”ÌT Í$ÌP”ÌU Í$ÌQ–” Í%” Í%” Í%” Í%” Í%” Í%œ” Í&” Í&” Í&”" Í&”# Í&”% Í&”, Í&&”. Í&(”8 Í&2”: Í&4”; Í&5”< Í&6‘”	 Í'‘” Í'œ” Í(” Í(” Í(”" Í(”# Í(”% Í(”, Í(&”. Í((”7 Í(1”9 Í(3”: Í(4”; Í(5‘”	 Í)’” Í*” Í*’” Í,
+” Í,—” Í-” Í-” Í-	” Í-” Í-”  Í-”! Í-—” Í.” Í.” Í.	” Í.” Í.” Í.” Í.—” Í/” Í/” Í/	” Í/”  Í/”" Í/”# Í/’” Í0” Í0’” Í2” Í2”” Í3
+” Í3” Í3” Í3'—” Í4” Í4” Í4	” Í4” Í4” Í4” Í4Ü ” Í5” Í5” Í5” Í5” Í5” Í5” Í5”" Í5”$ Í5 ”% Í5!”& Í5"”/ Í5+”1 Í5-”2 Í5.”3 Í5/”ÌB Í5>”ÌC Í5?”ÌD Í5Ì@’” Í6” Í6’” Í8” Í8–” Í9
+”	 Í9”
+ Í9” Í9!” Í9"” Í90˜” Í:” Í:” Í:	” Í:” Í:” Í:” Í:” Í:™” Í;” Í;
+” Í;” Í;”" Í;”# Í;”' Í;#”( Í;$”) Í;%ž” Í<” Í<
+” Í<”  Í<”+ Í<'”- Í<)”. Í<*”< Í<8”= Í<9”ÌD Í<Ì@”ÌF Í<ÌB”ÌG Í<ÌC”ÌH Í<ÌD”ÌI Í<ÌEœ” Í=” Í=” Í=” Í=” Í=”! Í=”( Í=$”* Í=&”5 Í=1”7 Í=3”8 Í=4”9 Í=5’” Í>” Í>’” Í@” Í@”” ÍA
+”	 ÍA”
+ ÍA” ÍA!™” ÍB” ÍB
+” ÍB” ÍB”" ÍB”# ÍB”' ÍB#”( ÍB$”) ÍB%š” ÍC” ÍC
+” ÍC”  ÍC”+ ÍC'”- ÍC)”. ÍC*”> ÍC:”Ì@ ÍC<”ÌA ÍC=ž” ÍD” ÍD” ÍD	” ÍD” ÍD”- ÍD)”. ÍD*”9 ÍD5”; ÍD7”< ÍD8”ÌD ÍDÌ@”ÌF ÍDÌB”ÌG ÍDÌC”ÌH ÍDÌDœ” ÍE” ÍE” ÍE” ÍE” ÍE”! ÍE”( ÍE$”* ÍE&”4 ÍE0”6 ÍE2”7 ÍE3”8 ÍE4’” ÍF” ÍF‘” ÍH’” ÍI” ÍI	–” ÍI” ÍI	” Íª” Íª
+” Íª” Íª–” ÍI” ÍI	” Í«” Í«” Í«” Í«˜” ÍI” ÍI	” Í¬”! Í¬”" Í¬”' Í¬”( Í¬”- Í¬ ’” ÍJ”> ÍJ8’” ÍK” ÍK’” ÍJ”> ÍJ8–” ÍK” ÍK” Ír” Ír” Ír” Ír’” ÍJ”> ÍJ8–” ÍK” ÍK” Ís” Ís” Ís”  Ís’” ÍJ”> ÍJ8š” ÍK” ÍK” Ít” Ít” Ít” Ít”  Ít”" Ít”$ Ít”& ÍtÜ ” ÍL” ÍL” ÍL”  ÍL”" ÍL”$ ÍL”3 ÍL(”5 ÍL*”9 ÍL.”; ÍL0”ÌD ÍL9”ÌF ÍL;”ÌQ ÍLÌF”ÌS ÍLÌH”ÌZ ÍLÌO”Ì\ ÍLÌQ”Ìf ÍLÌ[”Ìh ÍLÌ]”Ìl ÍLÌa”Ìm ÍLÌb”Ìy ÍLÌn”Ì{ ÍLÌp–” ÍL” ÍL” ÍM” ÍM” ÍM”# ÍM˜” ÍL” ÍL” ÍN”" ÍN”# ÍN”$ ÍN”' ÍN”) ÍN–” ÍL” ÍL” ÍO”# ÍO”$ ÍO”& ÍO–” ÍL” ÍL” ÍP” ÍP” ÍP”  ÍP™” ÍL” ÍL” ÍQ” ÍQ” ÍQ”  ÍQ”! ÍQ!”# ÍQ#”% ÍQ%˜” ÍR” ÍR” ÍR”# ÍR”$ ÍR ”% ÍR!”& ÍR"”' ÍR#’” ÍS
+” ÍS˜” ÍU” ÍU”  ÍU”" ÍU”) ÍU"”+ ÍU$”, ÍU%”. ÍU'—” ÍU” ÍU” ÍV”& ÍV”' ÍV”* ÍV ”, ÍV"™” ÍW” ÍW” ÍW”$ ÍW$”' ÍW'”+ ÍW+”, ÍW,”5 ÍW5”6 ÍW6’” ÍX” ÍX™” ÍU” ÍU” ÍY”' ÍY”( ÍY”) ÍY”. ÍY2”0 ÍY4”2 ÍY6Ü ” ÍZ” ÍZ” ÍZ” ÍZ”! ÍZ!”" ÍZ"”% ÍZ%”& ÍZ&”* ÍZ*”+ ÍZ+”2 ÍZ2”4 ÍZ4”8 ÍZ8”9 ÍZ9”< ÍZ<”= ÍZ=”ÌA ÍZÌA”ÌB ÍZÌB”ÌI ÍZÌI”ÌK ÍZÌK”ÌO ÍZÌO”ÌP ÍZÌP”Ì_ ÍZÌ_”Ìb ÍZÌb”Ìg ÍZÌg”Ìh ÍZÌh”Ìm ÍZÌm”Ìn ÍZÌn”Ìo ÍZÌo”Ìp ÍZÌpŸ” Í[” Í[” Í[” Í[” Í[” Í[”! Í[!”$ Í[$”( Í[(”) Í[)”2 Í[2”3 Í[3”6 Í[6”: Í[:”< Í[<—” Í\” Í\” Í\”" Í\ ”% Í\#”) Í\'”* Í\(š” Í]” Í]” Í]”& Í]$”' Í]%”. Í],”/ Í]-”3 Í]1”4 Í]2”5 Í]3–” Í^” Í^” Í^”$ Í^"”& Í^$”' Í^%‘” Í_’” Í`” Í`’” ÍU” ÍU›” ÍL” ÍL” Íb”# Íb”$ Íb”% Íb”- Íb'”/ Íb)”6 Íb6”8 Íb8”: Íb:’” Íc”5 Íc1›” Íd” Íd” Íd”  Íd”' Íd#”( Íd$”= Íd9”? Íd;”Ì@ Íd<”ÌM ÍdÌI”ÌN ÍdÌJÜ ” Íe” Íe” Íe” Íe”  Íe”! Íe”& Íe"”' Íe#”- Íe)”. Íe*”5 Íe1”6 Íe2”; Íe7”< Íe8”? Íe;”ÌF ÍeÌB”ÌG ÍeÌC”ÌH ÍeÌDÜ ” Íf” Íf” Íf” Íf”  Íf”! Íf”& Íf"”' Íf#”- Íf)”. Íf*”5 Íf1”6 Íf2”< Íf8”= Íf9”Ì@ Íf<”ÌG ÍfÌC”ÌH ÍfÌD”ÌI ÍfÌEš” Íg” Íg” Íg” Íg” Íg” Íg”" Íg”% Íg!”& Íg"”( Íg$š” Íh” Íh”  Íh”2 Íh,”3 Íh-”6 Íh0”8 Íh2”; Íh5”< Íh6”= Íh7‘” Íi’” Íj
+” Íj—” ÍL” ÍL” Ík” Ík” Ík”! Ík”# Ík–” Íl” Íl” Íl”" Íl”$ Íl ”% Íl!’” Ím
+” Ím—” ÍL” ÍL” Ín”  Ín”! Ín”$ Ín”& Ín–” Ío” Ío” Ío”+ Ío'”- Ío)”. Ío*’” Íp
+” Íp’” ÍJ”: ÍJ8’” ÍK” ÍK’” Ív” Ív–” Íw” Íw
+” Íw” Íw” Íw” Íw’” Íx” Íx–” Íx” Íx” Í	”$ Í”% Í”+ Í–” Íx” Íx” Í€	”% Í€”& Í€”, Í€˜” Íx” Íx” Í	”. Í”/ Í”: Í$”; Í%”? Í)’” Íy
+” Íy–” Íy
+” Íy” Íy”* Íy”+ Íy”, Íy ’” Íy
+” Íy’” Íz
+” Íz–” Íz
+” Íz”  Íz”+ Íz”, Íz ”/ Íz#–” Íz
+” Íz”  Íz%”% Íz*”& Íz+”> ÍzÌC’” Í{
+” Í{–” Í{
+” Í{” Í{”* Í{”+ Í{”, Í{ ’” Í{
+” Í{’” Í|
+” Í|–” Í|
+” Í|”  Í|”+ Í|”, Í| ”/ Í|#–” Í|
+” Í|”  Í|%”% Í|*”& Í|+”> Í|ÌC’” Í}
+” Í}–” Í}
+” Í}” Í}”* Í}”+ Í}”, Í} ’” Í}
+” Í}’” Íx” Íx’” Íƒ” Íƒ–” Íƒ” Íƒ” ÍŠ	”! ÍŠ”" ÍŠ”( ÍŠ–” Íƒ” Íƒ” Í‹	”" Í‹”# Í‹”) Í‹˜” Íƒ” Íƒ” ÍŒ	”+ ÍŒ”, ÍŒ”7 ÍŒ$”8 ÍŒ%”< ÍŒ)’” Í„
+” Í„–” Í„
+” Í„” Í„”* Í„”+ Í„”, Í„ ’” Í„
+” Í„’” Í…
+” Í…–” Í…
+” Í…”  Í…”( Í…”) Í…”- Í…!–” Í…
+” Í…”  Í…#”+ Í….”, Í…/”/ Í…2–” Í…
+” Í…”  Í…4”% Í…9”& Í…:”> Í…ÌR’” Í†
+” Í†–” Í†
+” Í†” Í†”* Í†”+ Í†”, Í† ’” Í†
+” Í†’” Í‡
+” Í‡–” Í‡
+” Í‡”  Í‡”( Í‡”) Í‡”- Í‡!–” Í‡
+” Í‡”  Í‡#”+ Í‡.”, Í‡/”/ Í‡2–” Í‡
+” Í‡”  Í‡4”% Í‡9”& Í‡:”> Í‡ÌR’” Íˆ
+” Íˆ–” Íˆ
+” Íˆ” Íˆ”* Íˆ”+ Íˆ”, Íˆ ’” Íˆ
+” Íˆ’” Íƒ” Íƒ‘” Í’” Í” Í‘” Í’” Í” Í–” Í” Í
+” Í” Í” Í”  Í’” Í‘” Í‘ž”  Í—”) Í—”* Í—”, Í—”4 Í—”6 Í—!”9 Í—$”; Í—&”Ì@ Í—+”ÌB Í—-”ÌG Í—2”ÌH Í—3”ÌO Í—:”ÌQ Í—<–” Í‘” Í‘” Í’”$ Í’”% Í’”' Í’–” Í‘” Í‘” Í“”% Í“”& Í“”( Í“–” Í‘” Í‘” Í””+ Í””, Í””. Í”ž” Í‘” Í‘” Í•”% Í•”& Í•”( Í•”- Í•”/ Í•”0 Í•”2 Í•”7 Í•#”9 Í•%”ÌO Í•;”ÌQ Í•=Ü ” Í‘” Í‘” Í–”' Í–”( Í–”* Í–”+ Í–”- Í–”1 Í–”2 Í–”8 Í–$”; Í–'”= Í–)”? Í–+”Ì@ Í–,”ÌB Í–.”ÌF Í–2”ÌG Í–3”ÌM Í–9”ÌP Í–<”ÌR Í–>”ÌT Í–Ì@’”  Í—”) Í—˜” Í‘” Í‘” Í˜”. Í˜”/ Í˜”: Í˜&”; Í˜'”? Í˜+’” Í‘” Í‘‘” Í™’” Í›” Í›‘” Í™’” Í›” Í›’” Íœ” Íœ’” Í›” Í›–” Íœ” Íœ” Í	” Í” Í” Í’” Í›” Í›–” Íœ” Íœ” Íž	” Íž” Íž”  Íž’” Í›” Í›˜” Íœ” Íœ” ÍŸ	”" ÍŸ”# ÍŸ”( ÍŸ”) ÍŸ”. ÍŸ$’” Í›” Í›˜” Íœ” Íœ” Í 	” Í ” Í ” Í ”  Í ”, Í "’” Í›” Í›˜” Íœ” Íœ” Í¡	”" Í¡”# Í¡”. Í¡$”/ Í¡%”3 Í¡)’” Í›” Í›’” Íœ” Íœ’” Í£” Í£œ” Í¤” Í¤
+” Í¤” Í¤” Í¤”! Í¤”% Í¤”& Í¤ ”. Í¤(”3 Í¤-”5 Í¤/”7 Í¤1˜” Í¥” Í¥”& Í¥”( Í¥”- Í¥”/ Í¥”1 Í¥”3 Í¥–” Í¥” Í¥” Í­	”$ Í­”% Í­”+ Í­ž” Í¥” Í¥” Í®	”& Í®”' Í®”) Í®”- Í®”/ Í®”1 Í®”3 Í®”8 Í®"”: Í®$”< Í®&”> Í®(–” Í¦
+” Í¦”  Í¦”! Í¦”) Í¦”+ Í¦’”$ Í§”3 Í§–”$ Í§”3 Í§”4 Í§”9 Í§#”: Í§$”< Í§&–”$ Í§”3 Í§”4 Í§(”: Í§.”; Í§/”= Í§1˜”$ Í§”3 Í§”4 Í§3”9 Í§8”: Í§9”? Í§>”Ì@ Í§?”ÌE Í§ÌD””$ Í¨”( Í¨”0 Í¨”9 Í¨–”$ Í¨”( Í¨”) Í¨”1 Í¨$”2 Í¨%”4 Í¨'–”$ Í¨”( Í¨”) Í¨)”2 Í¨2”3 Í¨3”ÌK Í¨ÌK’”  Í¨”$ Í¨‘” Í©‘” Í©–”$ Íª”( Íª”0 Íª”4 Íª”5 Íª”= Íª–”$ Íª”( Íª”) Íª ”1 Íª(”2 Íª)”4 Íª+–”$ Íª”( Íª”) Íª-”2 Íª6”3 Íª7”ÌJ ÍªÌN˜”$ Íª”( Íª”) ÍªÌP”2 ÍªÌY”3 ÍªÌZ”< ÍªÌc”= ÍªÌd”ÌC ÍªÌj’”  Íª”$ Íª‘” Í«’” Í¥” Í¥‘” Í¯’” Í±” Í±‘” Í¯’” Í±” Í±˜” Í²” Í²
+” Í²” Í²” Í²”" Í²”$ Í²”& Í² –” Í³” Í³”$ Í³”( Í³”) Í³”1 Í³–” Í³” Í³” Í´”% Í´”& Í´”( Í´˜” Í³” Í³” Íµ”& Íµ”' Íµ”, Íµ”- Íµ”2 Íµ Ü ” Í³” Í³” Í¶”$ Í¶”% Í¶”' Í¶”+ Í¶”- Í¶”/ Í¶”1 Í¶”6 Í¶$”8 Í¶&”: Í¶(”< Í¶*”? Í¶-”ÌA Í¶/”ÌB Í¶0”ÌD Í¶2”ÌJ Í¶8”ÌL Í¶:”ÌM Í¶;”ÌO Í¶=–” Í³” Í³” Í·”, Í·”- Í·”? Í·-–” Í³” Í³” Í¸”) Í¸”* Í¸”, Í¸š” Í³” Í³” Í¹”# Í¹”$ Í¹”& Í¹”) Í¹”+ Í¹”. Í¹”0 Í¹˜” Í³” Í³” Íº”, Íº”- Íº”8 Íº&”9 Íº'”= Íº+’” Í³” Í³‘” Í»’” Í½”  Í½‘” Í»’” Í½”  Í½˜” Í¾” Í¾” Í¾” Í¾”! Í¾”# Í¾”$ Í¾”& Í¾’” Í½”  Í½–” Í¾” Í¾” ÍÛ” ÍÛ” ÍÛ” ÍÛ’” Í½”  Í½š” Í¾” Í¾” ÍÜ” ÍÜ” ÍÜ” ÍÜ”  ÍÜ”" ÍÜ”$ ÍÜ”& ÍÜ’” Í½”  Í½˜” Í¾” Í¾” ÍÝ”" ÍÝ”# ÍÝ”. ÍÝ"”/ ÍÝ#”3 ÍÝ'˜” Í¿” Í¿” Í¿” Í¿” Í¿”  Í¿”! Í¿”# Í¿Ü ” Í¿” Í¿” ÍË	” ÍË” ÍË” ÍË” ÍË”  ÍË”" ÍË”$ ÍË”) ÍË"”+ ÍË$”- ÍË&”/ ÍË(”2 ÍË+”4 ÍË-”5 ÍË.”7 ÍË0”= ÍË6”? ÍË8”Ì@ ÍË9”ÌB ÍË;–” Í¿” Í¿” ÍÌ	” ÍÌ”  ÍÌ”2 ÍÌ+–” Í¿” Í¿” ÍÍ	” ÍÍ” ÍÍ” ÍÍ—” Í¿” Í¿” ÍÎ	” ÍÎ” ÍÎ” ÍÎ” ÍÎ—” ÍÏ
+” ÍÏ” ÍÏ”  ÍÏ”# ÍÏ”' ÍÏ!”( ÍÏ"’” ÍÐ” ÍÐ	œ” ÍÀ
+” ÍÀ” ÍÀ” ÍÀ”! ÍÀ”# ÍÀ”% ÍÀ”' ÍÀ”- ÍÀ$”/ ÍÀ&”1 ÍÀ(”3 ÍÀ*š” ÍÀ
+” ÍÀ” ÍÁ” ÍÁ” ÍÁ” ÍÁ” ÍÁ”" ÍÁ”# ÍÁ”& ÍÁ ž” ÍÀ
+” ÍÀ” ÍÂ” ÍÂ” ÍÂ” ÍÂ”! ÍÂ”# ÍÂ”& ÍÂ ”( ÍÂ"”- ÍÂ'”/ ÍÂ)”ÌF ÍÂÌ@”ÌH ÍÂÌB˜” ÍÃ
+” ÍÃ” ÍÃ” ÍÃ” ÍÃ”" ÍÃ”# ÍÃ”' ÍÃ–” ÍÃ
+” ÍÃ” ÍÄ” ÍÄ” ÍÄ” ÍÄ˜” ÍÃ
+” ÍÃ” ÍÅ” ÍÅ” ÍÅ”& ÍÅ"”' ÍÅ#”- ÍÅ)˜” ÍÃ
+” ÍÃ” ÍÆ” ÍÆ” ÍÆ”  ÍÆ”! ÍÆ”& ÍÆ"’” ÍÃ
+” ÍÃ”” ÍÇ
+” ÍÇ” ÍÇ” ÍÇ–” ÍÇ
+” ÍÇ” ÍÈ” ÍÈ” ÍÈ” ÍÈ–” ÍÇ
+” ÍÇ” ÍÉ” ÍÉ” ÍÉ”2 ÍÉ.’” ÍÇ
+” ÍÇ’” Í¿” Í¿–” ÍÒ” ÍÒ” ÍÒ” ÍÒ” ÍÒ”% ÍÒ–” ÍÒ” ÍÒ” ÍÓ” ÍÓ” ÍÓ” ÍÓ–” ÍÒ” ÍÒ” ÍÔ” ÍÔ” ÍÔ”3 ÍÔ-–” ÍÒ” ÍÒ” ÍÕ” ÍÕ” ÍÕ” ÍÕ˜” ÍÒ” ÍÒ” ÍÖ” ÍÖ” ÍÖ”$ ÍÖ”% ÍÖ”+ ÍÖ%Ü ” ÍÒ” ÍÒ” Í×” Í×” Í×” Í×” Í×”' Í×!”( Í×"”) Í×#”* Í×$”+ Í×%”, Í×&”- Í×'”. Í×(”/ Í×)Ü ” ÍÒ” ÍÒ” ÍØ” ÍØ” ÍØ” ÍØ” ÍØ”  ÍØ”$ ÍØ”% ÍØ”. ÍØ(”/ ÍØ)”0 ÍØ*”1 ÍØ+”2 ÍØ,”3 ÍØ-”4 ÍØ.”5 ÍØ/”6 ÍØ0”8 ÍØ2ž” ÍÒ” ÍÒ” ÍÙ” ÍÙ” ÍÙ” ÍÙ”  ÍÙ”" ÍÙ”# ÍÙ”% ÍÙ”* ÍÙ$”, ÍÙ&”> ÍÙ8”Ì@ ÍÙ:’” ÍÒ” ÍÒ’” Í½” Í½’” Í¾” Í¾’” Íß” Íß’” Íà” Íà’” Íß” Íß–” Íà” Íà” Íê” Íê” Íê” Íê’” Íß” Íß–” Íà” Íà” Íë” Íë” Íë” Íë’” Íß” ÍßÜ ” Íà” Íà” Íì” Íì” Íì” Íì” Íì”% Íì”& Íì”' Íì”( Íì”) Íì”* Íì”+ Íì ”, Íì!”0 Íì%’” Íß” Íßž” Íà” Íà” Íí” Íí” Íí” Íí” Íí”  Íí”& Íí”( Íí”) Íí”+ Íí ”. Íí#”0 Íí%’” Íß” Íßš” Íà” Íà” Íî” Íî” Íî” Íî” Íî”! Íî”( Íî”* Íî’” Íß” Íß—” Íà” Íà” Íï” Íï” Íï” Íï” Íïš” Íð” Íð” Íð” Íð” Íð” Íð”# Íð”$ Íð”* Íð"”+ Íð#’” Íñ” Íñ’” Íá” Íáš” Íá” Íá” Íá” Íá” Íá” Íá” Íá”  Íá”! Íá”" Íá š” Íá” Íá” Íá"” Íá*” Íá+” Íá,” Íá-” Íá/”  Íá1”! Íá2–” Íá” Íá” Íâ” Íâ” Íâ”/ Íâ)–” Íá” Íá” Íâ+” Íâ6” Íâ7”  Íâ:’” Íã” Íãš” Íã” Íã” Íã” Íã” Íã” Íã” Íã”! Íã”" Íã ”# Íã!š” Íã” Íã” Íã#” Íã+” Íã,” Íã-” Íã/” Íã1”! Íã3”" Íã4–” Íã” Íã” Íä” Íä” Íä”/ Íä)–” Íã” Íã” Íä+” Íä6” Íä7”  Íä:’” Íå” Íåš” Íå” Íå” Íå” Íå” Íå” Íå” Íå”  Íå”! Íå”" Íå š” Íå” Íå” Íå"” Íå*” Íå+” Íå,” Íå.” Íå0”  Íå1”! Íå2–” Íå” Íå” Íæ” Íæ” Íæ”/ Íæ)–” Íå” Íå” Íæ+” Íæ6” Íæ7”  Íæ:’” Íç” Íçš” Íç” Íç” Íç” Íç” Íç” Íç” Íç”  Íç”" Íç ”# Íç!š” Íç” Íç” Íç#” Íç+” Íç,” Íç-” Íç/” Íç1”! Íç3”" Íç4–” Íç” Íç” Íè” Íè” Íè”/ Íè)–” Íç” Íç” Íè+” Íè6” Íè7”  Íè:’” Íß” Íß’” Íà” Íà’” Íó”' Íó!˜” Íô” Íô	” Íô
+” Íô” Íô”  Íô”" Íô”$ Íô’” Íó”' Íó!–” Íô” Íô	” Í<” Í<” Í<”) Í< ’” Íó”' Íó!Ü ” Íô” Íô	” Í=” Í=” Í=” Í=” Í=”  Í=”" Í=”$ Í=”) Í= ”+ Í="”- Í=$”/ Í=&”2 Í=)”4 Í=+”6 Í=-”8 Í=/”> Í=5”Ì@ Í=7”ÌB Í=9”ÌD Í=;’” Íó”' Íó!–” Íô” Íô	” Í>” Í>”  Í>”2 Í>)’” Íó”' Íó!–” Íô” Íô	” Í?” Í?” Í?” Í?’” Íó”' Íó!–” Íô” Íô	” Í@” Í@” Í@” Í@’” Íó”' Íó!ž” Íô” Íô	” ÍA” ÍA” ÍA” ÍA” ÍA” ÍA”  ÍA”" ÍA”# ÍA”% ÍA”+ ÍA"”- ÍA$’” Íó”' Íó!š” Íô” Íô	” ÍB” ÍB” ÍB” ÍB” ÍB” ÍB”& ÍB”( ÍB’” Íõ” Íõš” Íö” Íö” Íö” Íö”' Íö”) Íö”2 Íö'”3 Íö(”9 Íö.”; Íö0’” Íõ” Íõ–” Íö” Íö” Í	” Í” Í” Í’” Íõ” Íõ–” Íö” Íö” Í	” Í” Í” Í˜” Í÷
+” Í÷” Í÷” Í÷”  Í÷”% Í÷#”' Í÷%”) Í÷'˜” Íø” Íø”% Íø”/ Íø”3 Íø ”4 Íø!”? Íø,”ÌA Íø.–” Íø” Íø” Íù”# Íù”$ Íù”& Íù–” Íø” Íø” Íú”$ Íú”% Íú”' Íú–” Íø” Íø” Íû”* Íû”+ Íû”- Íû˜” Íø” Íø” Íü”' Íü”( Íü”0 Íü!”1 Íü"”6 Íü'ž” Íø” Íø” Íý”$ Íý”% Íý”' Íý”, Íý”. Íý”1 Íý"”3 Íý$”8 Íý)”: Íý+”ÌR ÍýÌC”ÌT ÍýÌE—” Íø” Íø” Íþ”% Íþ”& Íþ”) Íþ”+ Íþœ” Íÿ”" Íÿ”# Íÿ”* Íÿ”+ Íÿ”- Íÿ!”0 Íÿ$”2 Íÿ&”ÌA Íÿ5”ÌC Íÿ7”ÌD Íÿ8”ÌE Íÿ9’” Í ” Í ‘” Í‘” Í’” Í” Í–” Í” Í” Í”$ Í”% Í”' Í–” Í” Í” Í”% Í”& Í”( Í–” Í” Í” Í”+ Í”, Í”. Í–” Í” Í” Í”. Í”/ Í”ÌG Í7ž” Í” Í” Í”% Í”& Í”( Í”- Í”/ Í”2 Í"”4 Í$”9 Í)”; Í+”ÌR ÍÌB”ÌT ÍÌD—” Í” Í” Í”& Í”' Í”* Í”, Íœ” Í	”" Í	”# Í	”* Í	”+ Í	”- Í	!”0 Í	$”2 Í	&”ÌA Í	5”ÌC Í	7”ÌD Í	8”ÌE Í	9’” Í
+” Í
+’” Í” Í‘” Í˜” Í
+” Í” Í” Í” Í”  Í”* Í!”, Í#–” Í
+” Í” Í” Í” Í” Í˜” Í
+” Í” Í” Í” Í”  Í”! Í”& Í"Ü ” Í
+” Í” Í” Í” Í” Í” Í”! Í”" Í”$ Í ”) Í%”+ Í'”, Í(”. Í*”1 Í-”3 Í/”4 Í0”6 Í2”< Í8”> Í:”? Í;”ÌA Í=š” Í
+” Í” Í”  Í”! Í”% Í!”& Í"”+ Í'”, Í(”/ Í+–” Í
+” Í” Í” Í” Í” ÍŸ” Í
+” Í” Í” Í” Í” Í” Í”  Í”! Í”# Í”$ Í ”& Í"”' Í#”( Í$”* Í&’” Í
+” Í’” Íõ” Íõ’” Íö” Íö’” Í” Í’” Í” Í’” Í” Í’” Í” Íž” Í!” Í!” Í!”  Í!”( Í!”* Í!!”- Í!$”/ Í!&”4 Í!+”6 Í!-”; Í!2”< Í!3”ÌC Í!:”ÌE Í!<’” Í” Í–” Í” Í” Í” Í” Í” Í’” Í” Í–” Í” Í” Í” Í” Í” Í’” Í” Í–” Í” Í” Í” Í”  Í”" Í’” Í” Í–” Í” Í” Í”" Í”# Í”; Í3’” Í” ÍÜ ” Í” Í” Í” Í” Í” Í”! Í”# Í”$ Í”& Í”+ Í#”- Í%”2 Í*”3 Í+”8 Í0”: Í2’” Í” ÍÜ "” Í” Í” Í ” Í ” Í ” Í ” Í ” Í ”" Í ”# Í ”* Í "”+ Í #”, Í $”- Í %”1 Í )”2 Í *”3 Í +”4 Í ,”5 Í -”7 Í /”8 Í 0”: Í 2”> Í 6”? Í 7”ÌF Í >”ÌG Í ?”ÌH Í Ì@”ÌI Í ÌA”ÌM Í ÌE”ÌN Í ÌF”ÌO Í ÌG”ÌP Í ÌH”ÌQ Í ÌI”ÌS Í ÌK’” Í!” Í!’” Í” Í—” Í” Í” Í"” Í"” Í"” Í"”  Í"–” Í#” Í#” Í#” Í#”  Í#”! Í#’” Í$
+” Í$’” Í” Í’” Í” Í’” Í&” Í&’” Í&” Í&’” Í(” Í(’” Í)” Í)’” Í(” Í(–” Í)” Í)” Í4	” Í4” Í4” Í4’” Í(” Í(–” Í)” Í)” Í5	” Í5” Í5” Í5’” Í(” Í(˜” Í)” Í)” Í6	”! Í6”" Í6”+ Í6!”, Í6"”2 Í6(’” Í(” Í(Ü ” Í)” Í)” Í7	” Í7” Í7” Í7”  Í7”) Í7”* Í7 ”+ Í7!”, Í7"”- Í7#”. Í7$”/ Í7%”0 Í7&”4 Í7*’” Í(” Í(—” Í)” Í)” Í8	” Í8” Í8” Í8”  Í8–” Í9
+” Í9” Í9”# Í9”% Í9”& Í9 ’” Í:” Í:	”” Í*
+” Í*” Í*” Í*–” Í*
+” Í*” Í+” Í+” Í+” Í+˜” Í*
+” Í*” Í,” Í,” Í,”  Í,”! Í,”& Í,"–” Í*
+” Í*” Í-” Í-” Í-” Í-–” Í*
+” Í*” Í.” Í.” Í.” Í.˜” Í*
+” Í*” Í/” Í/” Í/”$ Í/ ”% Í/!”+ Í/'–” Í*
+” Í*” Í0”  Í0”! Í0”9 Í05–” Í*
+” Í*” Í1” Í1” Í1”  Í1ž” Í*
+” Í*” Í2” Í2” Í2” Í2” Í2”! Í2”$ Í2 ”& Í2"”+ Í2'”- Í2)”ÌE Í2ÌA”ÌG Í2ÌC’” Í*
+” Í*’” Í(” Í(’” Í)” Í)’” Íó”# Íó!’” Íô” Íô	’” ÍD” ÍD–” ÍE” ÍE
+” ÍE” ÍE”  ÍE”" ÍE’” ÍF” ÍF–” ÍF” ÍF” ÍG”$ ÍG”% ÍG”+ ÍG–” ÍF” ÍF” ÍH”% ÍH”& ÍH”, ÍH–” ÍF” ÍF” ÍI”. ÍI”/ ÍI”ÌA ÍI-—” ÍF” ÍF” ÍJ”& ÍJ”' ÍJ”* ÍJ”, ÍJ—” ÍK”  ÍK”! ÍK”, ÍK”/ ÍK”4 ÍK$”5 ÍK%’” ÍL
+” ÍL’” ÍF” ÍF’” ÍM” ÍM–” ÍM” ÍM” Íc	”$ Íc”% Íc”+ Ícž” ÍM” ÍM” Íd	”' Íd”( Íd”* Íd”+ Íd”- Íd”. Íd”0 Íd”1 Íd”3 Íd”9 Íd#”; Íd%š” ÍM” ÍM” Íe	”( Íe”) Íe”+ Íe”, Íe”. Íe”5 Íe”7 Íe!“”8 ÍN
+”ÌI ÍN”ÌP ÍN–”$ ÍO”/ ÍO”1 ÍO”5 ÍO”6 ÍO”; ÍO#š”$ ÍP”, ÍP”. ÍP”? ÍP'”Ì@ ÍP(”ÌK ÍP3”ÌM ÍP5”ÌN ÍP6”Ì\ ÍPÌD”Ì^ ÍPÌF—”$ ÍQ”* ÍQ”, ÍQ”- ÍQ”. ÍQ#”0 ÍQ%”2 ÍQ'˜”( ÍR”, ÍR”- ÍR”; ÍR!”< ÍR"”= ÍR#”> ÍR$”? ÍR%’”$ ÍS”% ÍS—”$ ÍT”+ ÍT”- ÍT”. ÍT”/ ÍT$”1 ÍT&”3 ÍT(˜”( ÍU”, ÍU”- ÍU”> ÍU$”? ÍU%”Ì@ ÍU&”ÌA ÍU'”ÌB ÍU(’”$ ÍV”% ÍV•”$ ÍW”2 ÍW”4 ÍW”7 ÍW”9 ÍW!–”( ÍX”, ÍX”- ÍX”> ÍX$”Ì@ ÍX&”ÌA ÍX'’”$ ÍY”% ÍY•”$ ÍZ”4 ÍZ”6 ÍZ”9 ÍZ!”; ÍZ#—”( Í[”, Í[”- Í[”8 Í[”; Í[!”Ì@ Í[&”ÌA Í['œ”( Í\”. Í\”/ Í\”6 Í\”7 Í\”9 Í\”< Í\"”> Í\$”ÌP Í\6”ÌR Í\8”ÌS Í\9”ÌT Í\:’”$ Í]”% Í]•”$ Í^”+ Í^”- Í^”0 Í^”2 Í^—”( Í_”, Í_”- Í_”8 Í_”; Í_!”Ì@ Í_&”ÌA Í_'’”$ Í`”% Í`‘”! Ía–”( ÍO”3 ÍO”5 ÍO”9 ÍO”: ÍO”? ÍO#š”( ÍP”0 ÍP”2 ÍP”ÌC ÍP'”ÌD ÍP(”ÌO ÍP3”ÌQ ÍP5”ÌR ÍP6”Ì` ÍPÌD”Ìb ÍPÌF—”( ÍQ”. ÍQ”0 ÍQ”1 ÍQ”2 ÍQ#”4 ÍQ%”6 ÍQ'˜”, ÍR”0 ÍR”1 ÍR”? ÍR!”Ì@ ÍR"”ÌA ÍR#”ÌB ÍR$”ÌC ÍR%’”( ÍS”) ÍS—”( ÍT”/ ÍT”1 ÍT”2 ÍT”3 ÍT$”5 ÍT&”7 ÍT(˜”, ÍU”0 ÍU”1 ÍU”ÌB ÍU$”ÌC ÍU%”ÌD ÍU&”ÌE ÍU'”ÌF ÍU(’”( ÍV”) ÍV•”( ÍW”6 ÍW”8 ÍW”; ÍW”= ÍW!–”, ÍX”0 ÍX”1 ÍX”ÌB ÍX$”ÌD ÍX&”ÌE ÍX'’”( ÍY”) ÍY•”( ÍZ”8 ÍZ”: ÍZ”= ÍZ!”? ÍZ#—”, Í[”0 Í[”1 Í[”< Í[”? Í[!”ÌD Í[&”ÌE Í['œ”, Í\”2 Í\”3 Í\”: Í\”; Í\”= Í\”Ì@ Í\"”ÌB Í\$”ÌT Í\6”ÌV Í\8”ÌW Í\9”ÌX Í\:’”( Í]”) Í]•”( Í^”/ Í^”1 Í^”4 Í^”6 Í^—”, Í_”0 Í_”1 Í_”< Í_”? Í_!”ÌD Í_&”ÌE Í_'’”( Í`”) Í`’” ÍM” ÍM‘” Íf’” Íh”9 Íh3‘” Íf’” Íh”9 Íh3œ” Íi” Íi
+” Íi” Íi”  Íi”$ Íi”( Íi"”) Íi#”3 Íi-”8 Íi2”< Íi6”> Íi8’” Íj” Íj–” Íj” Íj” Í¥	”# Í¥”$ Í¥”* Í¥–” Íj” Íj” Í¦	”$ Í¦”% Í¦”+ Í¦˜” Íj” Íj” Í§	”- Í§”. Í§”3 Í§”4 Í§”9 Í§$’” Ík
+” Ík–” Ík
+” Ík” Í…”$ Í…”% Í…”+ Í…–” Ík
+” Ík” Í†”% Í†”& Í†”, Í†š” Ík
+” Ík” Í‡”& Í‡”' Í‡”) Í‡”, Í‡”. Í‡”0 Í‡”2 Í‡š” Íl” Íl”% Íl”' Íl”3 Íl ”5 Íl"”> Íl+”? Íl,”ÌJ Íl7”ÌL Íl9–” Íl” Íl” Í”  Í”! Í”1 Í –” Íl” Íl” Í€”# Í€”$ Í€”* Í€˜” Íl” Íl” Í”) Í”* Í”+ Í”. Í”0 Í–” Íl” Íl” Í‚”* Í‚”+ Í‚”- Í‚–” Íl” Íl” Íƒ”" Íƒ”# Íƒ”' Íƒ–” Ím” Ím”% Ím”) Ím”* Ím”4 Ím#–” Ím” Ím” Ín”# Ín”$ Ín”* Ín–” Ím” Ím” Ío”$ Ío”% Ío”+ Ío˜” Ím” Ím” Íp”' Íp”( Íp”0 Íp#”1 Íp$”6 Íp)˜” Ír” Ír”& Ír”( Ír”- Ír”/ Ír”0 Ír”2 Ír!ž” Ír” Ír” Í}”& Í}”' Í}”) Í}”- Í}”/ Í}”1 Í}!”3 Í}#”9 Í})”; Í}+”= Í}-”? Í}/Ü ” Ís” Ís”$ Ís”' Ís”+ Ís”, Ís”1 Ís"”2 Ís#”6 Ís'”< Ís-”Ì@ Ís1”ÌA Ís2”ÌF Ís7”ÌG Ís8”ÌJ Ís;”ÌL Ís=–” Ís” Ís” Ít”% Ít”& Ít”( Ít˜” Ís” Ís” Íu”' Íu”( Íu”2 Íu(”3 Íu)”9 Íu/˜” Ís” Ís” Ív”& Ív”' Ív”, Ív"”- Ív#”2 Ív(ž” Ís” Ís” Íw”# Íw”$ Íw”& Íw”, Íw"”. Íw$”/ Íw%”1 Íw'”6 Íw,”8 Íw.”ÌI Íw?”ÌK ÍwÌA’” Ís” Ís™” Íx” Íx”$ Íx”/ Íx ”3 Íx$”4 Íx%”= Íx.”? Íx0”ÌA Íx2–” Íx” Íx” Íy”% Íy”& Íy”( Íy–” Íx” Íx” Íz”& Íz”' Íz”> Íz4ž” Íx” Íx” Í{”# Í{”$ Í{”& Í{”, Í{"”. Í{$”/ Í{%”1 Í{'”6 Í{,”8 Í{.”ÌI Í{?”ÌK Í{ÌA’” Íx” Íx’” Ír” Ír’” Íl” Íl’” Ík
+” Ík’” Í‰
+”& Í‰˜” ÍŠ
+” ÍŠ”# ÍŠ”% ÍŠ”* ÍŠ”, ÍŠ”. ÍŠ”0 ÍŠ’” Í‰
+”& Í‰–” ÍŠ
+” ÍŠ” Í ”! Í ”" Í ”( Í ’” Í‰
+”& Í‰Ü ” ÍŠ
+” ÍŠ” Í¡”# Í¡”$ Í¡”& Í¡”* Í¡”, Í¡”. Í¡”0 Í¡”5 Í¡$”7 Í¡&”9 Í¡(”; Í¡*”ÌA Í¡0”ÌC Í¡2”ÌE Í¡4”ÌG Í¡6’” Í‰
+”& Í‰ž” ÍŠ
+” ÍŠ” Í¢”$ Í¢”% Í¢”' Í¢”( Í¢”* Í¢”+ Í¢”- Í¢”. Í¢”0 Í¢”6 Í¢%”8 Í¢'’” Í‰
+”& Í‰š” ÍŠ
+” ÍŠ” Í£”% Í£”& Í£”( Í£”) Í£”+ Í£”2 Í£!”4 Í£#Ü ” Í‹”" Í‹”* Í‹”, Í‹”0 Í‹”2 Í‹”ÌA Í‹.”ÌB Í‹/”ÌL Í‹9”ÌN Í‹;”ÌX Í‹ÌE”ÌZ Í‹ÌG”Ìd Í‹ÌQ”Ìe Í‹ÌR”Ìl Í‹ÌY”Ìn Í‹Ì[›” Í‹”" Í‹”# ÍŒ”* ÍŒ”+ ÍŒ”, ÍŒ”1 ÍŒ)”3 ÍŒ+”9 ÍŒÌJ”; ÍŒÌL”= ÍŒÌN˜” Í”  Í”& Í”+ Í”ÌB Í6”ÌC Í7”ÌJ Í>”ÌL ÍÌ@–”  ÍŽ”$ ÍŽ”% ÍŽ”2 ÍŽ$”4 ÍŽ&”5 ÍŽ'‘” Í‘”! Íœ”  Í”, Í”- Í”6 Í(”7 Í)”9 Í+”Ì@ Í2”ÌB Í4”ÌL Í>”ÌN ÍÌ@”ÌO ÍÌA”ÌP ÍÌB‘” Í‘’” Í’” Í’’” Í“” Í“’” Í“” Í“”” Í”” Í””$ Í””( Í”–” Í”” Í”” Í•”% Í•”& Í•”( Í•˜” Í”” Í”” Í–”& Í–”' Í–”, Í–”- Í–”2 Í–$–” Í”” Í”” Í—”# Í—”$ Í—”& Í—ž” Í”” Í”” Í˜”$ Í˜”% Í˜”' Í˜”+ Í˜”- Í˜”/ Í˜!”1 Í˜#”6 Í˜(”8 Í˜*”: Í˜,”< Í˜.˜” Í”” Í”” Í™”& Í™”' Í™”0 Í™"”1 Í™#”7 Í™)–” Í”” Í”” Íš”, Íš”- Íš”? Íš1–” Í”” Í”” Í›”) Í›”* Í›”, Í›—” Í”” Í”” Íœ”$ Íœ”% Íœ”( Íœ”* Íœ–” Í”  Í”! Í”- Í!”/ Í#”0 Í$’” Íž” Íž’” Í”” Í”’” Í‰
+”" Í‰’” ÍŠ
+” ÍŠ’” Íj” Íj‘” Í¨‘” Í¨’” ÍI” ÍI	‘” Í­’” Í¯
+” Í¯˜” Í°” Í°
+” Í°” Í°” Í°” Í°” Í°” Í°Ü ” Í±” Í±
+” Í±” Í±” Í±” Í±” Í±” Í±” Í±” Í± ” Í±!” Í±#”  Í±$”( Í±,”) Í±-”* Í±.”, Í±0”/ Í±3”0 Í±4”1 Í±5Ü &” Í²” Í²” Í²” Í²” Í²” Í²” Í²” Í²”  Í²”# Í²”$ Í² ”% Í²!”) Í²%”* Í²&”+ Í²'”, Í²(”- Í²)”4 Í²0”6 Í²2”7 Í²3”; Í²7”< Í²8”= Í²9”> Í²:”? Í²;”ÌG Í²ÌC”ÌI Í²ÌE”ÌJ Í²ÌF”ÌN Í²ÌJ”ÌO Í²ÌK”ÌP Í²ÌL”ÌQ Í²ÌM”ÌR Í²ÌN”Ì\ Í²ÌX”Ì^ Í²ÌZ”Ì_ Í²Ì[”Ìa Í²Ì]”Ìb Í²Ì^’” Í³” Í³ÔrI–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜø‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  ÌŽ ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ìž ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌÐ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  ÌÝ ‘”  ÌÞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìð ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìý ‘”  Ìþ ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  ÍŽ ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Íž ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ‘”  Í¢ ‘”  Í£ ‘”  Í¤ ‘”  Í¥ ‘”  Í¦ ‘”  Í§ ‘”  Í¨ ‘”  Í© ‘”  Íª ‘”  Í« ‘”  Í¬ ‘”  Í­ ‘”  Í® ‘”  Í¯ ‘”  Í° ‘”  Í± ‘”  Í² ‘”  Í³ ‘”  Í´ ‘”  Íµ ‘”  Í¶ ‘”  Í· ‘”  Í¸ ‘”  Í¹ ‘”  Íº ‘”  Í» ‘”  Í¼ ‘”  Í½ ‘”  Í¾ ‘”  Í¿ ‘”  ÍÀ ‘”  ÍÁ ‘”  ÍÂ ‘”  ÍÃ ‘”  ÍÄ ‘”  ÍÅ ‘”  ÍÆ ‘”  ÍÇ ‘”  ÍÈ ‘”  ÍÉ ‘”  ÍÊ ‘”  ÍË ‘”  ÍÌ ‘”  ÍÍ ‘”  ÍÎ ‘”  ÍÏ ‘”  ÍÐ ‘”  ÍÑ ‘”  ÍÒ ‘”  ÍÓ ‘”  ÍÔ ‘”  ÍÕ ‘”  ÍÖ ‘”  Í× ‘”  ÍØ ‘”  ÍÙ ‘”  ÍÚ ‘”  ÍÛ ‘”  ÍÜ ‘”  ÍÝ ‘”  ÍÞ ‘”  Íß ‘”  Íà ‘”  Íá ‘”  Íâ ‘”  Íã ‘”  Íä ‘”  Íå ‘”  Íæ ‘”  Íç ‘”  Íè ‘”  Íé ‘”  Íê ‘”  Íë ‘”  Íì ‘”  Íí ‘”  Íî ‘”  Íï ‘”  Íð ‘”  Íñ ‘”  Íò ‘”  Íó ‘”  Íô ‘”  Íõ ‘”  Íö ‘”  Í÷ ‘”  Íø ‘”  Íù ‘”  Íú ‘”  Íû ‘”  Íü ‘”  Íý ‘”  Íþ ‘”  Íÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  ÍŽ ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Íž ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ‘”  Í¢ ‘”  Í£ ‘”  Í¤ ‘”  Í¥ ‘”  Í¦ ‘”  Í§ ‘”  Í¨ ‘”  Í© ‘”  Íª ‘”  Í« ‘”  Í¬ ‘”  Í­ ‘”  Í® ‘”  Í¯ ‘”  Í° ‘”  Í± ‘”  Í² ‘”  Í³ ‘”  Í´ ‘”  Íµ ‘”  Í¶ ‘”  Í· ‘”  Í¸ ‘”  Í¹ ‘”  Íº ‘”  Í» ‘”  Í¼ ‘”  Í½ ‘”  Í¾ ‘”  Í¿ ‘”  ÍÀ ‘”  ÍÁ ‘”  ÍÂ ‘”  ÍÃ ‘”  ÍÄ ‘”  ÍÅ ‘”  ÍÆ ‘”  ÍÇ ‘”  ÍÈ ‘”  ÍÉ ‘”  ÍÊ ‘”  ÍË ‘”  ÍÌ ‘”  ÍÍ ‘”  ÍÎ ‘”  ÍÏ ‘”  ÍÐ ‘”  ÍÑ ‘”  ÍÒ ‘”  ÍÓ ‘”  ÍÔ ‘”  ÍÕ ‘”  ÍÖ ‘”  Í× ‘”  ÍØ ‘”  ÍÙ ‘”  ÍÚ ‘”  ÍÛ ‘”  ÍÜ ‘”  ÍÝ ‘”  ÍÞ ‘”  Íß ‘”  Íà ‘”  Íá ‘”  Íâ ‘”  Íã ‘”  Íä ‘”  Íå ‘”  Íæ ‘”  Íç ‘”  Íè ‘”  Íé ‘”  Íê ‘”  Íë ‘”  Íì ‘”  Íí ‘”  Íî ‘”  Íï ‘”  Íð ‘”  Íñ ‘”  Íò ‘”  Íó ‘”  Íô ‘”  Íõ ‘”  Íö ‘”  Í÷ ‘”  Íø ‘”  Íù ‘”  Íú ‘”  Íû ‘”  Íü ‘”  Íý ‘”  Íþ ‘”  Íÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  ÍŽ ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Íž ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ‘”  Í¢ ‘”  Í£ ‘”  Í¤ ‘”  Í¥ ‘”  Í¦ ‘”  Í§ ‘”  Í¨ ‘”  Í© ‘”  Íª ‘”  Í« ‘”  Í¬ ‘”  Í­ ‘”  Í® ‘”  Í¯ ‘”  Í° ‘”  Í± ‘”  Í² ‘”  Í³ ‘”  Í´ ‘”  Íµ ‘”  Í¶ ‘”  Í· ‘”  Í¸ ‘”  Í¹ ‘”  Íº ‘”  Í» ‘”  Í¼ ‘”  Í½ ‘”  Í¾ ‘”  Í¿ ‘”  ÍÀ ‘”  ÍÁ ‘”  ÍÂ ‘”  ÍÃ ‘”  ÍÄ ‘”  ÍÅ ‘”  ÍÆ ‘”  ÍÇ ‘”  ÍÈ ‘”  ÍÉ ‘”  ÍÊ ‘”  ÍË ‘”  ÍÌ ‘”  ÍÍ ‘”  ÍÎ ‘”  ÍÏ ‘”  ÍÐ ‘”  ÍÑ ‘”  ÍÒ ‘”  ÍÓ ‘”  ÍÔ ‘”  ÍÕ ‘”  ÍÖ ‘”  Í× ‘”  ÍØ ‘”  ÍÙ ‘”  ÍÚ ‘”  ÍÛ ‘”  ÍÜ ‘”  ÍÝ ‘”  ÍÞ ‘”  Íß ‘”  Íà ‘”  Íá ‘”  Íâ ‘”  Íã ‘”  Íä ‘”  Íå ‘”  Íæ ‘”  Íç ‘”  Íè ‘”  Íé ‘”  Íê ‘”  Íë ‘”  Íì ‘”  Íí ‘”  Íî ‘”  Íï ‘”  Íð ‘”  Íñ ‘”  Íò ‘”  Íó ‘”  Íô ‘”  Íõ ‘”  Íö ‘”  Í÷ ‘”  Íø ‘”  Íù ‘”  Íú ‘”  Íû ‘”  Íü ‘”  Íý ‘”  Íþ ‘”  Íÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  ÍŽ ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Íž ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ‘”  Í¢ ‘”  Í£ ‘”  Í¤ ‘”  Í¥ ‘”  Í¦ ‘”  Í§ ‘”  Í¨ ‘”  Í© ‘”  Íª ‘”  Í« ‘”  Í¬ ‘”  Í­ ‘”  Í® ‘”  Í¯ ‘”  Í° ‘”  Í± ‘”  Í² ‘”  Í³ ‘”  Í´ ‘”  Íµ ‘”  Í¶ ‘”  Í· ‘”  Í¸ ‘”  Í¹ ‘”  Íº ‘”  Í» ‘”  Í¼ ‘”  Í½ ‘”  Í¾ ‘”  Í¿ ‘”  ÍÀ ‘”  ÍÁ ‘”  ÍÂ ‘”  ÍÃ ‘”  ÍÄ ‘”  ÍÅ ‘”  ÍÆ ‘”  ÍÇ ‘”  ÍÈ ‘”  ÍÉ ‘”  ÍÊ ‘”  ÍË ‘”  ÍÌ ‘”  ÍÍ ‘”  ÍÎ ‘”  ÍÏ ‘”  ÍÐ ‘”  ÍÑ ‘”  ÍÒ ‘”  ÍÓ ‘”  ÍÔ ‘”  ÍÕ ‘”  ÍÖ ‘”  Í× ‘”  ÍØ ‘”  ÍÙ ‘”  ÍÚ ‘”  ÍÛ ‘”  ÍÜ ‘”  ÍÝ ‘”  ÍÞ ‘”  Íß ‘”  Íà ‘”  Íá ‘”  Íâ ‘”  Íã ‘”  Íä ‘”  Íå ‘”  Íæ ‘”  Íç ‘”  Íè ‘”  Íé ‘”  Íê ‘”  Íë ‘”  Íì ‘”  Íí ‘”  Íî ‘”  Íï ‘”  Íð ‘”  Íñ ‘”  Íò ‘”  Íó ‘”  Íô ‘”  Íõ ‘”  Íö ‘”  Í÷ ÔrJ’§missing¦pluginÃ¦genAbcÂÔ  ÔrK”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCacheŸÔrL•¤type¥start£endªspecifiers¦source±ImportDeclarationÌ€Ì¤‘ÔrM”¤type¥start£end¥local¶ImportDefaultSpecifierÌ‡ÌŽÔrN”¤type¥start£end¤nameªIdentifierÌ‡ÌŽ§displayÔrO•¤type¥start£end¥value£raw§LiteralÌ”Ì£­@ohos.display¯'@ohos.display'L±ImportDeclarationÌ¦ÌÑ‘M¶ImportDefaultSpecifierÌ­Ì²NªIdentifierÌ­Ì²¥imageO§LiteralÌ¸ÌÐ¶@ohos.multimedia.image¸'@ohos.multimedia.image'L±ImportDeclarationÌÓÍ‘M¶ImportDefaultSpecifierÌÚÌëNªIdentifierÌÚÌë±componentSnapshotO§LiteralÌñÍ½@ohos.arkui.componentSnapshot¿'@ohos.arkui.componentSnapshot'L±ImportDeclarationÍÍA‘M¶ImportDefaultSpecifierÍÍ&NªIdentifierÍÍ&¬promptActionO§LiteralÍ,Í@²@ohos.promptAction´'@ohos.promptAction'L±ImportDeclarationÍCÍe‘M¶ImportDefaultSpecifierÍJÍPNªIdentifierÍJÍP¦routerO§LiteralÍVÍd¬@ohos.router®'@ohos.router'L±ImportDeclarationÍgÍ‘M¶ImportDefaultSpecifierÍnÍvNªIdentifierÍnÍv¨vibratorO§LiteralÍ|ÍŒ®@ohos.vibrator°'@ohos.vibrator'L±ImportDeclarationÍÍµ‘M¶ImportDefaultSpecifierÍ–Í¡NªIdentifierÍ–Í¡«colorFilterO§LiteralÍ§Í´«libentry.so­'libentry.so'L±ImportDeclarationÍ·Íì‘ÔrP•¤type¥start£end¨imported¥local¯ImportSpecifierÍÀÍÍNªIdentifierÍÀÍÍ­COLOR_PRESETSNªIdentifierÍÀÍÍ­COLOR_PRESETSO§LiteralÍÕÍë´../model/ColorPreset¶'../model/ColorPreset'L±ImportDeclarationÍîÍ/‘P¯ImportSpecifierÍ÷ÍNªIdentifierÍ÷Í±DailyColorManagerNªIdentifierÍ÷Í±DailyColorManagerO§LiteralÍÍ.¼../manager/DailyColorManager¾'../manager/DailyColorManager'L±ImportDeclarationÍ1Í^‘P¯ImportSpecifierÍ:ÍBNªIdentifierÍ:ÍB¨PhotoDaoNªIdentifierÍ:ÍB¨PhotoDaoO§LiteralÍJÍ]±../model/PhotoDao³'../model/PhotoDao'L±ImportDeclarationÍ`Í™‘P¯ImportSpecifierÍiÍvNªIdentifierÍiÍv­CameraServiceNªIdentifierÍiÍv­CameraServiceO§LiteralÍ~Í˜¸../service/CameraServiceº'../service/CameraService'L±ImportDeclarationÍ›ÍÖ‘P¯ImportSpecifierÍ¤Í²NªIdentifierÍ¤Í²®CaptureServiceNªIdentifierÍ¤Í²®CaptureServiceO§LiteralÍºÍÕ¹../service/CaptureService»'../service/CaptureService'L±ImportDeclarationÍØÍ‘P¯ImportSpecifierÍáÍòNªIdentifierÍáÍò±CollectionServiceNªIdentifierÍáÍò±CollectionServiceO§LiteralÍúÍ¼../service/CollectionService¾'../service/CollectionService'L±ImportDeclarationÍÍP‘P¯ImportSpecifierÍ$Í/NªIdentifierÍ$Í/«EchoServiceNªIdentifierÍ$Í/«EchoServiceO§LiteralÍ7ÍO¶../service/EchoService¸'../service/EchoService'L±ImportDeclarationÍRÍ‘‘P¯ImportSpecifierÍ[ÍlNªIdentifierÍ[Íl±ColorPaletteSheetNªIdentifierÍ[Íl±ColorPaletteSheetO§LiteralÍtÍº../components/ColorPalette¼'../components/ColorPalette'

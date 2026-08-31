@@ -1,0 +1,1750 @@
+[2026-08-30T10:51:30.434] [DEBUG] debug-file - current process  memoryUsage: {
+  rss: 699912192,
+  heapTotal: 56717312,
+  heapUsed: 53587304,
+  external: 4047774,
+  arrayBuffers: 59684
+} os memoryUsage :14.471855163574219
+[2026-08-30T10:53:50.349] [DEBUG] debug-file - env: nodejsVersion=v18.20.1
+[2026-08-30T10:53:50.459] [DEBUG] debug-file - env: daemon=true
+[2026-08-30T10:53:50.351] [DEBUG] debug-file - env: hvigor-config.json5 content = {
+  modelVersion: '5.0.0',
+  dependencies: {},
+  execution: {},
+  logging: {},
+  debugging: {},
+  nodeOptions: {}
+}
+[2026-08-30T10:53:51.575] [DEBUG] debug-file - session manager: set active socket. socketId=otPHKACn-0nA7hsZAAAR
+[2026-08-30T10:53:51.591] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-08-30T10:53:51.598] [DEBUG] debug-file - Workers' log level updated to INFO
+[2026-08-30T10:53:51.604] [DEBUG] debug-file - Hvigor init with startParameters:{
+  hvigorfileTypeCheck: false,
+  parallelExecution: true,
+  incrementalExecution: true,
+  printStackTrace: false,
+  daemon: true,
+  analyze: 0,
+  logLevel: Level { level: 20000, levelStr: 'INFO', colour: 'green' },
+  optimizationStrategy: 'memory',
+  hotCompile: undefined,
+  hotReloadBuild: undefined,
+  customizedParam: undefined
+}
+[2026-08-30T10:53:51.610] [DEBUG] debug-file - Cache service initialization finished in 6 ms 
+[2026-08-30T10:53:51.611] [DEBUG] debug-file - hvigorfile, resolving D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+[2026-08-30T10:53:51.619] [DEBUG] debug-file - hvigorfile, require result:  { default: { plugins: [] } }
+[2026-08-30T10:53:51.619] [DEBUG] debug-file - hvigorfile, binding system plugins null
+[2026-08-30T10:53:51.620] [DEBUG] debug-file - Starting plugin build process
+[2026-08-30T10:53:51.620] [DEBUG] debug-file - App plugin prepare start...
+[2026-08-30T10:53:51.620] [DEBUG] debug-file - App plugin prepare end...
+[2026-08-30T10:53:51.620] [DEBUG] debug-file - App plugin creating...
+[2026-08-30T10:53:51.629] [DEBUG] debug-file - App plugin register hook start...
+[2026-08-30T10:53:51.630] [DEBUG] debug-file - App plugin register hook end...
+[2026-08-30T10:53:51.630] [DEBUG] debug-file - Plugin build process completed
+[2026-08-30T10:53:51.631] [DEBUG] debug-file - Start initialize project's product build option map with build mode debug.
+[2026-08-30T10:53:51.632] [DEBUG] debug-file - Picking option from product 'default' with build mode 'debug'.
+[2026-08-30T10:53:51.632] [DEBUG] debug-file - Product 'default' build option initialized
+[2026-08-30T10:53:51.632] [DEBUG] debug-file - End initialize project's product build option map with build mode 'debug'.
+[2026-08-30T10:53:51.633] [DEBUG] debug-file - Obtain build option for product 'default'in this build.
+[2026-08-30T10:53:51.634] [DEBUG] debug-file - D:\DevEcoProjects\ColorOfToday\build\cache\default\remote_hsp\remoteHspCache.json not exists.
+[2026-08-30T10:53:51.640] [DEBUG] debug-file - Start recording SDK configuration permission data.
+[2026-08-30T10:53:51.675] [DEBUG] debug-file - Sdk init in 39 ms 
+[2026-08-30T10:53:51.681] [DEBUG] debug-file - Project task initialization takes 6 ms 
+[2026-08-30T10:53:51.681] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2026-08-30T10:53:51.681] [DEBUG] debug-file - hvigorfile, no custom plugins were found in D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+[2026-08-30T10:53:51.681] [DEBUG] debug-file - hvigorfile, resolve finished D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+[2026-08-30T10:53:51.682] [DEBUG] debug-file - hvigorfile, resolving D:\DevEcoProjects\ColorOfToday\entry\hvigorfile.ts
+[2026-08-30T10:53:51.686] [DEBUG] debug-file - hvigorfile, require result:  { default: { plugins: [] } }
+[2026-08-30T10:53:51.686] [DEBUG] debug-file - hvigorfile, binding system plugins null
+[2026-08-30T10:53:51.686] [DEBUG] debug-file - Starting plugin build process
+[2026-08-30T10:53:51.686] [DEBUG] debug-file - Hap plugin creating...
+[2026-08-30T10:53:51.689] [DEBUG] debug-file - failed to load cangjie to dynamically generate schemas: Error: Cannot find module '@ohos/cangjie-build-support/index'
+Require stack:
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\hooks\cangjie-register.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\strategy\stage-init-strategy.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\builder\abstract-plugin-builder.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\builder\app-plugin-builder.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\factory\plugin-factory.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\index.js
+- D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\internal\lifecycle\configuration.js
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\boot\index.js
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\daemon\cluster\worker-process-lifecycle.js
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\daemon\process\daemon-process-boot-script.js
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=debug
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - Target 'default' config initialized
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=release
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - Target 'default' config initialized
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-08-30T10:53:51.693] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-08-30T10:53:51.694] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=debug
+[2026-08-30T10:53:51.694] [DEBUG] debug-file - Target 'default' config initialized
+[2026-08-30T10:53:51.694] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-08-30T10:53:51.694] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-08-30T10:53:51.694] [DEBUG] debug-file - Obtain build option for module 'entry' target 'default'in this build.
+[2026-08-30T10:53:51.700] [DEBUG] debug-file - Module entry task initialization takes 6 ms 
+[2026-08-30T10:53:51.700] [DEBUG] debug-file - Hap plugin register hook start...
+[2026-08-30T10:53:51.701] [DEBUG] debug-file - Hap plugin register hook end...
+[2026-08-30T10:53:51.701] [DEBUG] debug-file - Plugin build process completed
+[2026-08-30T10:53:51.701] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2026-08-30T10:53:51.701] [DEBUG] debug-file - hvigorfile, no custom plugins were found in D:\DevEcoProjects\ColorOfToday\entry\hvigorfile.ts
+[2026-08-30T10:53:51.701] [DEBUG] debug-file - hvigorfile, resolve finished D:\DevEcoProjects\ColorOfToday\entry\hvigorfile.ts
+[2026-08-30T10:53:51.720] [DEBUG] debug-file - hvigorfile, resolve hvigorfile dependencies in 19 ms 
+[2026-08-30T10:53:51.721] [DEBUG] debug-file - project has submodules:entry
+[2026-08-30T10:53:51.721] [DEBUG] debug-file - module:entry no need to execute packageHap
+[2026-08-30T10:53:51.724] [DEBUG] debug-file - start to load updatedOhPackageInfo to the disk
+[2026-08-30T10:53:51.727] [DEBUG] debug-file - load to the disk finished
+[2026-08-30T10:53:51.728] [DEBUG] debug-file - Start to initialize dependency information.
+[2026-08-30T10:53:51.730] [DEBUG] debug-file - Module ColorOfToday Collected Dependency: 
+[2026-08-30T10:53:51.730] [DEBUG] debug-file - Module ColorOfToday's total dependency: 0
+[2026-08-30T10:53:51.731] [DEBUG] debug-file - Start to initialize dependency information.
+[2026-08-30T10:53:51.739] [DEBUG] debug-file - Module entry Collected Dependency: D:\DevEcoProjects\ColorOfToday\entry\src\main\cpp\types\libentry
+[2026-08-30T10:53:51.739] [DEBUG] debug-file - Module entry's total dependency: 1
+[2026-08-30T10:53:51.742] [DEBUG] debug-file - Configuration phase cost:132 ms 
+[2026-08-30T10:53:51.743] [DEBUG] debug-file - Configuration task cost before running: 144 ms 
+[2026-08-30T10:53:51.750] [DEBUG] debug-file - Executing task :entry:default@PreBuild
+[2026-08-30T10:53:51.751] [DEBUG] debug-file - Task 'entry:default@PreBuild' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:51.765] [DEBUG] debug-file - Incremental task entry:default@PreBuild pre-execution cost: 10 ms .
+[2026-08-30T10:53:51.765] [DEBUG] debug-file - entry : default@PreBuild cost memory 0.27645111083984375
+[2026-08-30T10:53:51.769] [INFO] debug-file - UP-TO-DATE :entry:default@PreBuild...  
+[2026-08-30T10:53:51.770] [DEBUG] debug-file - Executing task :entry:default@CreateModuleInfo
+[2026-08-30T10:53:51.771] [DEBUG] debug-file - Task 'entry:default@CreateModuleInfo' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:51.771] [DEBUG] debug-file - entry : default@CreateModuleInfo cost memory 0.03928375244140625
+[2026-08-30T10:53:51.771] [DEBUG] debug-file - runTaskFromQueue task cost before running: 173 ms 
+[2026-08-30T10:53:51.771] [INFO] debug-file - Finished :entry:default@CreateModuleInfo... after 1 ms 
+[2026-08-30T10:53:51.777] [DEBUG] debug-file - Executing task :entry:default@GenerateMetadata
+[2026-08-30T10:53:51.778] [DEBUG] debug-file - Task 'entry:default@GenerateMetadata' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:51.780] [DEBUG] debug-file - Incremental task entry:default@GenerateMetadata pre-execution cost: 3 ms .
+[2026-08-30T10:53:51.780] [DEBUG] debug-file - entry : default@GenerateMetadata cost memory 0.0825347900390625
+[2026-08-30T10:53:51.781] [INFO] debug-file - UP-TO-DATE :entry:default@GenerateMetadata...  
+[2026-08-30T10:53:51.782] [DEBUG] debug-file - Executing task :entry:default@ConfigureCmake
+[2026-08-30T10:53:51.784] [DEBUG] debug-file - entry : default@ConfigureCmake cost memory 0.02907562255859375
+[2026-08-30T10:53:51.784] [DEBUG] debug-file - runTaskFromQueue task cost before running: 186 ms 
+[2026-08-30T10:53:51.785] [INFO] debug-file - Finished :entry:default@ConfigureCmake... after 2 ms 
+[2026-08-30T10:53:51.787] [DEBUG] debug-file - Executing task :entry:default@MergeProfile
+[2026-08-30T10:53:51.787] [DEBUG] debug-file - Task 'entry:default@MergeProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:51.790] [DEBUG] debug-file - Incremental task entry:default@MergeProfile pre-execution cost: 3 ms .
+[2026-08-30T10:53:51.790] [DEBUG] debug-file - entry : default@MergeProfile cost memory 0.115203857421875
+[2026-08-30T10:53:51.791] [INFO] debug-file - UP-TO-DATE :entry:default@MergeProfile...  
+[2026-08-30T10:53:51.793] [DEBUG] debug-file - Executing task :entry:default@CreateBuildProfile
+[2026-08-30T10:53:51.793] [DEBUG] debug-file - Task 'entry:default@CreateBuildProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:51.797] [DEBUG] debug-file - Incremental task entry:default@CreateBuildProfile pre-execution cost: 4 ms .
+[2026-08-30T10:53:51.797] [DEBUG] debug-file - entry : default@CreateBuildProfile cost memory 0.09725189208984375
+[2026-08-30T10:53:51.798] [INFO] debug-file - UP-TO-DATE :entry:default@CreateBuildProfile...  
+[2026-08-30T10:53:51.800] [DEBUG] debug-file - Executing task :entry:default@PreCheckSyscap
+[2026-08-30T10:53:51.800] [DEBUG] debug-file - entry : default@PreCheckSyscap cost memory 0.01427459716796875
+[2026-08-30T10:53:51.800] [DEBUG] debug-file - runTaskFromQueue task cost before running: 202 ms 
+[2026-08-30T10:53:51.801] [INFO] debug-file - Finished :entry:default@PreCheckSyscap... after 1 ms 
+[2026-08-30T10:53:51.807] [DEBUG] debug-file - Executing task :entry:default@ProcessIntegratedHsp
+[2026-08-30T10:53:51.807] [DEBUG] debug-file - entry:default@ProcessIntegratedHsp is not up-to-date, since the output file 'D:\DevEcoProjects\ColorOfToday\build\cache\default\integrated_hsp\integratedHspCache.json' does not exist.
+[2026-08-30T10:53:51.807] [DEBUG] debug-file - Incremental task entry:default@ProcessIntegratedHsp pre-execution cost: 1 ms .
+[2026-08-30T10:53:51.808] [DEBUG] debug-file - entry : default@ProcessIntegratedHsp cost memory 0.0543670654296875
+[2026-08-30T10:53:51.808] [DEBUG] debug-file - runTaskFromQueue task cost before running: 209 ms 
+[2026-08-30T10:53:51.808] [INFO] debug-file - Finished :entry:default@ProcessIntegratedHsp... after 1 ms 
+[2026-08-30T10:53:51.810] [DEBUG] debug-file - Executing task :entry:default@BuildNativeWithCmake
+[2026-08-30T10:53:51.813] [DEBUG] debug-file - Use tool [Cmake]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\cmake.exe',
+  '-HD:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp',
+  '-BD:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\arm64-v8a',
+  '-DOHOS_ARCH=arm64-v8a',
+  '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\cmake\\default\\obj\\arm64-v8a',
+  '-DCMAKE_BUILD_TYPE=Debug',
+  '-DOHOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\openharmony\\native',
+  '-DCMAKE_SYSTEM_NAME=OHOS',
+  '-DCMAKE_OHOS_ARCH_ABI=arm64-v8a',
+  '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
+  '-DCMAKE_TOOLCHAIN_FILE=D:\\DevEco Studio\\sdk\\default\\hms\\native\\build\\cmake\\hmos.toolchain.cmake',
+  '-GNinja',
+  '-DCMAKE_MAKE_PROGRAM=D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-DCMAKE_FIND_ROOT_PATH=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\arm64-v8a',
+  '-DPACKAGE_FIND_FILE=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\arm64-v8a\\summary.cmake',
+  '--no-warn-unused-cli',
+  '-DHMOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\hms\\native'
+]
+[2026-08-30T10:53:51.838] [DEBUG] debug-file - CMake configuration was up-to-date
+[2026-08-30T10:53:51.850] [DEBUG] debug-file - Use tool [Cmake]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\cmake.exe',
+  '-HD:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp',
+  '-BD:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\x86_64',
+  '-DOHOS_ARCH=x86_64',
+  '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\cmake\\default\\obj\\x86_64',
+  '-DCMAKE_BUILD_TYPE=Debug',
+  '-DOHOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\openharmony\\native',
+  '-DCMAKE_SYSTEM_NAME=OHOS',
+  '-DCMAKE_OHOS_ARCH_ABI=x86_64',
+  '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
+  '-DCMAKE_TOOLCHAIN_FILE=D:\\DevEco Studio\\sdk\\default\\hms\\native\\build\\cmake\\hmos.toolchain.cmake',
+  '-GNinja',
+  '-DCMAKE_MAKE_PROGRAM=D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-DCMAKE_FIND_ROOT_PATH=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\x86_64',
+  '-DPACKAGE_FIND_FILE=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\x86_64\\summary.cmake',
+  '--no-warn-unused-cli',
+  '-DHMOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\hms\\native'
+]
+[2026-08-30T10:53:51.877] [DEBUG] debug-file - CMake configuration was up-to-date
+[2026-08-30T10:53:51.890] [DEBUG] debug-file - entry : default@BuildNativeWithCmake cost memory -0.7954864501953125
+[2026-08-30T10:53:51.891] [DEBUG] debug-file - runTaskFromQueue task cost before running: 292 ms 
+[2026-08-30T10:53:51.891] [INFO] debug-file - Finished :entry:default@BuildNativeWithCmake... after 81 ms 
+[2026-08-30T10:53:51.893] [DEBUG] debug-file - Executing task :entry:default@MakePackInfo
+[2026-08-30T10:53:51.898] [DEBUG] debug-file - Incremental task entry:default@MakePackInfo pre-execution cost: 4 ms .
+[2026-08-30T10:53:51.898] [DEBUG] debug-file - entry : default@MakePackInfo cost memory 0.09554290771484375
+[2026-08-30T10:53:51.899] [INFO] debug-file - UP-TO-DATE :entry:default@MakePackInfo...  
+[2026-08-30T10:53:51.901] [DEBUG] debug-file - Executing task :entry:default@SyscapTransform
+[2026-08-30T10:53:51.901] [DEBUG] debug-file - File: 'D:\DevEcoProjects\ColorOfToday\entry\src\main\syscap.json' from 'sysCapJsonPath' is not exists, just ignore.
+[2026-08-30T10:53:51.902] [DEBUG] debug-file - Task 'entry:default@SyscapTransform' cost while wrapping incremental declarations: 2 ms 
+[2026-08-30T10:53:51.908] [DEBUG] debug-file - entry:default@SyscapTransform is not up-to-date, since the output file 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\syscap\default\rpcid.sc' does not exist.
+[2026-08-30T10:53:51.908] [DEBUG] debug-file - Incremental task entry:default@SyscapTransform pre-execution cost: 6 ms .
+[2026-08-30T10:53:51.908] [DEBUG] debug-file - entry : default@SyscapTransform cost memory 0.138336181640625
+[2026-08-30T10:53:51.908] [DEBUG] debug-file - runTaskFromQueue task cost before running: 310 ms 
+[2026-08-30T10:53:51.909] [INFO] debug-file - Finished :entry:default@SyscapTransform... after 8 ms 
+[2026-08-30T10:53:51.911] [DEBUG] debug-file - Executing task :entry:default@BuildNativeWithNinja
+[2026-08-30T10:53:51.912] [DEBUG] debug-file - Use tool [Ninja]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-C',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\arm64-v8a'
+]
+[2026-08-30T10:53:51.912] [DEBUG] debug-file - default@BuildNativeWithNinja work[28] is submitted.
+[2026-08-30T10:53:51.912] [DEBUG] debug-file - default@BuildNativeWithNinja work[28] is pushed to ready queue.
+[2026-08-30T10:53:51.913] [DEBUG] debug-file - default@BuildNativeWithNinja work[28] is not dispatched.
+[2026-08-30T10:53:51.926] [DEBUG] debug-file - OHOS_STL is c++_shared
+[2026-08-30T10:53:51.926] [DEBUG] debug-file - Copy STL libc++_shared.so to D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\arm64-v8a due to OHOS_STL is 'c++_shared'
+[2026-08-30T10:53:51.938] [DEBUG] debug-file - Use tool [Ninja]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-C',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\x86_64'
+]
+[2026-08-30T10:53:51.939] [DEBUG] debug-file - default@BuildNativeWithNinja work[29] is submitted.
+[2026-08-30T10:53:51.939] [DEBUG] debug-file - default@BuildNativeWithNinja work[29] is pushed to ready queue.
+[2026-08-30T10:53:51.939] [DEBUG] debug-file - default@BuildNativeWithNinja work[29] is not dispatched.
+[2026-08-30T10:53:51.947] [DEBUG] debug-file - OHOS_STL is c++_shared
+[2026-08-30T10:53:51.947] [DEBUG] debug-file - Copy STL libc++_shared.so to D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\x86_64 due to OHOS_STL is 'c++_shared'
+[2026-08-30T10:53:51.960] [DEBUG] debug-file - entry : default@BuildNativeWithNinja cost memory -0.4227752685546875
+[2026-08-30T10:53:51.962] [DEBUG] debug-file - Executing task :entry:default@GeneratePkgContextInfo
+[2026-08-30T10:53:51.980] [DEBUG] debug-file - Task 'entry:default@GeneratePkgContextInfo' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:51.981] [DEBUG] debug-file - Incremental task entry:default@GeneratePkgContextInfo pre-execution cost: 2 ms .
+[2026-08-30T10:53:51.981] [DEBUG] debug-file - entry : default@GeneratePkgContextInfo cost memory 0.9819564819335938
+[2026-08-30T10:53:51.982] [INFO] debug-file - UP-TO-DATE :entry:default@GeneratePkgContextInfo...  
+[2026-08-30T10:53:51.984] [DEBUG] debug-file - Executing task :entry:default@ProcessProfile
+[2026-08-30T10:53:51.985] [DEBUG] debug-file - Task 'entry:default@ProcessProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:51.987] [DEBUG] debug-file - Incremental task entry:default@ProcessProfile pre-execution cost: 3 ms .
+[2026-08-30T10:53:51.988] [DEBUG] debug-file - entry : default@ProcessProfile cost memory 0.1240692138671875
+[2026-08-30T10:53:51.988] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessProfile...  
+[2026-08-30T10:53:51.990] [DEBUG] debug-file - Executing task :entry:default@ProcessRouterMap
+[2026-08-30T10:53:51.995] [DEBUG] debug-file - Incremental task entry:default@ProcessRouterMap pre-execution cost: 5 ms .
+[2026-08-30T10:53:51.995] [DEBUG] debug-file - entry : default@ProcessRouterMap cost memory -1.7081222534179688
+[2026-08-30T10:53:51.996] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessRouterMap...  
+[2026-08-30T10:53:51.998] [DEBUG] debug-file - Executing task :entry:default@ProcessShareConfig
+[2026-08-30T10:53:52.003] [DEBUG] debug-file - Incremental task entry:default@ProcessShareConfig pre-execution cost: 5 ms .
+[2026-08-30T10:53:52.004] [DEBUG] debug-file - entry : default@ProcessShareConfig cost memory 0.1244964599609375
+[2026-08-30T10:53:52.005] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessShareConfig...  
+[2026-08-30T10:53:52.006] [DEBUG] debug-file - Executing task :entry:default@ProcessStartupConfig
+[2026-08-30T10:53:52.007] [DEBUG] debug-file - Task 'entry:default@ProcessStartupConfig' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:52.009] [DEBUG] debug-file - entry:default@ProcessStartupConfig is not up-to-date, since the output file 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\startup\default\startup_config.json' does not exist.
+[2026-08-30T10:53:52.009] [DEBUG] debug-file - Incremental task entry:default@ProcessStartupConfig pre-execution cost: 2 ms .
+[2026-08-30T10:53:52.010] [DEBUG] debug-file - entry : default@ProcessStartupConfig cost memory 0.126678466796875
+[2026-08-30T10:53:52.010] [DEBUG] debug-file - runTaskFromQueue task cost before running: 412 ms 
+[2026-08-30T10:53:52.011] [INFO] debug-file - Finished :entry:default@ProcessStartupConfig... after 4 ms 
+[2026-08-30T10:53:52.014] [DEBUG] debug-file - restool module names: entry; moduleName=entry, taskName=default@ProcessResource
+[2026-08-30T10:53:52.018] [DEBUG] debug-file - Executing task :entry:default@ProcessResource
+[2026-08-30T10:53:52.019] [DEBUG] debug-file - Task 'entry:default@ProcessResource' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:52.021] [DEBUG] debug-file - Incremental task entry:default@ProcessResource pre-execution cost: 2 ms .
+[2026-08-30T10:53:52.021] [DEBUG] debug-file - entry : default@ProcessResource cost memory 0.11993408203125
+[2026-08-30T10:53:52.024] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessResource...  
+[2026-08-30T10:53:52.028] [DEBUG] debug-file - Executing task :entry:default@GenerateLoaderJson
+[2026-08-30T10:53:52.029] [DEBUG] debug-file - Task 'entry:default@GenerateLoaderJson' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:52.043] [DEBUG] debug-file - Incremental task entry:default@GenerateLoaderJson pre-execution cost: 8 ms .
+[2026-08-30T10:53:52.043] [DEBUG] debug-file - entry : default@GenerateLoaderJson cost memory 0.461090087890625
+[2026-08-30T10:53:52.049] [INFO] debug-file - UP-TO-DATE :entry:default@GenerateLoaderJson...  
+[2026-08-30T10:53:52.051] [DEBUG] debug-file - restool module names: entry; moduleName=entry, taskName=default@CompileResource
+[2026-08-30T10:53:52.052] [DEBUG] debug-file - Executing task :entry:default@CompileResource
+[2026-08-30T10:53:52.081] [DEBUG] debug-file - Incremental task entry:default@CompileResource pre-execution cost: 28 ms .
+[2026-08-30T10:53:52.081] [DEBUG] debug-file - entry : default@CompileResource cost memory -1.2625656127929688
+[2026-08-30T10:53:52.084] [INFO] debug-file - UP-TO-DATE :entry:default@CompileResource...  
+[2026-08-30T10:53:52.086] [DEBUG] debug-file - Executing task :entry:default@CompileArkTS
+[2026-08-30T10:53:52.086] [DEBUG] debug-file - obfuscationOptions: undefined
+[2026-08-30T10:53:52.091] [DEBUG] debug-file - Task 'entry:default@CompileArkTS' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:52.123] [DEBUG] debug-file - entry:default@CompileArkTS is not up-to-date, since the input file 'D:\DevEcoProjects\ColorOfToday\entry\src\main\ets' has been changed.
+[2026-08-30T10:53:52.124] [DEBUG] debug-file - Incremental task entry:default@CompileArkTS pre-execution cost: 28 ms .
+[2026-08-30T10:53:52.149] [DEBUG] debug-file - build config:
+[2026-08-30T10:53:52.150] [DEBUG] debug-file - {
+  moduleType: 'entry',
+  perf: 0,
+  targetName: '.default',
+  packageManagerType: 'ohpm',
+  localPropertiesPath: 'D:\\DevEcoProjects\\ColorOfToday\\local.properties',
+  isPreview: false,
+  isOhosTest: false,
+  isLocalTest: false,
+  buildMode: 'Debug',
+  hotReloadBuild: undefined,
+  watchMode: 'false',
+  aceProfilePath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default\\resources\\base\\profile',
+  etsLoaderPath: 'D:\\DevEco Studio\\sdk\\default\\openharmony\\ets\\build-tools\\ets-loader',
+  modulePath: 'D:\\DevEcoProjects\\ColorOfToday\\entry',
+  testFrameworkPar: {
+    testMode: undefined,
+    coveragePathFilter: undefined,
+    coverageMode: undefined
+  },
+  needCoverageInsert: false,
+  debugLine: false,
+  projectTopDir: 'D:\\DevEcoProjects\\ColorOfToday',
+  compileSdkVersion: 22,
+  compatibleSdkVersion: 12,
+  originCompatibleSdkVersion: '5.0.0(12)',
+  compatibleSdkVersionStage: 'beta1',
+  bundleName: 'c***p',
+  etsLoaderVersion: '6.0.2.130',
+  etsLoaderReleaseType: 'Release',
+  aotCompileMode: 'type',
+  apPath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\modules.ap',
+  entryModuleName: 'entry',
+  entryModuleVersion: '1.0.0',
+  entryPackageName: 'entry',
+  allModuleNameHash: 'ae065cd75c6455e8e26b9ce39de658f0263147ae7522f3f5fb895fd691f36b62',
+  externalApiPaths: [ 'D:\\DevEco Studio\\sdk\\default\\hms\\ets' ],
+  compilerTypes: [],
+  isCrossplatform: false,
+  hvigorPluginFile: undefined,
+  compilePluginPath: undefined,
+  buildGeneratedProfilePath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\generated\\profile\\default',
+  bundleType: 'app',
+  arkTSVersion: undefined,
+  apiVersion: 22,
+  needCompleteSourcesMap: false,
+  isFaMode: false,
+  buildDir: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build',
+  deviceTypes: [ 'phone', 'tablet', '2in1' ],
+  pkgContextInfo: {
+    'libentry.so': {
+      packageName: 'libentry.so',
+      bundleName: '*****',
+      moduleName: '',
+      version: '',
+      entryPath: 'index',
+      isSO: true,
+      dependencyAlias: ''
+    },
+    entry: {
+      packageName: 'entry',
+      bundleName: '*****',
+      moduleName: '',
+      version: '',
+      entryPath: 'src/main/',
+      isSO: false,
+      dependencyAlias: ''
+    }
+  },
+  ohPackagePathMap: {},
+  dependencyAliasMap: {},
+  permission: {
+    requestPermissions: [ [Object], [Object] ],
+    definePermissions: undefined
+  },
+  useGetCurrentBundleName: false,
+  projectArkOption: undefined,
+  sourceMapDir: undefined,
+  branchElimination: false,
+  transformLib: undefined,
+  tsImportSendable: false,
+  resolveConflictMode: true,
+  depName2RootPath: {},
+  depName2DepInfo: {},
+  rootPathSet: [ 'D:\\DevEcoProjects\\ColorOfToday' ],
+  useNativeResolver: true,
+  shouldEmitJs: true,
+  useTscResolve: false,
+  singleFileEmit: false,
+  userProjectConfig: {
+    autoLazyImport: false,
+    allowEmptyBundleName: false,
+    reExportCheckMode: 'noCheck',
+    executionMode: 'memory',
+    usePathPlaceholder: false,
+    writeRollupCache: true,
+    isExpandImportEnabled: false,
+    expandImportExclude: '',
+    lazyImportExclude: '',
+    lazyImportInclude: '',
+    ignoreCrossplatformCheck: false,
+    isHarDeduplicateEnabled: false,
+    skipOhModulesLint: false,
+    enableStrictCheckOHModule: false,
+    disableSendableCheckRules: [],
+    useDeclarationFileSignature: false,
+    customizedOptions: undefined,
+    integratedHsp: false,
+    isPreloadSoEnabled: false
+  },
+  executionMode: 'memory',
+  arkCompileCachePath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\cache\\default\\default@CompileArkTS\\esmodule',
+  autoLazyFilter: undefined,
+  isHarDeduplicateEnabled: false,
+  intermediateHarDuplicateDirPath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\har_duplicate\\default',
+  autoLazyImport: false,
+  allowEmptyBundleName: false,
+  reExportCheckMode: 'noCheck',
+  usePathPlaceholder: false,
+  writeRollupCache: true,
+  isExpandImportEnabled: false,
+  expandImportExclude: '',
+  lazyImportExclude: '',
+  lazyImportInclude: '',
+  ignoreCrossplatformCheck: false,
+  skipOhModulesLint: false,
+  enableStrictCheckOHModule: false,
+  disableSendableCheckRules: [],
+  useDeclarationFileSignature: false,
+  customizedOptions: undefined,
+  integratedHsp: false,
+  isPreloadSoEnabled: false,
+  strictMode: {
+    caseSensitiveCheck: true,
+    useNormalizedOHMUrl: true,
+    noExternalImportByPath: true
+  },
+  useNormalizedOHMUrl: true,
+  caseSensitiveCheck: true,
+  aceModuleJsonPath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default\\ark_module.json',
+  appResource: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default\\ResourceTable.txt',
+  rawFileResource: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default\\resources\\rawfile',
+  resourceTableHash: 'a94e3a903c1d60daeca85820901f4c173b437a0d8068bb541ea8670459fed8c8',
+  runtimeOS: 'HarmonyOS',
+  sdkInfo: 'false:22:6.0.2.130:Release',
+  aceModuleRoot: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\ets',
+  compileMode: 'esmodule',
+  aceSuperVisualPath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\supervisual',
+  aceBuildJson: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\loader\\default\\loader.json',
+  cachePath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\cache\\default\\default@CompileArkTS\\esmodule\\debug',
+  aceModuleBuild: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\loader_out\\default\\ets',
+  supportChunks: true,
+  declaredFilesPath: undefined,
+  shouldCollectDirectImportees: false,
+  isByteCodeHarOptimize: false,
+  expandImportPath: undefined,
+  pkgNameToPkgBriefInfo: {
+    entry: {
+      pkgRoot: 'D:\\DevEcoProjects\\ColorOfToday\\entry',
+      originalSourceRoots: undefined,
+      sourceRoots: [Array],
+      pkgName: 'entry'
+    }
+  },
+  projectModel: {
+    'D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main': {
+      moduleName: 'entry',
+      modulePkgPath: 'D:\\DevEcoProjects\\ColorOfToday\\entry',
+      belongProjectPath: 'D:\\DevEcoProjects\\ColorOfToday'
+    },
+    'D:\\DevEcoProjects\\ColorOfToday\\entry': {
+      moduleName: 'entry',
+      modulePkgPath: 'D:\\DevEcoProjects\\ColorOfToday\\entry',
+      belongProjectPath: 'D:\\DevEcoProjects\\ColorOfToday'
+    },
+    'D:\\DevEcoProjects\\ColorOfToday': {
+      moduleName: 'ColorOfToday',
+      modulePkgPath: 'D:\\DevEcoProjects\\ColorOfToday',
+      belongProjectPath: 'D:\\DevEcoProjects\\ColorOfToday'
+    }
+  },
+  pkgJsonFileHash: '2f3609a8a38e7d2d8167e09a239d1537e10ad373b7dfb469a664ebb5665ca394',
+  allModulePaths: [ 'D:\\DevEcoProjects\\ColorOfToday\\entry' ],
+  routerMap: {},
+  obfuscationOptions: undefined,
+  byteCodeHarToDependencyKeys: undefined,
+  compileBlockPkg: [],
+  mockParams: {
+    decorator: '@MockSetup',
+    packageName: '@ohos/hamock',
+    etsSourceRootPath: 'src/main/ets',
+    mockConfigPath: undefined,
+    mockConfigKey2ModuleInfo: {},
+    source2ModuleIdMap: {}
+  },
+  copyCodeResourceEnable: false,
+  copyCodeResourceExcludes: [],
+  copyCodeResourceIncludes: undefined,
+  uiTransformOptimization: false,
+  sdkPath: 'D:/DevEco Studio/sdk',
+  needPreloadSoFileSet: {},
+  preloadSoFilePath: 'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\preload\\default\\preload.json',
+  useSourceHash: false,
+  localModuleParamMap: {},
+  otherPaths: {
+    'entry/*': [
+      '..\\*',
+      '..\\..\\..\\build\\default\\generated\\profile\\default\\*'
+    ]
+  },
+  collectImportersConfig: undefined
+}
+[2026-08-30T10:53:52.150] [DEBUG] debug-file - Compile arkts with external api path: D:\DevEco Studio\sdk\default\hms\ets
+[2026-08-30T10:53:52.152] [DEBUG] debug-file - default@CompileArkTS work[30] is submitted.
+[2026-08-30T10:53:52.152] [DEBUG] debug-file - default@CompileArkTS work[30] is pushed to ready queue.
+[2026-08-30T10:53:52.152] [DEBUG] debug-file - default@CompileArkTS work[30] is not dispatched.
+[2026-08-30T10:53:52.153] [DEBUG] debug-file - entry : default@CompileArkTS cost memory 1.3775863647460938
+[2026-08-30T10:53:52.155] [DEBUG] debug-file - Executing task :entry:default@BuildJS
+[2026-08-30T10:53:52.155] [DEBUG] debug-file - Task 'entry:default@BuildJS' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:52.159] [DEBUG] debug-file - entry : default@BuildJS cost memory 0.15148162841796875
+[2026-08-30T10:53:52.160] [DEBUG] debug-file - runTaskFromQueue task cost before running: 561 ms 
+[2026-08-30T10:53:52.160] [INFO] debug-file - Finished :entry:default@BuildJS... after 6 ms 
+[2026-08-30T10:53:52.264] [DEBUG] debug-file - A work dispatched to worker[11] failed because unable to get work from ready queue.
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - default@BuildNativeWithNinja work[28] has been dispatched to worker[10].
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - A work dispatched to worker[11] failed because unable to get work from ready queue.
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - A work dispatched to worker[10] failed because of worker busy.
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - default@BuildNativeWithNinja work[29] has been dispatched to worker[9].
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - A work dispatched to worker[11] failed because unable to get work from ready queue.
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - A work dispatched to worker[10] failed because of worker busy.
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - A work dispatched to worker[9] failed because of worker busy.
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - A work dispatched to worker[8] failed because unable to get work from ready queue.
+[2026-08-30T10:53:52.265] [DEBUG] debug-file - A work dispatched to worker[7] failed because unable to get work from ready queue.
+[2026-08-30T10:53:52.266] [DEBUG] debug-file - A work dispatched to worker[6] failed because unable to get work from ready queue.
+[2026-08-30T10:53:52.266] [DEBUG] debug-file - A work dispatched to worker[5] failed because unable to get work from ready queue.
+[2026-08-30T10:53:52.266] [DEBUG] debug-file - default@CompileArkTS work[30] has been dispatched to worker[4].
+[2026-08-30T10:53:52.476] [DEBUG] debug-file - ninja: Entering directory `D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64'
+ninja: no work to do.
+
+[2026-08-30T10:53:52.484] [DEBUG] debug-file - ninja: Entering directory `D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a'
+ninja: no work to do.
+
+[2026-08-30T10:53:52.491] [DEBUG] debug-file - worker[9] has one work done.
+[2026-08-30T10:53:52.500] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libEGL.so".
+[2026-08-30T10:53:52.501] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libEGL.so".
+[2026-08-30T10:53:52.501] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libGLESv3.so".
+[2026-08-30T10:53:52.501] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libGLESv3.so".
+[2026-08-30T10:53:52.501] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-30T10:53:52.502] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-30T10:53:52.502] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_window.so".
+[2026-08-30T10:53:52.502] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_window.so".
+[2026-08-30T10:53:52.502] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_image.so".
+[2026-08-30T10:53:52.502] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_image.so".
+[2026-08-30T10:53:52.502] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libace_ndk.z.so".
+[2026-08-30T10:53:52.503] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libace_ndk.z.so".
+[2026-08-30T10:53:52.503] [DEBUG] debug-file - default@BuildNativeWithNinja work[29] done.
+[2026-08-30T10:53:52.503] [DEBUG] debug-file - worker[10] has one work done.
+[2026-08-30T10:53:52.507] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libEGL.so".
+[2026-08-30T10:53:52.507] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libEGL.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libGLESv3.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libGLESv3.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_window.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_window.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_image.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_image.so".
+[2026-08-30T10:53:52.508] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libace_ndk.z.so".
+[2026-08-30T10:53:52.509] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libace_ndk.z.so".
+[2026-08-30T10:53:52.509] [DEBUG] debug-file - default@BuildNativeWithNinja work[28] done.
+[2026-08-30T10:53:52.509] [INFO] debug-file - Finished :entry:default@BuildNativeWithNinja... after 277 ms 
+[2026-08-30T10:53:52.512] [DEBUG] debug-file - Executing task :entry:default@ProcessLibs
+[2026-08-30T10:53:52.523] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\x86_64\libentry.so
+[2026-08-30T10:53:52.526] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\x86_64\libc++_shared.so
+[2026-08-30T10:53:52.539] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\arm64-v8a\libentry.so
+[2026-08-30T10:53:52.544] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\arm64-v8a\libc++_shared.so
+[2026-08-30T10:53:52.577] [DEBUG] debug-file - Incremental task entry:default@ProcessLibs pre-execution cost: 8 ms .
+[2026-08-30T10:53:52.577] [DEBUG] debug-file - entry : default@ProcessLibs cost memory -8.076339721679688
+[2026-08-30T10:53:52.580] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessLibs...  
+[2026-08-30T10:53:52.585] [DEBUG] debug-file - Executing task :entry:default@DoNativeStrip
+[2026-08-30T10:53:52.585] [DEBUG] debug-file - Task 'entry:default@DoNativeStrip' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:52.594] [DEBUG] debug-file - Incremental task entry:default@DoNativeStrip pre-execution cost: 9 ms .
+[2026-08-30T10:53:52.595] [DEBUG] debug-file - entry : default@DoNativeStrip cost memory 0.1834564208984375
+[2026-08-30T10:53:52.595] [INFO] debug-file - UP-TO-DATE :entry:default@DoNativeStrip...  
+[2026-08-30T10:53:52.597] [DEBUG] debug-file - Executing task :entry:default@CacheNativeLibs
+[2026-08-30T10:53:52.598] [DEBUG] debug-file - Task 'entry:default@CacheNativeLibs' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:52.615] [DEBUG] debug-file - Incremental task entry:default@CacheNativeLibs pre-execution cost: 17 ms .
+[2026-08-30T10:53:52.616] [DEBUG] debug-file - entry : default@CacheNativeLibs cost memory 0.19551849365234375
+[2026-08-30T10:53:52.616] [INFO] debug-file - UP-TO-DATE :entry:default@CacheNativeLibs...  
+[2026-08-30T10:53:52.731] [DEBUG] debug-file - A work dispatched to worker[10] failed because unable to get work from ready queue.
+[2026-08-30T10:53:53.166] [DEBUG] debug-file - A work dispatched to worker[9] failed because unable to get work from ready queue.
+[2026-08-30T10:53:54.029] [WARN] debug-file - [33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:46:23
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:49:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:50:30
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:58:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:59:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:60:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:82:23
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:84:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:85:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:86:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:87:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:88:27
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:107:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:110:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:111:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:112:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:113:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:114:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:115:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:116:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:123:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/manager/DailyColorManager.ets:124:13
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:74:24
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:75:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:76:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:77:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:78:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:87:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:100:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:102:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:103:17
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:103:37
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:104:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:104:31
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:107:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:119:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:122:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:126:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:146:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:156:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:159:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:163:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:175:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:178:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:182:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:194:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:196:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:207:32
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:216:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:225:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:237:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:239:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:240:17
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:240:37
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:241:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:241:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:244:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:256:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:259:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:263:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:277:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:279:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:290:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:293:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:294:16
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:294:36
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:297:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:310:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:312:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:321:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:325:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:326:17
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:326:35
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:329:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:340:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:342:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:348:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:348:22
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:349:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:349:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:350:18
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:350:31
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:351:16
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:351:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:352:18
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:352:31
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:353:17
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:353:30
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:354:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:354:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:355:15
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:355:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:356:18
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/PhotoDao.ets:356:29
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:23:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:101:40
+ 'getSupportedOutputCapability' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:122:36
+ 'createCaptureSession' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:123:20
+ 'beginConfig' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:124:20
+ 'addInput' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:125:20
+ 'addOutput' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:126:26
+ 'commitConfig' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:127:26
+ 'start' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:144:20
+ 'setFocusMode' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:145:20
+ 'setFocusPoint' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:157:27
+ 'getZoomRatioRange' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:169:34
+ 'getZoomRatioRange' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:171:20
+ 'setZoomRatio' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:180:28
+ 'stop' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CameraService.ets:183:28
+ 'release' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/service/CaptureService.ets:24:32
+ To use this API, you need to apply for the permissions: ohos.permission.WRITE_IMAGEVIDEO
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/model/OrientalColor.ets:31:25
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:81:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:92:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:99:7
+ 'animateTo' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:121:7
+ 'animateTo' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:139:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:196:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:200:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:200:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:209:22
+ 'px2vp' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:209:28
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:210:22
+ 'px2vp' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:210:28
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:238:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:238:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:243:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:245:7
+ 'animateTo' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:251:9
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:251:22
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:264:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:264:44
+ 'get' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:266:23
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:269:9
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:269:22
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:277:11
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:277:24
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:292:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:295:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:295:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:297:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:297:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:316:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:318:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:318:18
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:323:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:326:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:326:18
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:512:24
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:522:24
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:605:22
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Index.ets:657:32
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:23:7
+ 'animateTo' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:41:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:41:18
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:57:22
+ 'back' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Gallery.ets:85:20
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:44:7
+ 'animateTo' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:100:23
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:192:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:192:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:203:23
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:220:22
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:222:22
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:225:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:225:20
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:247:22
+ 'back' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/TimePalette.ets:451:34
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Collection.ets:151:7
+ 'animateTo' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Collection.ets:157:21
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Collection.ets:185:22
+ 'back' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: D:/DevEcoProjects/ColorOfToday/entry/src/main/ets/pages/Collection.ets:220:34
+ 'showToast' has been deprecated.
+[39m[39m
+
+[2026-08-30T10:53:54.030] [DEBUG] debug-file - Ark compile task finished.finished time is 665558631825400
+[2026-08-30T10:53:54.031] [DEBUG] debug-file - worker[4] has one work done.
+[2026-08-30T10:53:54.033] [DEBUG] debug-file - default@CompileArkTS work[30] done.
+[2026-08-30T10:53:54.037] [INFO] debug-file - Finished :entry:default@CompileArkTS... after 1 s 830 ms 
+[2026-08-30T10:53:54.039] [DEBUG] debug-file - Executing task :entry:default@GeneratePkgModuleJson
+[2026-08-30T10:53:54.039] [DEBUG] debug-file - File: 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\preload\default\preload.json' from 'preloadSoJsonPath' is not exists, just ignore.
+[2026-08-30T10:53:54.040] [DEBUG] debug-file - Error occurs while handling @Input 'shouldDeduplicateHar': The "data" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received undefined
+[2026-08-30T10:53:54.040] [DEBUG] debug-file - Task 'entry:default@GeneratePkgModuleJson' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:54.042] [DEBUG] debug-file - Incremental task entry:default@GeneratePkgModuleJson pre-execution cost: 2 ms .
+[2026-08-30T10:53:54.042] [DEBUG] debug-file - entry : default@GeneratePkgModuleJson cost memory 0.09995269775390625
+[2026-08-30T10:53:54.042] [INFO] debug-file - UP-TO-DATE :entry:default@GeneratePkgModuleJson...  
+[2026-08-30T10:53:54.044] [DEBUG] debug-file - Executing task :entry:default@ProcessCompiledResources
+[2026-08-30T10:53:54.044] [DEBUG] debug-file - File: 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\preload\default\preload.json' from 'preloadSoJsonPath' is not exists, just ignore.
+[2026-08-30T10:53:54.044] [DEBUG] debug-file - Task 'entry:default@ProcessCompiledResources' cost while wrapping incremental declarations: 1 ms 
+[2026-08-30T10:53:54.045] [DEBUG] debug-file - entry : default@ProcessCompiledResources cost memory 0.055999755859375
+[2026-08-30T10:53:54.045] [DEBUG] debug-file - runTaskFromQueue task cost before running: 2 s 446 ms 
+[2026-08-30T10:53:54.045] [INFO] debug-file - Finished :entry:default@ProcessCompiledResources... after 2 ms 
+[2026-08-30T10:53:54.048] [DEBUG] debug-file - Executing task :entry:default@PackageHap
+[2026-08-30T10:53:54.063] [DEBUG] debug-file - entry:default@PackageHap is not up-to-date, since the input file 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\ets' has been changed.
+[2026-08-30T10:53:54.063] [DEBUG] debug-file - Incremental task entry:default@PackageHap pre-execution cost: 14 ms .
+[2026-08-30T10:53:54.064] [DEBUG] debug-file - Use tool [D:\DevEco Studio\sdk\default\openharmony\toolchains\lib\app_packing_tool.jar]
+ [
+  'java',
+  '-Dfile.encoding=GBK',
+  '-jar',
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\toolchains\\lib\\app_packing_tool.jar',
+  '--mode',
+  'hap',
+  '--force',
+  'true',
+  '--lib-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\stripped_native_libs\\default',
+  '--json-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\package\\default\\module.json',
+  '--resources-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default\\resources',
+  '--index-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\res\\default\\resources.index',
+  '--pack-info-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\outputs\\default\\pack.info',
+  '--out-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\outputs\\default\\entry-default-unsigned.hap',
+  '--ets-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\loader_out\\default\\ets',
+  '--pkg-context-path',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\loader\\default\\pkgContextInfo.json'
+]
+[2026-08-30T10:53:54.069] [DEBUG] debug-file - java daemon socket close code:1006 reason:
+[2026-08-30T10:53:54.069] [DEBUG] debug-file - java daemon remote pack failed: connect ECONNREFUSED 127.0.0.1:45050. fallback to local java -jar pack
+[2026-08-30T10:53:54.070] [DEBUG] debug-file - default@PackageHap work[31] is submitted.
+[2026-08-30T10:53:54.070] [DEBUG] debug-file - default@PackageHap work[31] is pushed to ready queue.
+[2026-08-30T10:53:54.071] [DEBUG] debug-file - default@PackageHap work[31] is not dispatched.
+[2026-08-30T10:53:54.076] [DEBUG] debug-file - entry : default@PackageHap cost memory 0.71258544921875
+[2026-08-30T10:53:54.287] [DEBUG] debug-file - A work dispatched to worker[11] failed because unable to get work from ready queue.
+[2026-08-30T10:53:54.287] [DEBUG] debug-file - default@PackageHap work[31] has been dispatched to worker[10].
+[2026-08-30T10:53:54.289] [DEBUG] debug-file - current process  memoryUsage: {
+  rss: 667848704,
+  heapTotal: 56717312,
+  heapUsed: 53349608,
+  external: 4048152,
+  arrayBuffers: 58928
+} os memoryUsage :14.600910186767578
+[2026-08-30T10:53:54.364] [DEBUG] debug-file - A work dispatched to worker[4] failed because unable to get work from ready queue.
+[2026-08-30T10:53:55.354] [DEBUG] debug-file - worker[10] has one work done.
+[2026-08-30T10:53:55.354] [DEBUG] debug-file - default@PackageHap work[31] done.
+[2026-08-30T10:53:55.357] [INFO] debug-file - Finished :entry:default@PackageHap... after 1 s 96 ms 
+[2026-08-30T10:53:55.359] [DEBUG] debug-file - Executing task :entry:default@PackingCheck
+[2026-08-30T10:53:55.372] [DEBUG] debug-file - entry : default@PackingCheck cost memory 0.34931182861328125
+[2026-08-30T10:53:55.373] [DEBUG] debug-file - runTaskFromQueue task cost before running: 3 s 774 ms 
+[2026-08-30T10:53:55.373] [INFO] debug-file - Finished :entry:default@PackingCheck... after 14 ms 
+[2026-08-30T10:53:55.375] [DEBUG] debug-file - Executing task :entry:default@SignHap
+[2026-08-30T10:53:55.383] [DEBUG] debug-file - entry:default@SignHap is not up-to-date, since the input file 'D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\entry-default-unsigned.hap' has been changed.
+[2026-08-30T10:53:55.384] [DEBUG] debug-file - Incremental task entry:default@SignHap pre-execution cost: 8 ms .
+[2026-08-30T10:53:55.418] [DEBUG] debug-file - java daemon socket close code:1006 reason:
+[2026-08-30T10:53:55.418] [DEBUG] debug-file - java daemon remote sign failed 1006 fallback to local java -jar sign
+[2026-08-30T10:53:55.444] [DEBUG] debug-file - current process  memoryUsage: {
+  rss: 668049408,
+  heapTotal: 135491584,
+  heapUsed: 117278296,
+  external: 6589665,
+  arrayBuffers: 3559013
+} os memoryUsage :14.613475799560547
+[2026-08-30T10:53:55.505] [DEBUG] debug-file - A work dispatched to worker[10] failed because unable to get work from ready queue.
+[2026-08-30T10:53:56.916] [DEBUG] debug-file - 08-30 10:53:56.915  INFO - Start verify-profile
+
+[2026-08-30T10:53:57.507] [DEBUG] debug-file - 08-30 10:53:57.507  INFO - verify-profile success
+
+[2026-08-30T10:53:57.602] [DEBUG] debug-file - current process  memoryUsage: {
+  rss: 668114944,
+  heapTotal: 135491584,
+  heapUsed: 117571504,
+  external: 6598157,
+  arrayBuffers: 3566649
+} os memoryUsage :14.63248062133789
+[2026-08-30T10:53:59.010] [DEBUG] debug-file - 08-30 10:53:59.009  INFO - Start sign-app
+
+[2026-08-30T10:53:59.450] [DEBUG] debug-file - 08-30 10:53:59.449  INFO - certificate in profile: 杨晨轩(1863844026688499649)\,Development
+
+[2026-08-30T10:53:59.576] [DEBUG] debug-file - 08-30 10:53:59.575  INFO - Start to sign code.
+
+[2026-08-30T10:53:59.585] [DEBUG] debug-file - 08-30 10:53:59.585  INFO - profile type is: debug
+
+[2026-08-30T10:53:59.660] [DEBUG] debug-file - 08-30 10:53:59.660  INFO - C:\\Users\\杨贵鑫\\.ohos\\config\\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.p12 is exist. Try to load it with given passwd
+
+[2026-08-30T10:54:00.093] [DEBUG] debug-file - 08-30 10:54:00.093  INFO - Create a sign info successfully.
+
+[2026-08-30T10:54:00.120] [DEBUG] debug-file - 08-30 10:54:00.120  INFO - Create a sign info successfully.
+
+[2026-08-30T10:54:00.154] [DEBUG] debug-file - 08-30 10:54:00.151  INFO - Create a sign info successfully.
+
+[2026-08-30T10:54:00.155] [DEBUG] debug-file - 08-30 10:54:00.154  INFO - Create a sign info successfully.
+08-30 10:54:00.154  INFO - Create a sign info successfully.
+
+[2026-08-30T10:54:00.160] [DEBUG] debug-file - 08-30 10:54:00.159  INFO - Create a sign info successfully.
+
+[2026-08-30T10:54:00.174] [DEBUG] debug-file - 08-30 10:54:00.173  INFO - Sign successfully.
+
+[2026-08-30T10:54:00.192] [DEBUG] debug-file - 08-30 10:54:00.191  INFO - Add sign data in sign info list success.
+
+[2026-08-30T10:54:00.199] [DEBUG] debug-file - 08-30 10:54:00.197  INFO - Generate signing block success, begin write it to output file
+
+[2026-08-30T10:54:00.201] [DEBUG] debug-file - 08-30 10:54:00.201  INFO - Sign Hap success!
+
+[2026-08-30T10:54:00.202] [DEBUG] debug-file - 08-30 10:54:00.201  INFO - sign-app success
+
+[2026-08-30T10:54:00.259] [DEBUG] debug-file - entry : default@SignHap cost memory -1.8980636596679688
+[2026-08-30T10:54:00.259] [DEBUG] debug-file - runTaskFromQueue task cost before running: 8 s 660 ms 
+[2026-08-30T10:54:00.262] [INFO] debug-file - Finished :entry:default@SignHap... after 4 s 884 ms 
+[2026-08-30T10:54:00.264] [DEBUG] debug-file - Executing task :entry:default@CollectDebugSymbol
+[2026-08-30T10:54:00.266] [DEBUG] debug-file - entry : default@CollectDebugSymbol cost memory 0.08263397216796875
+[2026-08-30T10:54:00.266] [DEBUG] debug-file - runTaskFromQueue task cost before running: 8 s 667 ms 
+[2026-08-30T10:54:00.266] [INFO] debug-file - Finished :entry:default@CollectDebugSymbol... after 2 ms 
+[2026-08-30T10:54:00.266] [DEBUG] debug-file - Executing task :entry:assembleHap
+[2026-08-30T10:54:00.266] [DEBUG] debug-file - entry : assembleHap cost memory 0.01251220703125
+[2026-08-30T10:54:00.267] [DEBUG] debug-file - runTaskFromQueue task cost before running: 8 s 668 ms 
+[2026-08-30T10:54:00.268] [INFO] debug-file - Finished :entry:assembleHap... after 1 ms 
+[2026-08-30T10:54:00.289] [INFO] debug-file - BUILD SUCCESSFUL in 8 s 691 ms 
+[2026-08-30T10:54:00.290] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@PreBuild is up-to-date.
+[2026-08-30T10:54:00.290] [DEBUG] debug-file - Update task entry:default@CreateModuleInfo output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\generated\profile\default\ModuleInfo.ts cache.
+[2026-08-30T10:54:00.290] [DEBUG] debug-file - Incremental task entry:default@CreateModuleInfo post-execution cost:1 ms .
+[2026-08-30T10:54:00.290] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GenerateMetadata is up-to-date.
+[2026-08-30T10:54:00.291] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@MergeProfile is up-to-date.
+[2026-08-30T10:54:00.291] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CreateBuildProfile is up-to-date.
+[2026-08-30T10:54:00.291] [DEBUG] debug-file - Update task entry:default@ProcessIntegratedHsp output file:D:\DevEcoProjects\ColorOfToday\build\cache\default\integrated_hsp\integratedHspCache.json cache.
+[2026-08-30T10:54:00.291] [DEBUG] debug-file - Incremental task entry:default@ProcessIntegratedHsp post-execution cost:1 ms .
+[2026-08-30T10:54:00.291] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@MakePackInfo is up-to-date.
+[2026-08-30T10:54:00.293] [DEBUG] debug-file - Update task entry:default@SyscapTransform input file:D:\DevEco Studio\sdk\default\openharmony\toolchains\syscap_tool.exe cache by regenerate.
+[2026-08-30T10:54:00.294] [DEBUG] debug-file - Update task entry:default@SyscapTransform input file:D:\DevEco Studio\sdk\default\openharmony\ets\api\device-define cache by regenerate.
+[2026-08-30T10:54:00.298] [DEBUG] debug-file - Update task entry:default@SyscapTransform output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\syscap\default\rpcid.sc cache.
+[2026-08-30T10:54:00.298] [DEBUG] debug-file - Incremental task entry:default@SyscapTransform post-execution cost:7 ms .
+[2026-08-30T10:54:00.298] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GeneratePkgContextInfo is up-to-date.
+[2026-08-30T10:54:00.299] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessProfile is up-to-date.
+[2026-08-30T10:54:00.299] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessRouterMap is up-to-date.
+[2026-08-30T10:54:00.299] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessShareConfig is up-to-date.
+[2026-08-30T10:54:00.300] [DEBUG] debug-file - Update task entry:default@ProcessStartupConfig input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default\pkgContextInfo.json cache by regenerate.
+[2026-08-30T10:54:00.300] [DEBUG] debug-file - Update task entry:default@ProcessStartupConfig output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\startup\default\startup_config.json cache.
+[2026-08-30T10:54:00.301] [DEBUG] debug-file - Incremental task entry:default@ProcessStartupConfig post-execution cost:2 ms .
+[2026-08-30T10:54:00.301] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessResource is up-to-date.
+[2026-08-30T10:54:00.301] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GenerateLoaderJson is up-to-date.
+[2026-08-30T10:54:00.301] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CompileResource is up-to-date.
+[2026-08-30T10:54:00.305] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default cache by regenerate.
+[2026-08-30T10:54:00.307] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources\rawfile cache by regenerate.
+[2026-08-30T10:54:00.309] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\ResourceTable.txt cache by regenerate.
+[2026-08-30T10:54:00.309] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\ark_module.json cache by regenerate.
+[2026-08-30T10:54:00.310] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources\base\profile cache by regenerate.
+[2026-08-30T10:54:00.311] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\src\main\ets cache from map.
+[2026-08-30T10:54:00.312] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default\pkgContextInfo.json cache by regenerate.
+[2026-08-30T10:54:00.312] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\generated\profile\default\BuildProfile.ets cache by regenerate.
+[2026-08-30T10:54:00.313] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:D:\DevEcoProjects\ColorOfToday\entry\src\main\cpp\types cache by regenerate.
+[2026-08-30T10:54:00.316] [DEBUG] debug-file - Update task entry:default@CompileArkTS output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\ets cache.
+[2026-08-30T10:54:00.317] [DEBUG] debug-file - Incremental task entry:default@CompileArkTS post-execution cost:16 ms .
+[2026-08-30T10:54:00.320] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default cache by regenerate.
+[2026-08-30T10:54:00.322] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources\rawfile cache by regenerate.
+[2026-08-30T10:54:00.323] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\ResourceTable.txt cache by regenerate.
+[2026-08-30T10:54:00.323] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\ark_module.json cache by regenerate.
+[2026-08-30T10:54:00.324] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources\base\profile cache by regenerate.
+[2026-08-30T10:54:00.325] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default\pkgContextInfo.json cache by regenerate.
+[2026-08-30T10:54:00.326] [DEBUG] debug-file - Update task entry:default@BuildJS output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\js cache.
+[2026-08-30T10:54:00.326] [DEBUG] debug-file - Incremental task entry:default@BuildJS post-execution cost:9 ms .
+[2026-08-30T10:54:00.326] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessLibs is up-to-date.
+[2026-08-30T10:54:00.327] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@DoNativeStrip is up-to-date.
+[2026-08-30T10:54:00.327] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CacheNativeLibs is up-to-date.
+[2026-08-30T10:54:00.327] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GeneratePkgModuleJson is up-to-date.
+[2026-08-30T10:54:00.327] [DEBUG] debug-file - Incremental task entry:default@ProcessCompiledResources post-execution cost:1 ms .
+[2026-08-30T10:54:00.328] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\stripped_native_libs\default cache by regenerate.
+[2026-08-30T10:54:00.335] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\module.json cache by regenerate.
+[2026-08-30T10:54:00.336] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources cache by regenerate.
+[2026-08-30T10:54:00.341] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources.index cache by regenerate.
+[2026-08-30T10:54:00.341] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\pack.info cache by regenerate.
+[2026-08-30T10:54:00.342] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\ets cache from map.
+[2026-08-30T10:54:00.342] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default\pkgContextInfo.json cache by regenerate.
+[2026-08-30T10:54:00.343] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\ets\sourceMaps.map cache by regenerate.
+[2026-08-30T10:54:00.343] [DEBUG] debug-file - Update task entry:default@PackageHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\generated\profile\default\BuildProfile.ets cache by regenerate.
+[2026-08-30T10:54:00.344] [DEBUG] debug-file - Update task entry:default@PackageHap output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\entry-default-unsigned.hap cache.
+[2026-08-30T10:54:00.344] [DEBUG] debug-file - Update task entry:default@PackageHap output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\source_map\default\sourceMaps.map cache.
+[2026-08-30T10:54:00.344] [DEBUG] debug-file - Update task entry:default@PackageHap output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\mapping\sourceMaps.map cache.
+[2026-08-30T10:54:00.345] [DEBUG] debug-file - Incremental task entry:default@PackageHap post-execution cost:19 ms .
+[2026-08-30T10:54:00.348] [DEBUG] debug-file - Update task entry:default@SignHap input file:C:\Users\杨贵鑫\.ohos\config\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.cer cache by regenerate.
+[2026-08-30T10:54:00.349] [DEBUG] debug-file - Update task entry:default@SignHap input file:C:\Users\杨贵鑫\.ohos\config\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.p7b cache by regenerate.
+[2026-08-30T10:54:00.350] [DEBUG] debug-file - Update task entry:default@SignHap input file:C:\Users\杨贵鑫\.ohos\config\default_ColorOfToday_aQVGbYGhuPMoj5hnFjKxVdIEIu0z_LfaVSW4YN3glKA=.p12 cache by regenerate.
+[2026-08-30T10:54:00.351] [DEBUG] debug-file - Update task entry:default@SignHap input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\entry-default-unsigned.hap cache from map.
+[2026-08-30T10:54:00.351] [DEBUG] debug-file - Update task entry:default@SignHap output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\entry-default-signed.hap cache.
+[2026-08-30T10:54:00.351] [DEBUG] debug-file - Incremental task entry:default@SignHap post-execution cost:7 ms .
+[2026-08-30T10:54:00.352] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\ets\sourceMaps.map cache by regenerate.
+[2026-08-30T10:54:00.353] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\libs\default cache by regenerate.
+[2026-08-30T10:54:00.358] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\symbol cache.
+[2026-08-30T10:54:00.358] [DEBUG] debug-file - Incremental task entry:default@CollectDebugSymbol post-execution cost:7 ms .
+[2026-08-30T10:54:00.401] [DEBUG] debug-file - hvigor build process will be closed.
+[2026-08-30T10:54:00.410] [DEBUG] debug-file - session manager: send message to worker process.
+[2026-08-30T10:54:00.410] [DEBUG] debug-file - session manager: send message to worker process.
+[2026-08-30T10:54:00.410] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-08-30T10:54:00.411] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-08-31T19:43:14.007] [DEBUG] debug-file - env: nodejsVersion=v18.20.1
+[2026-08-31T19:43:14.113] [DEBUG] debug-file - env: daemon=true
+[2026-08-31T19:43:14.009] [DEBUG] debug-file - env: hvigor-config.json5 content = {
+  modelVersion: '5.0.0',
+  dependencies: {},
+  execution: {},
+  logging: {},
+  debugging: {},
+  nodeOptions: {}
+}
+[2026-08-31T19:43:15.368] [DEBUG] debug-file - hvigor java daemon: Starting java daemon. jvmXmxValue=512m, jarPath=D:\DevEco Studio\tools\hvigor\hvigor\lib\hvigor-java-daemon.jar
+[2026-08-31T19:43:15.370] [DEBUG] debug-file - hvigor java daemon: Read cache file, 
+    port=45050, pid=35604, sessionId exists=true
+[2026-08-31T19:43:15.401] [DEBUG] debug-file - hvigor java daemon: tryConnect failed, Error: connect ECONNREFUSED 127.0.0.1:45050, will start new daemon
+[2026-08-31T19:43:15.497] [DEBUG] debug-file - java daemon started at port 45050 pid 6628
+[2026-08-31T19:43:15.531] [DEBUG] debug-file - session manager: set active socket. socketId=G9GkN3ubksDvrGnHAAAB
+[2026-08-31T19:43:16.567] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-08-31T19:43:16.574] [DEBUG] debug-file - Since there is no instance or instance is terminated, create a new worker pool.
+[2026-08-31T19:43:16.574] [DEBUG] debug-file - Worker pool is initialized with config:  {
+  minPoolNum: 2,
+  maxPoolNum: undefined,
+  maxCoreSize: undefined,
+  cacheCapacity: undefined,
+  cacheTtl: undefined
+}
+[2026-08-31T19:43:16.576] [DEBUG] debug-file - Create  resident worker with id: 0.
+[2026-08-31T19:43:16.578] [DEBUG] debug-file - Create  resident worker with id: 1.
+[2026-08-31T19:43:16.581] [DEBUG] debug-file - Workers' log level updated to INFO
+[2026-08-31T19:43:16.595] [DEBUG] debug-file - Hvigor init with startParameters:{
+  hvigorfileTypeCheck: false,
+  parallelExecution: true,
+  incrementalExecution: true,
+  printStackTrace: false,
+  daemon: true,
+  analyze: 0,
+  logLevel: Level { level: 20000, levelStr: 'INFO', colour: 'green' },
+  optimizationStrategy: 'memory',
+  hotCompile: undefined,
+  hotReloadBuild: undefined,
+  customizedParam: undefined
+}
+[2026-08-31T19:43:16.603] [DEBUG] debug-file - Cache service initialization finished in 7 ms 
+[2026-08-31T19:43:16.606] [DEBUG] debug-file - hvigorfile, resolving D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+[2026-08-31T19:43:20.609] [DEBUG] debug-file - hvigorfile, require result:  { default: { plugins: [] } }
+[2026-08-31T19:43:20.610] [DEBUG] debug-file - hvigorfile, binding system plugins null
+[2026-08-31T19:43:20.610] [DEBUG] debug-file - Starting plugin build process
+[2026-08-31T19:43:20.611] [DEBUG] debug-file - App plugin prepare start...
+[2026-08-31T19:43:20.611] [DEBUG] debug-file - App plugin prepare end...
+[2026-08-31T19:43:20.611] [DEBUG] debug-file - App plugin creating...
+[2026-08-31T19:43:20.812] [DEBUG] debug-file - App plugin register hook start...
+[2026-08-31T19:43:20.812] [DEBUG] debug-file - App plugin register hook end...
+[2026-08-31T19:43:20.812] [DEBUG] debug-file - Plugin build process completed
+[2026-08-31T19:43:20.813] [DEBUG] debug-file - Start initialize project's product build option map with build mode debug.
+[2026-08-31T19:43:20.814] [DEBUG] debug-file - Picking option from product 'default' with build mode 'debug'.
+[2026-08-31T19:43:20.814] [DEBUG] debug-file - Product 'default' build option initialized
+[2026-08-31T19:43:20.814] [DEBUG] debug-file - End initialize project's product build option map with build mode 'debug'.
+[2026-08-31T19:43:20.816] [DEBUG] debug-file - Obtain build option for product 'default'in this build.
+[2026-08-31T19:43:20.819] [DEBUG] debug-file - D:\DevEcoProjects\ColorOfToday\build\cache\default\remote_hsp\remoteHspCache.json not exists.
+[2026-08-31T19:43:20.822] [DEBUG] debug-file - Local scan or download HarmonyOS sdk components toolchains,ets,js,native,previewer
+[2026-08-31T19:43:20.825] [DEBUG] debug-file - Local scan or download hmscore sdk components toolchains,ets,native
+[2026-08-31T19:43:20.828] [DEBUG] debug-file - Start recording SDK configuration permission data.
+[2026-08-31T19:43:20.865] [DEBUG] debug-file - Sdk init in 46 ms 
+[2026-08-31T19:43:20.872] [DEBUG] debug-file - Project task initialization takes 6 ms 
+[2026-08-31T19:43:20.872] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2026-08-31T19:43:20.872] [DEBUG] debug-file - hvigorfile, no custom plugins were found in D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+[2026-08-31T19:43:20.872] [DEBUG] debug-file - hvigorfile, resolve finished D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+[2026-08-31T19:43:20.873] [DEBUG] debug-file - hvigorfile, resolving D:\DevEcoProjects\ColorOfToday\entry\hvigorfile.ts
+[2026-08-31T19:43:20.880] [DEBUG] debug-file - hvigorfile, require result:  { default: { plugins: [] } }
+[2026-08-31T19:43:20.881] [DEBUG] debug-file - hvigorfile, binding system plugins null
+[2026-08-31T19:43:20.881] [DEBUG] debug-file - Starting plugin build process
+[2026-08-31T19:43:20.881] [DEBUG] debug-file - Hap plugin creating...
+[2026-08-31T19:43:20.883] [DEBUG] debug-file - failed to load cangjie to dynamically generate schemas: Error: Cannot find module '@ohos/cangjie-build-support/index'
+Require stack:
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\hooks\cangjie-register.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\strategy\stage-init-strategy.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\builder\abstract-plugin-builder.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\builder\app-plugin-builder.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\plugin\factory\plugin-factory.js
+- D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\index.js
+- D:\DevEcoProjects\ColorOfToday\hvigorfile.ts
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\internal\lifecycle\configuration.js
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\boot\index.js
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\daemon\cluster\worker-process-lifecycle.js
+- D:\DevEco Studio\tools\hvigor\hvigor\src\base\daemon\process\daemon-process-boot-script.js
+[2026-08-31T19:43:20.897] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=debug
+[2026-08-31T19:43:20.897] [DEBUG] debug-file - Target 'default' config initialized
+[2026-08-31T19:43:20.898] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-08-31T19:43:20.898] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-08-31T19:43:20.898] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=release
+[2026-08-31T19:43:20.899] [DEBUG] debug-file - Target 'default' config initialized
+[2026-08-31T19:43:20.899] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-08-31T19:43:20.899] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-08-31T19:43:20.899] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=debug
+[2026-08-31T19:43:20.899] [DEBUG] debug-file - Target 'default' config initialized
+[2026-08-31T19:43:20.900] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-08-31T19:43:20.900] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-08-31T19:43:20.900] [DEBUG] debug-file - Obtain build option for module 'entry' target 'default'in this build.
+[2026-08-31T19:43:20.906] [DEBUG] debug-file - Module entry task initialization takes 6 ms 
+[2026-08-31T19:43:20.907] [DEBUG] debug-file - Hap plugin register hook start...
+[2026-08-31T19:43:20.907] [DEBUG] debug-file - Hap plugin register hook end...
+[2026-08-31T19:43:20.907] [DEBUG] debug-file - Plugin build process completed
+[2026-08-31T19:43:20.907] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2026-08-31T19:43:20.907] [DEBUG] debug-file - hvigorfile, no custom plugins were found in D:\DevEcoProjects\ColorOfToday\entry\hvigorfile.ts
+[2026-08-31T19:43:20.907] [DEBUG] debug-file - hvigorfile, resolve finished D:\DevEcoProjects\ColorOfToday\entry\hvigorfile.ts
+[2026-08-31T19:43:20.925] [DEBUG] debug-file - hvigorfile, resolve hvigorfile dependencies in 18 ms 
+[2026-08-31T19:43:20.925] [DEBUG] debug-file - project has submodules:entry
+[2026-08-31T19:43:20.925] [DEBUG] debug-file - module:entry no need to execute packageHap
+[2026-08-31T19:43:20.927] [DEBUG] debug-file - start to load updatedOhPackageInfo to the disk
+[2026-08-31T19:43:20.931] [DEBUG] debug-file - load to the disk finished
+[2026-08-31T19:43:20.932] [DEBUG] debug-file - Start to initialize dependency information.
+[2026-08-31T19:43:20.934] [DEBUG] debug-file - Module ColorOfToday Collected Dependency: 
+[2026-08-31T19:43:20.934] [DEBUG] debug-file - Module ColorOfToday's total dependency: 0
+[2026-08-31T19:43:20.936] [DEBUG] debug-file - Start to initialize dependency information.
+[2026-08-31T19:43:20.943] [DEBUG] debug-file - Module entry Collected Dependency: D:\DevEcoProjects\ColorOfToday\entry\src\main\cpp\types\libentry
+[2026-08-31T19:43:20.943] [DEBUG] debug-file - Module entry's total dependency: 1
+[2026-08-31T19:43:20.947] [DEBUG] debug-file - Configuration phase cost:4 s 344 ms 
+[2026-08-31T19:43:20.950] [DEBUG] debug-file - Configuration task cost before running: 4 s 368 ms 
+[2026-08-31T19:43:20.957] [DEBUG] debug-file - Executing task :entry:default@PreBuild
+[2026-08-31T19:43:20.959] [DEBUG] debug-file - Task 'entry:default@PreBuild' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:20.972] [DEBUG] debug-file - entry:default@PreBuild is not up-to-date, since the task snapshots are different.
+[2026-08-31T19:43:20.972] [DEBUG] debug-file - Incremental task entry:default@PreBuild pre-execution cost: 9 ms .
+[2026-08-31T19:43:21.105] [DEBUG] debug-file - current product is not Atomic service.
+[2026-08-31T19:43:21.105] [DEBUG] debug-file - Use tool [win32: JAVA_HOME, CLASSPATH]
+ [ { JAVA_HOME: 'D:\\DevEco Studio\\jbr' }, { CLASSPATH: undefined } ]
+[2026-08-31T19:43:21.106] [DEBUG] debug-file - Use tool [win32: NODE_HOME]
+ [ { NODE_HOME: 'D:\\DevEco Studio\\tools\\node' } ]
+[2026-08-31T19:43:21.107] [DEBUG] debug-file - entry : default@PreBuild cost memory 18.09839630126953
+[2026-08-31T19:43:21.107] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 525 ms 
+[2026-08-31T19:43:21.110] [INFO] debug-file - Finished :entry:default@PreBuild... after 150 ms 
+[2026-08-31T19:43:21.111] [DEBUG] debug-file - Executing task :entry:default@CreateModuleInfo
+[2026-08-31T19:43:21.111] [DEBUG] debug-file - Task 'entry:default@CreateModuleInfo' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.112] [DEBUG] debug-file - entry : default@CreateModuleInfo cost memory -0.0013885498046875
+[2026-08-31T19:43:21.112] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 530 ms 
+[2026-08-31T19:43:21.115] [INFO] debug-file - Finished :entry:default@CreateModuleInfo... after 1 ms 
+[2026-08-31T19:43:21.120] [DEBUG] debug-file - Executing task :entry:default@GenerateMetadata
+[2026-08-31T19:43:21.120] [DEBUG] debug-file - Task 'entry:default@GenerateMetadata' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.123] [DEBUG] debug-file - Incremental task entry:default@GenerateMetadata pre-execution cost: 2 ms .
+[2026-08-31T19:43:21.123] [DEBUG] debug-file - entry : default@GenerateMetadata cost memory 0.09015655517578125
+[2026-08-31T19:43:21.123] [INFO] debug-file - UP-TO-DATE :entry:default@GenerateMetadata...  
+[2026-08-31T19:43:21.125] [DEBUG] debug-file - Executing task :entry:default@ConfigureCmake
+[2026-08-31T19:43:21.130] [DEBUG] debug-file - entry : default@ConfigureCmake cost memory 0.0791015625
+[2026-08-31T19:43:21.130] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 548 ms 
+[2026-08-31T19:43:21.130] [INFO] debug-file - Finished :entry:default@ConfigureCmake... after 6 ms 
+[2026-08-31T19:43:21.132] [DEBUG] debug-file - Executing task :entry:default@MergeProfile
+[2026-08-31T19:43:21.133] [DEBUG] debug-file - Task 'entry:default@MergeProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.135] [DEBUG] debug-file - Incremental task entry:default@MergeProfile pre-execution cost: 3 ms .
+[2026-08-31T19:43:21.136] [DEBUG] debug-file - entry : default@MergeProfile cost memory 0.13115692138671875
+[2026-08-31T19:43:21.136] [INFO] debug-file - UP-TO-DATE :entry:default@MergeProfile...  
+[2026-08-31T19:43:21.137] [DEBUG] debug-file - Executing task :entry:default@CreateBuildProfile
+[2026-08-31T19:43:21.138] [DEBUG] debug-file - Task 'entry:default@CreateBuildProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.140] [DEBUG] debug-file - Incremental task entry:default@CreateBuildProfile pre-execution cost: 2 ms .
+[2026-08-31T19:43:21.140] [DEBUG] debug-file - entry : default@CreateBuildProfile cost memory 0.107666015625
+[2026-08-31T19:43:21.140] [INFO] debug-file - UP-TO-DATE :entry:default@CreateBuildProfile...  
+[2026-08-31T19:43:21.141] [DEBUG] debug-file - Executing task :entry:default@PreCheckSyscap
+[2026-08-31T19:43:21.142] [DEBUG] debug-file - entry : default@PreCheckSyscap cost memory 0.01474761962890625
+[2026-08-31T19:43:21.142] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 560 ms 
+[2026-08-31T19:43:21.142] [INFO] debug-file - Finished :entry:default@PreCheckSyscap... after 1 ms 
+[2026-08-31T19:43:21.147] [DEBUG] debug-file - Executing task :entry:default@ProcessIntegratedHsp
+[2026-08-31T19:43:21.147] [DEBUG] debug-file - entry:default@ProcessIntegratedHsp is not up-to-date, since the output file 'D:\DevEcoProjects\ColorOfToday\build\cache\default\integrated_hsp\integratedHspCache.json' does not exist.
+[2026-08-31T19:43:21.147] [DEBUG] debug-file - Incremental task entry:default@ProcessIntegratedHsp pre-execution cost: 1 ms .
+[2026-08-31T19:43:21.148] [DEBUG] debug-file - entry : default@ProcessIntegratedHsp cost memory 0.0558013916015625
+[2026-08-31T19:43:21.148] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 566 ms 
+[2026-08-31T19:43:21.148] [INFO] debug-file - Finished :entry:default@ProcessIntegratedHsp... after 1 ms 
+[2026-08-31T19:43:21.149] [DEBUG] debug-file - Executing task :entry:default@BuildNativeWithCmake
+[2026-08-31T19:43:21.153] [DEBUG] debug-file - Use tool [Cmake]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\cmake.exe',
+  '-HD:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp',
+  '-BD:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\arm64-v8a',
+  '-DOHOS_ARCH=arm64-v8a',
+  '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\cmake\\default\\obj\\arm64-v8a',
+  '-DCMAKE_BUILD_TYPE=Debug',
+  '-DOHOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\openharmony\\native',
+  '-DCMAKE_SYSTEM_NAME=OHOS',
+  '-DCMAKE_OHOS_ARCH_ABI=arm64-v8a',
+  '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
+  '-DCMAKE_TOOLCHAIN_FILE=D:\\DevEco Studio\\sdk\\default\\hms\\native\\build\\cmake\\hmos.toolchain.cmake',
+  '-GNinja',
+  '-DCMAKE_MAKE_PROGRAM=D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-DCMAKE_FIND_ROOT_PATH=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\arm64-v8a',
+  '-DPACKAGE_FIND_FILE=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\arm64-v8a\\summary.cmake',
+  '--no-warn-unused-cli',
+  '-DHMOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\hms\\native'
+]
+[2026-08-31T19:43:21.170] [DEBUG] debug-file - CMake configuration was up-to-date
+[2026-08-31T19:43:21.179] [DEBUG] debug-file - Use tool [Cmake]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\cmake.exe',
+  '-HD:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp',
+  '-BD:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\x86_64',
+  '-DOHOS_ARCH=x86_64',
+  '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\\DevEcoProjects\\ColorOfToday\\entry\\build\\default\\intermediates\\cmake\\default\\obj\\x86_64',
+  '-DCMAKE_BUILD_TYPE=Debug',
+  '-DOHOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\openharmony\\native',
+  '-DCMAKE_SYSTEM_NAME=OHOS',
+  '-DCMAKE_OHOS_ARCH_ABI=x86_64',
+  '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
+  '-DCMAKE_TOOLCHAIN_FILE=D:\\DevEco Studio\\sdk\\default\\hms\\native\\build\\cmake\\hmos.toolchain.cmake',
+  '-GNinja',
+  '-DCMAKE_MAKE_PROGRAM=D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-DCMAKE_FIND_ROOT_PATH=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\x86_64',
+  '-DPACKAGE_FIND_FILE=D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\hvigor\\x86_64\\summary.cmake',
+  '--no-warn-unused-cli',
+  '-DHMOS_SDK_NATIVE=D:\\DevEco Studio\\sdk\\default\\hms\\native'
+]
+[2026-08-31T19:43:21.194] [DEBUG] debug-file - CMake configuration was up-to-date
+[2026-08-31T19:43:21.199] [DEBUG] debug-file - entry : default@BuildNativeWithCmake cost memory 1.324432373046875
+[2026-08-31T19:43:21.199] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 617 ms 
+[2026-08-31T19:43:21.199] [INFO] debug-file - Finished :entry:default@BuildNativeWithCmake... after 50 ms 
+[2026-08-31T19:43:21.202] [DEBUG] debug-file - Executing task :entry:default@MakePackInfo
+[2026-08-31T19:43:21.205] [DEBUG] debug-file - Incremental task entry:default@MakePackInfo pre-execution cost: 3 ms .
+[2026-08-31T19:43:21.205] [DEBUG] debug-file - entry : default@MakePackInfo cost memory 0.1103363037109375
+[2026-08-31T19:43:21.206] [INFO] debug-file - UP-TO-DATE :entry:default@MakePackInfo...  
+[2026-08-31T19:43:21.207] [DEBUG] debug-file - Executing task :entry:default@SyscapTransform
+[2026-08-31T19:43:21.207] [DEBUG] debug-file - File: 'D:\DevEcoProjects\ColorOfToday\entry\src\main\syscap.json' from 'sysCapJsonPath' is not exists, just ignore.
+[2026-08-31T19:43:21.208] [DEBUG] debug-file - Task 'entry:default@SyscapTransform' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.222] [DEBUG] debug-file - entry:default@SyscapTransform is not up-to-date, since the output file 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\syscap\default\rpcid.sc' does not exist.
+[2026-08-31T19:43:21.222] [DEBUG] debug-file - Incremental task entry:default@SyscapTransform pre-execution cost: 14 ms .
+[2026-08-31T19:43:21.222] [DEBUG] debug-file - entry : default@SyscapTransform cost memory 0.35291290283203125
+[2026-08-31T19:43:21.223] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 641 ms 
+[2026-08-31T19:43:21.223] [INFO] debug-file - Finished :entry:default@SyscapTransform... after 16 ms 
+[2026-08-31T19:43:21.224] [DEBUG] debug-file - Executing task :entry:default@BuildNativeWithNinja
+[2026-08-31T19:43:21.231] [DEBUG] debug-file - Use tool [Ninja]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-C',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\arm64-v8a'
+]
+[2026-08-31T19:43:21.232] [DEBUG] debug-file - default@BuildNativeWithNinja work[0] is submitted.
+[2026-08-31T19:43:21.232] [DEBUG] debug-file - default@BuildNativeWithNinja work[0] is pushed to ready queue.
+[2026-08-31T19:43:21.233] [DEBUG] debug-file - A work dispatched to worker[11] failed because unable to get work from ready queue.
+[2026-08-31T19:43:21.233] [DEBUG] debug-file - Create  resident worker with id: 10.
+[2026-08-31T19:43:21.234] [DEBUG] debug-file - default@BuildNativeWithNinja work[0] has been dispatched to worker[10].
+[2026-08-31T19:43:21.234] [DEBUG] debug-file - default@BuildNativeWithNinja work[0] is dispatched.
+[2026-08-31T19:43:21.243] [DEBUG] debug-file - OHOS_STL is c++_shared
+[2026-08-31T19:43:21.243] [DEBUG] debug-file - Copy STL libc++_shared.so to D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\arm64-v8a due to OHOS_STL is 'c++_shared'
+[2026-08-31T19:43:21.254] [DEBUG] debug-file - Use tool [Ninja]
+ [
+  'D:\\DevEco Studio\\sdk\\default\\openharmony\\native\\build-tools\\cmake\\bin\\ninja.exe',
+  '-C',
+  'D:\\DevEcoProjects\\ColorOfToday\\entry\\.cxx\\default\\default\\debug\\x86_64'
+]
+[2026-08-31T19:43:21.254] [DEBUG] debug-file - default@BuildNativeWithNinja work[1] is submitted.
+[2026-08-31T19:43:21.254] [DEBUG] debug-file - default@BuildNativeWithNinja work[1] is pushed to ready queue.
+[2026-08-31T19:43:21.254] [DEBUG] debug-file - A work dispatched to worker[11] failed because unable to get work from ready queue.
+[2026-08-31T19:43:21.254] [DEBUG] debug-file - A work dispatched to worker[10] failed because of worker busy.
+[2026-08-31T19:43:21.254] [DEBUG] debug-file - Create  resident worker with id: 9.
+[2026-08-31T19:43:21.255] [DEBUG] debug-file - default@BuildNativeWithNinja work[1] has been dispatched to worker[9].
+[2026-08-31T19:43:21.255] [DEBUG] debug-file - default@BuildNativeWithNinja work[1] is dispatched.
+[2026-08-31T19:43:21.263] [DEBUG] debug-file - OHOS_STL is c++_shared
+[2026-08-31T19:43:21.264] [DEBUG] debug-file - Copy STL libc++_shared.so to D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\x86_64 due to OHOS_STL is 'c++_shared'
+[2026-08-31T19:43:21.272] [DEBUG] debug-file - entry : default@BuildNativeWithNinja cost memory -22.13288116455078
+[2026-08-31T19:43:21.274] [DEBUG] debug-file - Executing task :entry:default@GeneratePkgContextInfo
+[2026-08-31T19:43:21.293] [DEBUG] debug-file - Task 'entry:default@GeneratePkgContextInfo' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.295] [DEBUG] debug-file - Incremental task entry:default@GeneratePkgContextInfo pre-execution cost: 2 ms .
+[2026-08-31T19:43:21.295] [DEBUG] debug-file - entry : default@GeneratePkgContextInfo cost memory 1.2191925048828125
+[2026-08-31T19:43:21.295] [INFO] debug-file - UP-TO-DATE :entry:default@GeneratePkgContextInfo...  
+[2026-08-31T19:43:21.298] [DEBUG] debug-file - Executing task :entry:default@ProcessProfile
+[2026-08-31T19:43:21.300] [DEBUG] debug-file - Task 'entry:default@ProcessProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.302] [DEBUG] debug-file - Incremental task entry:default@ProcessProfile pre-execution cost: 2 ms .
+[2026-08-31T19:43:21.302] [DEBUG] debug-file - entry : default@ProcessProfile cost memory 0.24468231201171875
+[2026-08-31T19:43:21.303] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessProfile...  
+[2026-08-31T19:43:21.304] [DEBUG] debug-file - Executing task :entry:default@ProcessRouterMap
+[2026-08-31T19:43:21.310] [DEBUG] debug-file - Incremental task entry:default@ProcessRouterMap pre-execution cost: 5 ms .
+[2026-08-31T19:43:21.310] [DEBUG] debug-file - entry : default@ProcessRouterMap cost memory 0.1658782958984375
+[2026-08-31T19:43:21.311] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessRouterMap...  
+[2026-08-31T19:43:21.313] [DEBUG] debug-file - Executing task :entry:default@ProcessShareConfig
+[2026-08-31T19:43:21.319] [DEBUG] debug-file - Incremental task entry:default@ProcessShareConfig pre-execution cost: 5 ms .
+[2026-08-31T19:43:21.319] [DEBUG] debug-file - entry : default@ProcessShareConfig cost memory 0.14234161376953125
+[2026-08-31T19:43:21.320] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessShareConfig...  
+[2026-08-31T19:43:21.321] [DEBUG] debug-file - Executing task :entry:default@ProcessStartupConfig
+[2026-08-31T19:43:21.322] [DEBUG] debug-file - Task 'entry:default@ProcessStartupConfig' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.324] [DEBUG] debug-file - entry:default@ProcessStartupConfig is not up-to-date, since the output file 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\startup\default\startup_config.json' does not exist.
+[2026-08-31T19:43:21.324] [DEBUG] debug-file - Incremental task entry:default@ProcessStartupConfig pre-execution cost: 2 ms .
+[2026-08-31T19:43:21.326] [DEBUG] debug-file - entry : default@ProcessStartupConfig cost memory 0.13924407958984375
+[2026-08-31T19:43:21.327] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 745 ms 
+[2026-08-31T19:43:21.327] [INFO] debug-file - Finished :entry:default@ProcessStartupConfig... after 6 ms 
+[2026-08-31T19:43:21.331] [DEBUG] debug-file - restool module names: entry; moduleName=entry, taskName=default@ProcessResource
+[2026-08-31T19:43:21.336] [DEBUG] debug-file - Executing task :entry:default@ProcessResource
+[2026-08-31T19:43:21.336] [DEBUG] debug-file - Task 'entry:default@ProcessResource' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.339] [DEBUG] debug-file - Incremental task entry:default@ProcessResource pre-execution cost: 3 ms .
+[2026-08-31T19:43:21.339] [DEBUG] debug-file - entry : default@ProcessResource cost memory 0.13031005859375
+[2026-08-31T19:43:21.343] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessResource...  
+[2026-08-31T19:43:21.347] [DEBUG] debug-file - Executing task :entry:default@GenerateLoaderJson
+[2026-08-31T19:43:21.349] [DEBUG] debug-file - Task 'entry:default@GenerateLoaderJson' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.365] [DEBUG] debug-file - Incremental task entry:default@GenerateLoaderJson pre-execution cost: 10 ms .
+[2026-08-31T19:43:21.366] [DEBUG] debug-file - entry : default@GenerateLoaderJson cost memory 0.4835052490234375
+[2026-08-31T19:43:21.371] [INFO] debug-file - UP-TO-DATE :entry:default@GenerateLoaderJson...  
+[2026-08-31T19:43:21.373] [DEBUG] debug-file - restool module names: entry; moduleName=entry, taskName=default@CompileResource
+[2026-08-31T19:43:21.374] [DEBUG] debug-file - Executing task :entry:default@CompileResource
+[2026-08-31T19:43:21.405] [DEBUG] debug-file - Incremental task entry:default@CompileResource pre-execution cost: 29 ms .
+[2026-08-31T19:43:21.405] [DEBUG] debug-file - entry : default@CompileResource cost memory 0.5360870361328125
+[2026-08-31T19:43:21.407] [INFO] debug-file - UP-TO-DATE :entry:default@CompileResource...  
+[2026-08-31T19:43:21.409] [DEBUG] debug-file - Executing task :entry:default@CompileArkTS
+[2026-08-31T19:43:21.410] [DEBUG] debug-file - obfuscationOptions: undefined
+[2026-08-31T19:43:21.417] [DEBUG] debug-file - Task 'entry:default@CompileArkTS' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.444] [DEBUG] debug-file - Incremental task entry:default@CompileArkTS pre-execution cost: 24 ms .
+[2026-08-31T19:43:21.444] [DEBUG] debug-file - entry : default@CompileArkTS cost memory 0.8329010009765625
+[2026-08-31T19:43:21.447] [INFO] debug-file - UP-TO-DATE :entry:default@CompileArkTS...  
+[2026-08-31T19:43:21.450] [DEBUG] debug-file - Executing task :entry:default@BuildJS
+[2026-08-31T19:43:21.450] [DEBUG] debug-file - Task 'entry:default@BuildJS' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:21.455] [DEBUG] debug-file - entry : default@BuildJS cost memory 0.1575164794921875
+[2026-08-31T19:43:21.455] [DEBUG] debug-file - runTaskFromQueue task cost before running: 4 s 873 ms 
+[2026-08-31T19:43:21.455] [INFO] debug-file - Finished :entry:default@BuildJS... after 6 ms 
+[2026-08-31T19:43:23.597] [DEBUG] debug-file - ninja: Entering directory `D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a'
+ninja: no work to do.
+
+[2026-08-31T19:43:23.601] [DEBUG] debug-file - worker[10] has one work done.
+[2026-08-31T19:43:23.603] [DEBUG] debug-file - ninja: Entering directory `D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64'
+ninja: no work to do.
+
+[2026-08-31T19:43:23.606] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libEGL.so".
+[2026-08-31T19:43:23.606] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libEGL.so".
+[2026-08-31T19:43:23.606] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libGLESv3.so".
+[2026-08-31T19:43:23.606] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libGLESv3.so".
+[2026-08-31T19:43:23.607] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-31T19:43:23.607] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-31T19:43:23.607] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_window.so".
+[2026-08-31T19:43:23.607] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_window.so".
+[2026-08-31T19:43:23.607] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_image.so".
+[2026-08-31T19:43:23.607] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libnative_image.so".
+[2026-08-31T19:43:23.607] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libace_ndk.z.so".
+[2026-08-31T19:43:23.608] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\arm64-v8a\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\aarch64-linux-ohos\libace_ndk.z.so".
+[2026-08-31T19:43:23.608] [DEBUG] debug-file - default@BuildNativeWithNinja work[0] done.
+[2026-08-31T19:43:23.608] [DEBUG] debug-file - A work dispatched to worker[10] failed because unable to get work from ready queue.
+[2026-08-31T19:43:23.608] [DEBUG] debug-file - worker[9] has one work done.
+[2026-08-31T19:43:23.613] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libEGL.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libEGL.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libGLESv3.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libGLESv3.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libhilog_ndk.z.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_window.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_window.so".
+[2026-08-31T19:43:23.614] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_image.so".
+[2026-08-31T19:43:23.615] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libnative_image.so".
+[2026-08-31T19:43:23.615] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libace_ndk.z.so".
+[2026-08-31T19:43:23.615] [DEBUG] debug-file - Sync native runtime file D:\DevEcoProjects\ColorOfToday\entry\.cxx\default\default\debug\x86_64\"D:\DevEco Studio\sdk\default\openharmony\native\sysroot\usr\lib\x86_64-linux-ohos\libace_ndk.z.so".
+[2026-08-31T19:43:23.615] [DEBUG] debug-file - default@BuildNativeWithNinja work[1] done.
+[2026-08-31T19:43:23.615] [DEBUG] debug-file - A work dispatched to worker[9] failed because unable to get work from ready queue.
+[2026-08-31T19:43:23.616] [INFO] debug-file - Finished :entry:default@BuildNativeWithNinja... after 235 ms 
+[2026-08-31T19:43:23.617] [DEBUG] debug-file - Executing task :entry:default@ProcessLibs
+[2026-08-31T19:43:23.629] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\x86_64\libentry.so
+[2026-08-31T19:43:23.635] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\x86_64\libc++_shared.so
+[2026-08-31T19:43:23.640] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\arm64-v8a\libentry.so
+[2026-08-31T19:43:23.643] [DEBUG] debug-file - Check content hash for D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\cmake\default\obj\arm64-v8a\libc++_shared.so
+[2026-08-31T19:43:23.652] [DEBUG] debug-file - Incremental task entry:default@ProcessLibs pre-execution cost: 4 ms .
+[2026-08-31T19:43:23.652] [DEBUG] debug-file - entry : default@ProcessLibs cost memory 1.668304443359375
+[2026-08-31T19:43:23.653] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessLibs...  
+[2026-08-31T19:43:23.654] [DEBUG] debug-file - Executing task :entry:default@DoNativeStrip
+[2026-08-31T19:43:23.655] [DEBUG] debug-file - Task 'entry:default@DoNativeStrip' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:23.660] [DEBUG] debug-file - Incremental task entry:default@DoNativeStrip pre-execution cost: 6 ms .
+[2026-08-31T19:43:23.660] [DEBUG] debug-file - entry : default@DoNativeStrip cost memory 0.20236968994140625
+[2026-08-31T19:43:23.660] [INFO] debug-file - UP-TO-DATE :entry:default@DoNativeStrip...  
+[2026-08-31T19:43:23.661] [DEBUG] debug-file - Executing task :entry:default@CacheNativeLibs
+[2026-08-31T19:43:23.662] [DEBUG] debug-file - Task 'entry:default@CacheNativeLibs' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:23.667] [DEBUG] debug-file - Incremental task entry:default@CacheNativeLibs pre-execution cost: 6 ms .
+[2026-08-31T19:43:23.668] [DEBUG] debug-file - entry : default@CacheNativeLibs cost memory 0.21600341796875
+[2026-08-31T19:43:23.668] [INFO] debug-file - UP-TO-DATE :entry:default@CacheNativeLibs...  
+[2026-08-31T19:43:23.669] [DEBUG] debug-file - Executing task :entry:default@GeneratePkgModuleJson
+[2026-08-31T19:43:23.669] [DEBUG] debug-file - File: 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\preload\default\preload.json' from 'preloadSoJsonPath' is not exists, just ignore.
+[2026-08-31T19:43:23.670] [DEBUG] debug-file - Error occurs while handling @Input 'shouldDeduplicateHar': The "data" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received undefined
+[2026-08-31T19:43:23.670] [DEBUG] debug-file - Task 'entry:default@GeneratePkgModuleJson' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:23.671] [DEBUG] debug-file - Incremental task entry:default@GeneratePkgModuleJson pre-execution cost: 1 ms .
+[2026-08-31T19:43:23.671] [DEBUG] debug-file - entry : default@GeneratePkgModuleJson cost memory 0.1027069091796875
+[2026-08-31T19:43:23.671] [INFO] debug-file - UP-TO-DATE :entry:default@GeneratePkgModuleJson...  
+[2026-08-31T19:43:23.672] [DEBUG] debug-file - Executing task :entry:default@ProcessCompiledResources
+[2026-08-31T19:43:23.672] [DEBUG] debug-file - File: 'D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\preload\default\preload.json' from 'preloadSoJsonPath' is not exists, just ignore.
+[2026-08-31T19:43:23.672] [DEBUG] debug-file - Task 'entry:default@ProcessCompiledResources' cost while wrapping incremental declarations: 1 ms 
+[2026-08-31T19:43:23.672] [DEBUG] debug-file - entry : default@ProcessCompiledResources cost memory 0.05762481689453125
+[2026-08-31T19:43:23.673] [DEBUG] debug-file - runTaskFromQueue task cost before running: 7 s 91 ms 
+[2026-08-31T19:43:23.673] [INFO] debug-file - Finished :entry:default@ProcessCompiledResources... after 1 ms 
+[2026-08-31T19:43:23.675] [DEBUG] debug-file - Executing task :entry:default@PackageHap
+[2026-08-31T19:43:23.688] [DEBUG] debug-file - Incremental task entry:default@PackageHap pre-execution cost: 13 ms .
+[2026-08-31T19:43:23.689] [DEBUG] debug-file - entry : default@PackageHap cost memory 0.45359039306640625
+[2026-08-31T19:43:23.690] [INFO] debug-file - UP-TO-DATE :entry:default@PackageHap...  
+[2026-08-31T19:43:23.691] [DEBUG] debug-file - Executing task :entry:default@PackingCheck
+[2026-08-31T19:43:23.697] [DEBUG] debug-file - entry : default@PackingCheck cost memory 0.509521484375
+[2026-08-31T19:43:23.698] [DEBUG] debug-file - runTaskFromQueue task cost before running: 7 s 116 ms 
+[2026-08-31T19:43:23.698] [INFO] debug-file - Finished :entry:default@PackingCheck... after 7 ms 
+[2026-08-31T19:43:23.699] [DEBUG] debug-file - Executing task :entry:default@SignHap
+[2026-08-31T19:43:23.707] [DEBUG] debug-file - Incremental task entry:default@SignHap pre-execution cost: 6 ms .
+[2026-08-31T19:43:23.707] [DEBUG] debug-file - entry : default@SignHap cost memory 0.13455963134765625
+[2026-08-31T19:43:23.708] [INFO] debug-file - UP-TO-DATE :entry:default@SignHap...  
+[2026-08-31T19:43:23.710] [DEBUG] debug-file - Executing task :entry:default@CollectDebugSymbol
+[2026-08-31T19:43:23.711] [DEBUG] debug-file - entry : default@CollectDebugSymbol cost memory 0.08768463134765625
+[2026-08-31T19:43:23.711] [DEBUG] debug-file - runTaskFromQueue task cost before running: 7 s 129 ms 
+[2026-08-31T19:43:23.711] [INFO] debug-file - Finished :entry:default@CollectDebugSymbol... after 2 ms 
+[2026-08-31T19:43:23.711] [DEBUG] debug-file - Executing task :entry:assembleHap
+[2026-08-31T19:43:23.711] [DEBUG] debug-file - entry : assembleHap cost memory 0.0128936767578125
+[2026-08-31T19:43:23.712] [DEBUG] debug-file - runTaskFromQueue task cost before running: 7 s 130 ms 
+[2026-08-31T19:43:23.712] [INFO] debug-file - Finished :entry:assembleHap... after 1 ms 
+[2026-08-31T19:43:23.724] [INFO] debug-file - BUILD SUCCESSFUL in 7 s 142 ms 
+[2026-08-31T19:43:23.726] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\AppScope\app.json5 cache by regenerate.
+[2026-08-31T19:43:23.726] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\entry\src\main\module.json5 cache by regenerate.
+[2026-08-31T19:43:23.727] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\build-profile.json5 cache by regenerate.
+[2026-08-31T19:43:23.727] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\entry\build-profile.json5 cache by regenerate.
+[2026-08-31T19:43:23.727] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\entry\src\main\resources\base\profile\main_pages.json cache by regenerate.
+[2026-08-31T19:43:23.728] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\hvigor\hvigor-config.json5 cache by regenerate.
+[2026-08-31T19:43:23.728] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\entry\oh-package.json5 cache by regenerate.
+[2026-08-31T19:43:23.729] [DEBUG] debug-file - Update task entry:default@PreBuild input file:D:\DevEcoProjects\ColorOfToday\oh-package.json5 cache by regenerate.
+[2026-08-31T19:43:23.729] [DEBUG] debug-file - Incremental task entry:default@PreBuild post-execution cost:5 ms .
+[2026-08-31T19:43:23.729] [DEBUG] debug-file - Update task entry:default@CreateModuleInfo output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\generated\profile\default\ModuleInfo.ts cache.
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - Incremental task entry:default@CreateModuleInfo post-execution cost:1 ms .
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GenerateMetadata is up-to-date.
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@MergeProfile is up-to-date.
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CreateBuildProfile is up-to-date.
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - Update task entry:default@ProcessIntegratedHsp output file:D:\DevEcoProjects\ColorOfToday\build\cache\default\integrated_hsp\integratedHspCache.json cache.
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - Incremental task entry:default@ProcessIntegratedHsp post-execution cost:1 ms .
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@MakePackInfo is up-to-date.
+[2026-08-31T19:43:23.730] [DEBUG] debug-file - Update task entry:default@SyscapTransform input file:D:\DevEco Studio\sdk\default\openharmony\toolchains\syscap_tool.exe cache by regenerate.
+[2026-08-31T19:43:23.731] [DEBUG] debug-file - Update task entry:default@SyscapTransform input file:D:\DevEco Studio\sdk\default\openharmony\ets\api\device-define cache by regenerate.
+[2026-08-31T19:43:23.733] [DEBUG] debug-file - Update task entry:default@SyscapTransform output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\syscap\default\rpcid.sc cache.
+[2026-08-31T19:43:23.733] [DEBUG] debug-file - Incremental task entry:default@SyscapTransform post-execution cost:3 ms .
+[2026-08-31T19:43:23.733] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GeneratePkgContextInfo is up-to-date.
+[2026-08-31T19:43:23.733] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessProfile is up-to-date.
+[2026-08-31T19:43:23.733] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessRouterMap is up-to-date.
+[2026-08-31T19:43:23.733] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessShareConfig is up-to-date.
+[2026-08-31T19:43:23.733] [DEBUG] debug-file - Update task entry:default@ProcessStartupConfig input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default\pkgContextInfo.json cache by regenerate.
+[2026-08-31T19:43:23.734] [DEBUG] debug-file - Update task entry:default@ProcessStartupConfig output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\startup\default\startup_config.json cache.
+[2026-08-31T19:43:23.734] [DEBUG] debug-file - Incremental task entry:default@ProcessStartupConfig post-execution cost:1 ms .
+[2026-08-31T19:43:23.734] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessResource is up-to-date.
+[2026-08-31T19:43:23.734] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GenerateLoaderJson is up-to-date.
+[2026-08-31T19:43:23.734] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CompileResource is up-to-date.
+[2026-08-31T19:43:23.734] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CompileArkTS is up-to-date.
+[2026-08-31T19:43:23.736] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default cache by regenerate.
+[2026-08-31T19:43:23.737] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources\rawfile cache by regenerate.
+[2026-08-31T19:43:23.738] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\ResourceTable.txt cache by regenerate.
+[2026-08-31T19:43:23.738] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\ark_module.json cache by regenerate.
+[2026-08-31T19:43:23.739] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\res\default\resources\base\profile cache by regenerate.
+[2026-08-31T19:43:23.739] [DEBUG] debug-file - Update task entry:default@BuildJS input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader\default\pkgContextInfo.json cache by regenerate.
+[2026-08-31T19:43:23.740] [DEBUG] debug-file - Update task entry:default@BuildJS output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\js cache.
+[2026-08-31T19:43:23.740] [DEBUG] debug-file - Incremental task entry:default@BuildJS post-execution cost:7 ms .
+[2026-08-31T19:43:23.741] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessLibs is up-to-date.
+[2026-08-31T19:43:23.741] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@DoNativeStrip is up-to-date.
+[2026-08-31T19:43:23.741] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CacheNativeLibs is up-to-date.
+[2026-08-31T19:43:23.741] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GeneratePkgModuleJson is up-to-date.
+[2026-08-31T19:43:23.741] [DEBUG] debug-file - Incremental task entry:default@ProcessCompiledResources post-execution cost:1 ms .
+[2026-08-31T19:43:23.741] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@PackageHap is up-to-date.
+[2026-08-31T19:43:23.741] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@SignHap is up-to-date.
+[2026-08-31T19:43:23.742] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\loader_out\default\ets\sourceMaps.map cache by regenerate.
+[2026-08-31T19:43:23.742] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol input file:D:\DevEcoProjects\ColorOfToday\entry\build\default\intermediates\libs\default cache by regenerate.
+[2026-08-31T19:43:23.745] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol output file:D:\DevEcoProjects\ColorOfToday\entry\build\default\outputs\default\symbol cache.
+[2026-08-31T19:43:23.745] [DEBUG] debug-file - Incremental task entry:default@CollectDebugSymbol post-execution cost:4 ms .
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Cleanup worker 0.
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Worker 0 has been cleaned up.
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Current idle worker size: 3.
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Current resident worker size: 4.
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Cleanup worker 1.
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Worker 1 has been cleaned up.
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Current idle worker size: 2.
+[2026-08-31T19:43:23.775] [DEBUG] debug-file - Current resident worker size: 4.
+[2026-08-31T19:43:23.777] [DEBUG] debug-file - hvigor build process will be closed.
+[2026-08-31T19:43:23.783] [DEBUG] debug-file - session manager: send message to worker process.
+[2026-08-31T19:43:23.784] [DEBUG] debug-file - session manager: send message to worker process.
+[2026-08-31T19:43:23.781] [DEBUG] debug-file - worker[0] exits with exit code 1.
+[2026-08-31T19:43:23.782] [DEBUG] debug-file - worker[1] exits with exit code 1.
+[2026-08-31T19:43:23.784] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-08-31T19:43:23.784] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.

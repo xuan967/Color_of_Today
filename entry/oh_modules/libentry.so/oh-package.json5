@@ -1,0 +1,6 @@
+{
+  "name": "libentry.so",
+  "types": "./index.d.ts",
+  "version": "1.0.0",
+  "description": "今日限定色 GL 渲染原生模块"
+}

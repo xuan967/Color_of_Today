@@ -1,0 +1,20 @@
+[
+{
+  "directory": "D:/DevEcoProjects/ColorOfToday/entry/.cxx/default/default/debug/arm64-v8a",
+  "command": "D:\\DEVECO~1\\sdk\\default\\OPENHA~1\\native\\llvm\\bin\\CLANG_~1.EXE --target=aarch64-linux-ohos --gcc-toolchain=\"D:/DevEco Studio/sdk/default/openharmony/native/llvm\" --sysroot=\"D:/DevEco Studio/sdk/default/openharmony/native/sysroot\" -Dentry_EXPORTS -I\"D:/DevEco Studio/sdk/default/hms/native/sysroot/usr/include\" -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security   -D__MUSL__ -O0 -g -fno-limit-debug-info  -std=gnu++17 -fPIC -o CMakeFiles\\entry.dir\\napi_init.cpp.o -c D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp\\napi_init.cpp",
+  "file": "D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp\\napi_init.cpp",
+  "output": "CMakeFiles\\entry.dir\\napi_init.cpp.o"
+},
+{
+  "directory": "D:/DevEcoProjects/ColorOfToday/entry/.cxx/default/default/debug/arm64-v8a",
+  "command": "D:\\DEVECO~1\\sdk\\default\\OPENHA~1\\native\\llvm\\bin\\CLANG_~1.EXE --target=aarch64-linux-ohos --gcc-toolchain=\"D:/DevEco Studio/sdk/default/openharmony/native/llvm\" --sysroot=\"D:/DevEco Studio/sdk/default/openharmony/native/sysroot\" -Dentry_EXPORTS -I\"D:/DevEco Studio/sdk/default/hms/native/sysroot/usr/include\" -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security   -D__MUSL__ -O0 -g -fno-limit-debug-info  -std=gnu++17 -fPIC -o CMakeFiles\\entry.dir\\egl_core.cpp.o -c D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp\\egl_core.cpp",
+  "file": "D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp\\egl_core.cpp",
+  "output": "CMakeFiles\\entry.dir\\egl_core.cpp.o"
+},
+{
+  "directory": "D:/DevEcoProjects/ColorOfToday/entry/.cxx/default/default/debug/arm64-v8a",
+  "command": "D:\\DEVECO~1\\sdk\\default\\OPENHA~1\\native\\llvm\\bin\\CLANG_~1.EXE --target=aarch64-linux-ohos --gcc-toolchain=\"D:/DevEco Studio/sdk/default/openharmony/native/llvm\" --sysroot=\"D:/DevEco Studio/sdk/default/openharmony/native/sysroot\" -Dentry_EXPORTS -I\"D:/DevEco Studio/sdk/default/hms/native/sysroot/usr/include\" -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security   -D__MUSL__ -O0 -g -fno-limit-debug-info  -std=gnu++17 -fPIC -o CMakeFiles\\entry.dir\\gl_renderer.cpp.o -c D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp\\gl_renderer.cpp",
+  "file": "D:\\DevEcoProjects\\ColorOfToday\\entry\\src\\main\\cpp\\gl_renderer.cpp",
+  "output": "CMakeFiles\\entry.dir\\gl_renderer.cpp.o"
+}
+]
