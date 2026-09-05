@@ -257,10 +257,22 @@ struct Index {
   }
 
   private refreshCameraControls(): void {
-    this.canSwitch = this.cameraService.canSwitch();
-    const range = this.cameraService.zoomRange();
-    this.zoomMin = range[0];
-    this.zoomMax = range[1];
+    try {
+      this.canSwitch = this.cameraService.canSwitch();
+      const range = this.cameraService.zoomRange();
+      this.zoomMin = range[0];
+      this.zoomMax = range[1];
+      this.zoomRatio = Math.min(this.zoomMax, Math.max(this.zoomMin, this.zoomRatio));
+      console.info(`[TodayColor][CameraUI][op=${this.cameraOperationId}] controls ` +
+        `canSwitch=${this.canSwitch}, zoom=${this.zoomMin}..${this.zoomMax}`);
+    } catch (err) {
+      this.canSwitch = false;
+      this.zoomMin = 1;
+      this.zoomMax = 1;
+      this.zoomRatio = 1;
+      console.error(`[TodayColor][CameraUI][op=${this.cameraOperationId}] optional controls fallback: ` +
+        `${(err as Error).message}`);
+    }
   }
 
   private isCameraLoading(): boolean {
@@ -280,9 +292,14 @@ struct Index {
           return;
         }
         this.clearFirstFrameTimer();
-        colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
-        this.refreshCameraControls();
         this.setCameraPhase(operationId, CameraUiPhase.PREVIEWING);
+        try {
+          colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+          this.refreshCameraControls();
+        } catch (err) {
+          console.error(`[TodayColor][CameraUI][op=${operationId}] first-frame optional setup isolated: ` +
+            `${(err as Error).message}`);
+        }
       },
       onRuntimeError: (message: string) => {
         if (!this.isOperationActive(operationId)) {

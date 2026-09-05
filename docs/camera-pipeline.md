@@ -49,10 +49,17 @@ Surface ID 重新创建渲染线程。`session.start()` 只代表启动请求完
 `PreviewOutput.frameStart` 才进入 `previewing` 并清除历史错误。镜头切换失败时
 CameraService 会尝试恢复原朝向。
 
+NativeImage 严格按生产者通知消费：`OH_OnFrameAvailableListener` 只递增通知序号，
+EGL 线程发现新序号后才调用一次 `OH_NativeImage_UpdateSurfaceImage`。只有消费与矩阵读取
+都成功时才替换缓存的纹理方向；无新帧或消费失败继续显示最后一个有效方向，避免预览内容
+在横竖方向之间跳变，也避免无条件取帧造成 buffer 耗尽。
+
 ## 模拟器与日志
 
 模拟器不保证提供真实的前后两个可用朝向。切换能力同时要求前置和后置设备都能查询到
 `NORMAL_PHOTO` 的 Preview Profile；否则按钮保持禁用，点击时会显示具体缺失原因。
+变焦范围和自动对焦也按可选能力处理：空/非法变焦范围降级为固定 `1x`，不支持自动对焦时
+忽略点按对焦并只记录一次日志，两者都不会把有效预览切换到错误态。
 
 一次启动或切换使用同一个 `op` 关联 ArkTS 日志：
 

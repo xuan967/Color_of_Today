@@ -107,10 +107,27 @@ GLuint CompileShader(GLenum type, const char *src, int32_t operationId)
 }
 } // namespace
 
+void GlRenderer::OnFrameAvailable(void *context)
+{
+    if (context == nullptr) {
+        return;
+    }
+    auto *renderer = static_cast<GlRenderer *>(context);
+    // NativeImage 回调线程只发布通知，不调用任何 NativeImage 接口。
+    renderer->frameAvailableSequence_.fetch_add(1, std::memory_order_release);
+}
+
 bool GlRenderer::Init()
 {
     firstFrameLogged_ = false;
-    imageUpdateErrorLogged_ = false;
+    firstFrameNotificationLogged_ = false;
+    frameAvailableSequence_.store(0, std::memory_order_relaxed);
+    consumedFrameSequence_ = 0;
+    failedFrameConsumeCount_ = 0;
+    textureTransform_[0] = 1.0f;
+    textureTransform_[1] = 0.0f;
+    textureTransform_[2] = 0.0f;
+    textureTransform_[3] = 1.0f;
     LOG("[op=%{public}d] GL renderer init begin", operationId_);
     if (!BuildProgram()) {
         LOGE("[op=%{public}d] GL program build failed", operationId_);
@@ -146,6 +163,15 @@ bool GlRenderer::Init()
         LOGE("[op=%{public}d] OH_NativeImage_Create failed", operationId_);
         return false;
     }
+    OH_OnFrameAvailableListener listener = {this, &GlRenderer::OnFrameAvailable};
+    int32_t listenerResult = OH_NativeImage_SetOnFrameAvailableListener(image_, listener);
+    if (listenerResult != 0) {
+        LOGE("[op=%{public}d] frame listener registration failed code=%{public}d",
+            operationId_, listenerResult);
+        return false;
+    }
+    frameListenerRegistered_ = true;
+    LOG("[op=%{public}d] frame listener registered", operationId_);
     imageWindow_ = OH_NativeImage_AcquireNativeWindow(image_);
     if (imageWindow_ == nullptr) {
         LOGE("[op=%{public}d] AcquireNativeWindow failed", operationId_);
@@ -201,6 +227,11 @@ void GlRenderer::Release()
     }
     capCv_.notify_all();
     if (image_ != nullptr) {
+        if (frameListenerRegistered_) {
+            int32_t unsetResult = OH_NativeImage_UnsetOnFrameAvailableListener(image_);
+            LOG("[op=%{public}d] frame listener removed code=%{public}d", operationId_, unsetResult);
+            frameListenerRegistered_ = false;
+        }
         OH_NativeImage_Destroy(&image_);
         image_ = nullptr;
         imageWindow_ = nullptr;
@@ -222,7 +253,10 @@ void GlRenderer::Release()
         program_ = 0;
     }
     firstFrameLogged_ = false;
-    imageUpdateErrorLogged_ = false;
+    firstFrameNotificationLogged_ = false;
+    frameAvailableSequence_.store(0, std::memory_order_relaxed);
+    consumedFrameSequence_ = 0;
+    failedFrameConsumeCount_ = 0;
     LOG("[op=%{public}d] GL renderer release completed", operationId_);
 }
 
@@ -324,25 +358,44 @@ void GlRenderer::EnsureTexturePad()
 
 void GlRenderer::DrawFrame()
 {
-    float texLin[4] = {1.0f, 0.0f, 0.0f, 1.0f};
     bool imageUpdated = false;
-    if (image_ != nullptr) {
+    uint64_t availableSequence = frameAvailableSequence_.load(std::memory_order_acquire);
+    if (!firstFrameNotificationLogged_ && availableSequence > 0) {
+        firstFrameNotificationLogged_ = true;
+        LOG("[op=%{public}d] first native frame notification sequence=%{public}llu",
+            operationId_, availableSequence);
+    }
+    if (image_ != nullptr && availableSequence != consumedFrameSequence_) {
         int32_t updateResult = OH_NativeImage_UpdateSurfaceImage(image_);
+        // 一次通知最多触发一次消费尝试；失败时等待下一次生产者通知，避免忙循环耗尽 buffer。
+        consumedFrameSequence_ = availableSequence;
         imageUpdated = updateResult == 0;
         if (imageUpdated) {
             float m[16];
-            OH_NativeImage_GetTransformMatrixV2(image_, m);
-            // 列主序 2x2 线性部分：col0=(m0,m1) col1=(m4,m5)
-            texLin[0] = m[0];
-            texLin[1] = m[1];
-            texLin[2] = m[4];
-            texLin[3] = m[5];
+            int32_t matrixResult = OH_NativeImage_GetTransformMatrixV2(image_, m);
+            if (matrixResult == 0) {
+                // 只有完整成功消费的帧才能替换方向；失败/无新帧始终沿用最后一个有效矩阵。
+                textureTransform_[0] = m[0];
+                textureTransform_[1] = m[1];
+                textureTransform_[2] = m[4];
+                textureTransform_[3] = m[5];
+            } else {
+                LOGE("[op=%{public}d] transform query failed code=%{public}d; retaining cached transform",
+                    operationId_, matrixResult);
+            }
             EnsureTexturePad();
-        } else if (!imageUpdateErrorLogged_) {
-            imageUpdateErrorLogged_ = true;
-            LOGE("[op=%{public}d] NativeImage first update failed code=%{public}d", operationId_, updateResult);
+        } else {
+            failedFrameConsumeCount_++;
+            if (failedFrameConsumeCount_ == 1 || failedFrameConsumeCount_ % 60 == 0) {
+                LOGE("[op=%{public}d] frame consume failed code=%{public}d count=%{public}llu; "
+                    "retaining cached transform", operationId_, updateResult, failedFrameConsumeCount_);
+            }
         }
     }
+
+    float texLin[4] = {
+        textureTransform_[0], textureTransform_[1], textureTransform_[2], textureTransform_[3]
+    };
 
     float hue = 0.62f;
     float threshold = 0.05f;

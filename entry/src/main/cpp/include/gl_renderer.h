@@ -1,4 +1,5 @@
 #pragma once
+#include <atomic>
 #include <cstdint>
 #include <GLES3/gl3.h>
 #include <GLES2/gl2ext.h>
@@ -42,6 +43,7 @@ public:
     void DrawFrame();
 
 private:
+    static void OnFrameAvailable(void *context);
     bool BuildProgram();
     void EnsureTexturePad();
     void HandleCapture(int surfaceWidth, int surfaceHeight);
@@ -53,6 +55,11 @@ private:
 
     OH_NativeImage *image_ = nullptr;
     OHNativeWindow *imageWindow_ = nullptr;
+    bool frameListenerRegistered_ = false;
+    std::atomic<uint64_t> frameAvailableSequence_{0};
+    uint64_t consumedFrameSequence_ = 0;
+    uint64_t failedFrameConsumeCount_ = 0;
+    float textureTransform_[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 
     GLint locTex_ = -1;
     GLint locHue_ = -1;
@@ -87,5 +94,5 @@ private:
     int capH_ = 0;
     int32_t operationId_ = 0;
     bool firstFrameLogged_ = false;
-    bool imageUpdateErrorLogged_ = false;
+    bool firstFrameNotificationLogged_ = false;
 };

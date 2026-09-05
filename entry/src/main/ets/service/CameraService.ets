@@ -28,6 +28,7 @@ export class CameraService {
   private started: boolean = false;
   private glSurfaceId: string = '';
   private activeOperationId: number = 0;
+  private focusUnsupportedLogged: boolean = false;
 
   private log(operationId: number, message: string): void {
     console.info(`[TodayColor][CameraService][op=${operationId}] ${message}`);
@@ -36,6 +37,35 @@ export class CameraService {
   private logError(operationId: number, stage: string, err: BusinessError): void {
     console.error(`[TodayColor][CameraService][op=${operationId}] ${stage} failed ` +
       `code=${err.code}, message=${err.message}`);
+  }
+
+  private logCallbackError(operationId: number, callbackName: string, err: Error): void {
+    console.error(`[TodayColor][CameraService][op=${operationId}] ${callbackName} callback isolated: ${err.message}`);
+  }
+
+  private notifyPreviewSize(callbacks: CameraStartCallbacks, operationId: number,
+    width: number, height: number): void {
+    try {
+      callbacks.onPreviewSize(width, height);
+    } catch (err) {
+      this.logCallbackError(operationId, 'onPreviewSize', err as Error);
+    }
+  }
+
+  private notifyFirstFrame(callbacks: CameraStartCallbacks, operationId: number): void {
+    try {
+      callbacks.onFirstFrame();
+    } catch (err) {
+      this.logCallbackError(operationId, 'onFirstFrame', err as Error);
+    }
+  }
+
+  private notifyRuntimeError(callbacks: CameraStartCallbacks, operationId: number, message: string): void {
+    try {
+      callbacks.onRuntimeError(message);
+    } catch (err) {
+      this.logCallbackError(operationId, 'onRuntimeError', err as Error);
+    }
   }
 
   static async ensureCameraPermission(context: common.Context, operationId: number): Promise<boolean> {
@@ -233,13 +263,13 @@ export class CameraService {
     previewOutput.on('frameStart', (err: BusinessError) => {
       if (err !== undefined && err.code !== 0) {
         this.logError(operationId, 'preview frameStart', err);
-        callbacks.onRuntimeError(`预览首帧失败 (code ${err.code})`);
+        this.notifyRuntimeError(callbacks, operationId, `预览首帧失败 (code ${err.code})`);
         return;
       }
       if (!firstFrameDelivered && operationId === this.activeOperationId) {
         firstFrameDelivered = true;
         this.log(operationId, 'preview first frame received');
-        callbacks.onFirstFrame();
+        this.notifyFirstFrame(callbacks, operationId);
       }
     });
     previewOutput.on('frameEnd', (err: BusinessError) => {
@@ -251,11 +281,11 @@ export class CameraService {
     });
     previewOutput.on('error', (err: BusinessError) => {
       this.logError(operationId, 'preview runtime', err);
-      callbacks.onRuntimeError(`预览输出异常 (code ${err.code})`);
+      this.notifyRuntimeError(callbacks, operationId, `预览输出异常 (code ${err.code})`);
     });
     session.on('error', (err: BusinessError) => {
       this.logError(operationId, 'photo session runtime', err);
-      callbacks.onRuntimeError(`相机会话异常 (code ${err.code})`);
+      this.notifyRuntimeError(callbacks, operationId, `相机会话异常 (code ${err.code})`);
     });
   }
 
@@ -272,7 +302,7 @@ export class CameraService {
         return '该相机不支持预览流';
       }
       const profile = this.selectProfile(profiles, targetAspect, operationId);
-      callbacks.onPreviewSize(profile.size.width, profile.size.height);
+      this.notifyPreviewSize(callbacks, operationId, profile.size.width, profile.size.height);
       colorFilter.setPreviewSize(profile.size.width, profile.size.height);
       this.log(operationId, `opening index=${this.currentIndex}, position=${device.cameraPosition}, ` +
         `surfaceValid=${this.glSurfaceId !== '' && this.glSurfaceId !== '0'}`);
@@ -296,6 +326,7 @@ export class CameraService {
       this.log(operationId, 'PhotoSession commitConfig completed');
       await this.session.start();
       this.started = true;
+      this.focusUnsupportedLogged = false;
       this.log(operationId, 'PhotoSession start completed; waiting for frameStart');
       return null;
     } catch (err) {
@@ -311,6 +342,13 @@ export class CameraService {
       return;
     }
     try {
+      if (!this.session.isFocusModeSupported(camera.FocusMode.FOCUS_MODE_AUTO)) {
+        if (!this.focusUnsupportedLogged) {
+          this.focusUnsupportedLogged = true;
+          this.log(this.activeOperationId, 'autofocus unsupported; tap focus ignored');
+        }
+        return;
+      }
       this.session.setFocusMode(camera.FocusMode.FOCUS_MODE_AUTO);
       this.session.setFocusPoint({ x: x, y: y });
     } catch (err) {
@@ -323,7 +361,19 @@ export class CameraService {
       return [1, 1];
     }
     try {
-      return this.session.getZoomRatioRange();
+      const range: Array<number> | null | undefined = this.session.getZoomRatioRange();
+      if (range === null || range === undefined || range.length < 2) {
+        this.log(this.activeOperationId, 'zoom unavailable; fallback=1..1');
+        return [1, 1];
+      }
+      const minimum = range[0];
+      const maximum = range[1];
+      if (!Number.isFinite(minimum) || !Number.isFinite(maximum)
+        || minimum <= 0 || maximum < minimum) {
+        this.log(this.activeOperationId, 'zoom range invalid; fallback=1..1');
+        return [1, 1];
+      }
+      return [minimum, maximum];
     } catch (err) {
       this.logError(this.activeOperationId, 'get zoom range', err as BusinessError);
       return [1, 1];
@@ -335,7 +385,10 @@ export class CameraService {
       return;
     }
     try {
-      const range = this.session.getZoomRatioRange();
+      const range = this.zoomRange();
+      if (range[0] === range[1]) {
+        return;
+      }
       this.session.setZoomRatio(Math.min(range[1], Math.max(range[0], ratio)));
     } catch (err) {
       this.logError(this.activeOperationId, 'set zoom', err as BusinessError);
