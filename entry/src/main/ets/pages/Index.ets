@@ -73,7 +73,7 @@ class CameraPreviewController extends XComponentController {
 
 /**
  * 相机取景页（App 主页）：
- * 全屏实时颜色隔离取景；顶部今日色卡（点按开调色盘），底部玻璃控制条。
+ * 全屏实时颜色隔离取景；顶部今日色签（点按开调色盘），底部不透明相机控制区。
  * 辅助功能：九宫格构图线、点击对焦、双指变焦、前后置切换。
  */
 @Entry
@@ -675,6 +675,20 @@ struct Index {
         .opacity(this.flashOpacity)
         .hitTestBehavior(HitTestMode.None)
 
+      // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+      Column()
+        .width('100%')
+        .height(176)
+        .linearGradient({
+          direction: GradientDirection.Bottom,
+          colors: [
+            ['rgba(0,0,0,0.58)', 0.0],
+            ['rgba(0,0,0,0)', 1.0]
+          ] as Array<[ResourceColor, number]>
+        })
+        .position({ x: 0, y: 0 })
+        .hitTestBehavior(HitTestMode.None)
+
       // 取景浮层（错误提示 / 加载中）
       if (this.isCameraLoading() || this.cameraPhase === CameraUiPhase.ERROR) {
         Column({ space: 10 }) {
@@ -710,58 +724,83 @@ struct Index {
       }
 
       // 顶部色卡 HUD（点按打开调色盘）
-      Column({ space: 8 }) {
-        Row({ space: 8 }) {
-          Circle({ width: 13, height: 13 })
+      Column({ space: 7 }) {
+        Row({ space: 7 }) {
+          Circle({ width: 12, height: 12 })
             .fill(this.today.hex)
-            .border({ width: 1.5, color: 'rgba(255,255,255,0.9)' })
+            .border({ width: 1.2, color: 'rgba(255,255,255,0.88)' })
           Text(this.today.name)
-            .fontSize(18)
+            .fontSize(17)
             .fontWeight(FontWeight.Medium)
             .fontColor(Color.White)
           Text('›')
-            .fontSize(16)
-            .fontColor('rgba(255,255,255,0.6)')
+            .fontSize(15)
+            .fontColor('rgba(255,255,255,0.62)')
         }
-        .padding({ left: 16, right: 12, top: 9, bottom: 9 })
-        .backgroundColor('rgba(0,0,0,0.28)')
-        .borderRadius(22)
+        .padding({ left: 14, right: 11, top: 8, bottom: 8 })
+        .backgroundColor('rgba(20,20,20,0.58)')
+        .border({ width: 0.8, color: 'rgba(255,255,255,0.14)' })
+        .borderRadius(20)
         .onClick(() => {
           this.paletteOpen = true;
         })
 
         Text(this.echoLine)
-          .fontSize(12.5)
-          .fontColor('rgba(255,255,255,0.82)')
-          .maxLines(2)
+          .fontSize(12)
+          .fontColor('rgba(255,255,255,0.72)')
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
           .textAlign(TextAlign.Center)
           .opacity(this.echoReady ? 1 : 0)
-          .translate({ y: this.echoReady ? 0 : 6 })
-          .shadow({ radius: 6, color: 'rgba(0,0,0,0.45)' })
+          .translate({ y: this.echoReady ? 0 : 4 })
+          .shadow({ radius: 5, color: 'rgba(0,0,0,0.55)' })
       }
       .width('100%')
-      .padding({ top: 64, left: 24, right: 24 })
+      .padding({ top: 58, left: 64, right: 64 })
+      .alignItems(HorizontalAlign.Center)
       .position({ x: 0, y: 0 })
 
       // 右上角：构图线开关
       Stack() {
-        Line().startPoint([8, 2]).endPoint([8, 22])
-          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
-        Line().startPoint([16, 2]).endPoint([16, 22])
-          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
-        Line().startPoint([2, 8]).endPoint([22, 8])
-          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
-        Line().startPoint([2, 16]).endPoint([22, 16])
-          .stroke('rgba(255,255,255,0.9)').strokeWidth(1.6)
+        Stack() {
+          Line().startPoint([8, 2]).endPoint([8, 22])
+            .stroke('rgba(255,255,255,0.92)').strokeWidth(1.4)
+          Line().startPoint([16, 2]).endPoint([16, 22])
+            .stroke('rgba(255,255,255,0.92)').strokeWidth(1.4)
+          Line().startPoint([2, 8]).endPoint([22, 8])
+            .stroke('rgba(255,255,255,0.92)').strokeWidth(1.4)
+          Line().startPoint([2, 16]).endPoint([22, 16])
+            .stroke('rgba(255,255,255,0.92)').strokeWidth(1.4)
+        }
+        .width(24)
+        .height(24)
       }
-      .width(24)
-      .height(24)
-      .opacity(this.gridOn ? 1 : 0.55)
-      .position({ x: '100%', y: 120 })
-      .translate({ x: '-160%' })
+      .width(42)
+      .height(42)
+      .backgroundColor('rgba(20,20,20,0.58)')
+      .border({ width: 0.8, color: 'rgba(255,255,255,0.14)' })
+      .borderRadius(21)
+      .opacity(this.gridOn ? 1 : 0.68)
+      .position({ x: '100%', y: 64 })
+      .translate({ x: '-138%' })
       .onClick(() => {
         this.gridOn = !this.gridOn;
       })
+
+      // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+      Column()
+        .width('100%')
+        .height(32)
+        .linearGradient({
+          direction: GradientDirection.Bottom,
+          colors: [
+            ['rgba(0,0,0,0)', 0.0],
+            [Color.Black, 1.0]
+          ] as Array<[ResourceColor, number]>
+        })
+        .position({ x: 0, y: '100%' })
+        .translate({ y: -172 })
+        .hitTestBehavior(HitTestMode.None)
 
       // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
       Row({ space: 12 }) {
@@ -769,21 +808,21 @@ struct Index {
         Stack({ alignContent: Alignment.TopEnd }) {
           if (this.latestThumb !== '') {
             Image(`file://${this.latestThumb}`)
-              .width(50)
-              .height(50)
-              .borderRadius(14)
+              .width(52)
+              .height(52)
+              .borderRadius(12)
               .objectFit(ImageFit.Cover)
-              .border({ width: 1.5, color: 'rgba(255,255,255,0.85)' })
+              .border({ width: 1.2, color: 'rgba(255,255,255,0.58)' })
               .onClick(() => {
                 router.pushUrl({ url: 'pages/Gallery' });
               })
           } else {
             Column()
-              .width(50)
-              .height(50)
-              .borderRadius(14)
-              .backgroundColor('rgba(255,255,255,0.10)')
-              .border({ width: 1.5, color: 'rgba(255,255,255,0.4)' })
+              .width(52)
+              .height(52)
+              .borderRadius(12)
+              .backgroundColor('rgba(255,255,255,0.08)')
+              .border({ width: 1.2, color: 'rgba(255,255,255,0.42)' })
               .onClick(() => {
                 router.pushUrl({ url: 'pages/Gallery' });
               })
@@ -794,20 +833,25 @@ struct Index {
             .padding({ left: 6, right: 6, top: 1, bottom: 1 })
             .backgroundColor(this.today.hex)
             .borderRadius(9)
-            .translate({ x: 6, y: -6 })
+            .border({ width: 1, color: Color.Black })
+            .translate({ x: 5, y: -5 })
         }
-        .width(56)
-        .height(56)
+        .width(60)
+        .height(60)
 
         Blank()
 
         // 中：快门
-        Column()
-          .width(74)
-          .height(74)
-          .borderRadius(37)
-          .backgroundColor('rgba(255,255,255,0.14)')
-          .border({ width: 3, color: Color.White })
+        Stack() {
+          Circle({ width: 78, height: 78 })
+            .fill('rgba(0,0,0,0)')
+            .stroke(Color.White)
+            .strokeWidth(2.5)
+          Circle({ width: 64, height: 64 })
+            .fill(Color.White)
+        }
+          .width(78)
+          .height(78)
           .scale({ x: this.capBusy ? 0.92 : 1, y: this.capBusy ? 0.92 : 1 })
           .animation({ duration: 120, curve: Curve.EaseOut })
           .onClick(() => {
@@ -819,17 +863,17 @@ struct Index {
         // 右：前后置摄像头切换
         Column() {
           Text('⟳')
-            .fontSize(22)
+            .fontSize(21)
             .fontColor(Color.White)
-            .width(50)
-            .height(50)
+            .width(52)
+            .height(52)
             .textAlign(TextAlign.Center)
-            .backgroundColor('rgba(255,255,255,0.10)')
-            .borderRadius(25)
-            .border({ width: 1.2, color: 'rgba(255,255,255,0.55)' })
+            .backgroundColor('rgba(255,255,255,0.08)')
+            .borderRadius(26)
+            .border({ width: 1.2, color: 'rgba(255,255,255,0.42)' })
         }
-        .width(56)
-        .height(56)
+        .width(60)
+        .height(60)
         .justifyContent(FlexAlign.Center)
         .opacity(this.canSwitch ? 1 : 0.35)
         .onClick(() => {
@@ -837,8 +881,8 @@ struct Index {
         })
       }
       .width('100%')
-      .height(160)
-      .padding({ left: 24, right: 24, top: 16, bottom: 28 })
+      .height(140)
+      .padding({ left: 24, right: 24, top: 12, bottom: 22 })
       .backgroundColor(Color.Black)
       .position({ x: 0, y: '100%' })
       .translate({ y: '-100%' })
