@@ -28,14 +28,15 @@
 全屏取景需要分别满足两个条件：
 
 1. **显示几何铺满窗口。** ArkUI 根节点和 XComponent 必须覆盖完整窗口，系统栏改为透明叠加；交互控件根据安全区避让刘海和底部手势条。
-2. **纹理有效内容铺满 Surface。** NativeImage 的完整 Buffer Matrix 是生产端提供的旋转、平移和有效内容区真值。Shader 必须使用完整矩阵，再按 Surface 与有效画面的宽高比执行等比 cover。不能丢弃矩阵平移，也不能用纹理分配尺寸猜测内容区域。
+2. **纹理有效内容铺满 Surface。** API 12 的 NativeImage V2 变换矩阵是生产端旋转和平移的真值。Shader 必须保留完整 4×4 矩阵，并在屏幕坐标系先执行等比 cover、再映射到纹理坐标。不能丢弃矩阵平移，也不能在旋转后沿错误的纹理轴执行 cover。
 
 ## Native 渲染设计
 
-- 使用 `OH_NativeImage_GetBufferMatrix` 获取包含旋转和有效内容区的完整 4×4 矩阵。
+- 使用 API 12 可用的 `OH_NativeImage_GetTransformMatrixV2` 获取完整 4×4 变换矩阵。`OH_NativeImage_GetBufferMatrix` 从 API 15 才提供，本项目禁止使用。
 - Shader 使用完整矩阵变换 UV，不再只取 2×2 线性部分并手工补中心平移。
-- 删除/停用 `glGetTexLevelParameteriv` 推算 pad 的路径，避免旋转后把 padding 应用到错误轴。
-- 从矩阵映射四个 UV 角，计算有效采样矩形的宽高比；结合相机 buffer 尺寸与旋转方向计算 cover。
+- cover 在未旋转的屏幕 UV 上执行，再通过完整矩阵映射到纹理坐标，确保横屏相机源旋转到竖屏后沿正确轴裁切。
+- 保留纹理分配尺寸 pad 兼容路径，但它只作用于最终纹理坐标，并记录实际参数；查询失败时使用无 pad 的安全回退。
+- 结合相机 buffer 尺寸与矩阵旋转方向计算显示有效宽高比和 cover。
 - 保留上一轮已经实现的帧通知驱动消费和最后有效矩阵缓存。
 - cover 只做等比居中裁切，绝不进行非等比拉伸。
 
@@ -52,7 +53,7 @@
 
 - cover 会裁掉少量横向或纵向边缘，这是保持比例并铺满屏幕的必然代价。
 - 系统栏透明后必须使用安全区，避免顶部文字与刘海重叠、底部按钮进入手势区。
-- 模拟器和真机可能提供不同 Buffer Matrix；必须记录矩阵、Surface、buffer 和 cover 参数，并在至少一种真机上复核。
+- 模拟器和真机可能提供不同 Transform Matrix；必须记录矩阵、Surface、buffer 和 cover 参数，并在至少一种真机上复核。
 - 拍摄截图使用与预览相同的全屏 framebuffer，因此成片构图与预览保持一致；底部控制面板不进入拍摄截图。
 
 ## 验证标准
