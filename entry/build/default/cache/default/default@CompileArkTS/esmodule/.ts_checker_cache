@@ -1716,7 +1716,7 @@
       "error": false
     },
     "E:\\desktop\\Code\\harmony\\ColorOfToday\\Color_of_Today\\entry\\src\\main\\ets\\pages\\Index.ets": {
-      "mtimeMs": 1788609511879.271,
+      "mtimeMs": 1788611660327.3452,
       "children": [
         "D:\\local\\DevEcoStudio\\sdk\\default\\openharmony\\ets\\api\\@ohos.app.ability.common.d.ts",
         "D:\\local\\DevEcoStudio\\sdk\\default\\openharmony\\ets\\api\\@ohos.display.d.ts",

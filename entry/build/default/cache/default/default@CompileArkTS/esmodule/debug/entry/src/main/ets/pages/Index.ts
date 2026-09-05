@@ -1105,6 +1105,31 @@ class Index extends ViewPU {
         // 拍照白闪
         Column.pop();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+            Column.create();
+            // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+            Column.width('100%');
+            // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+            Column.height(176);
+            // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+            Column.linearGradient({
+                direction: GradientDirection.Bottom,
+                colors: [
+                    ['rgba(0,0,0,0.58)', 0.0],
+                    ['rgba(0,0,0,0)', 1.0]
+                ] as Array<[
+                    ResourceColor,
+                    number
+                ]>
+            });
+            // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+            Column.position({ x: 0, y: 0 });
+            // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+            Column.hitTestBehavior(HitTestMode.None);
+        }, Column);
+        // 顶部可读性渐变：保留实时取景，不形成独立黑色页头。
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
             If.create();
             // 取景浮层（错误提示 / 加载中）
             if (this.isCameraLoading() || this.cameraPhase === CameraUiPhase.ERROR) {
@@ -1193,51 +1218,55 @@ class Index extends ViewPU {
         If.pop();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             // 顶部色卡 HUD（点按打开调色盘）
-            Column.create({ space: 8 });
+            Column.create({ space: 7 });
             // 顶部色卡 HUD（点按打开调色盘）
             Column.width('100%');
             // 顶部色卡 HUD（点按打开调色盘）
-            Column.padding({ top: 64, left: 24, right: 24 });
+            Column.padding({ top: 58, left: 64, right: 64 });
+            // 顶部色卡 HUD（点按打开调色盘）
+            Column.alignItems(HorizontalAlign.Center);
             // 顶部色卡 HUD（点按打开调色盘）
             Column.position({ x: 0, y: 0 });
         }, Column);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Row.create({ space: 8 });
-            Row.padding({ left: 16, right: 12, top: 9, bottom: 9 });
-            Row.backgroundColor('rgba(0,0,0,0.28)');
-            Row.borderRadius(22);
+            Row.create({ space: 7 });
+            Row.padding({ left: 14, right: 11, top: 8, bottom: 8 });
+            Row.backgroundColor('rgba(20,20,20,0.58)');
+            Row.border({ width: 0.8, color: 'rgba(255,255,255,0.14)' });
+            Row.borderRadius(20);
             Row.onClick(() => {
                 this.paletteOpen = true;
             });
         }, Row);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Circle.create({ width: 13, height: 13 });
+            Circle.create({ width: 12, height: 12 });
             Circle.fill(this.today.hex);
-            Circle.border({ width: 1.5, color: 'rgba(255,255,255,0.9)' });
+            Circle.border({ width: 1.2, color: 'rgba(255,255,255,0.88)' });
         }, Circle);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Text.create(this.today.name);
-            Text.fontSize(18);
+            Text.fontSize(17);
             Text.fontWeight(FontWeight.Medium);
             Text.fontColor(Color.White);
         }, Text);
         Text.pop();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Text.create('›');
-            Text.fontSize(16);
-            Text.fontColor('rgba(255,255,255,0.6)');
+            Text.fontSize(15);
+            Text.fontColor('rgba(255,255,255,0.62)');
         }, Text);
         Text.pop();
         Row.pop();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Text.create(this.echoLine);
-            Text.fontSize(12.5);
-            Text.fontColor('rgba(255,255,255,0.82)');
-            Text.maxLines(2);
+            Text.fontSize(12);
+            Text.fontColor('rgba(255,255,255,0.72)');
+            Text.maxLines(1);
+            Text.textOverflow({ overflow: TextOverflow.Ellipsis });
             Text.textAlign(TextAlign.Center);
             Text.opacity(this.echoReady ? 1 : 0);
-            Text.translate({ y: this.echoReady ? 0 : 6 });
-            Text.shadow({ radius: 6, color: 'rgba(0,0,0,0.45)' });
+            Text.translate({ y: this.echoReady ? 0 : 4 });
+            Text.shadow({ radius: 5, color: 'rgba(0,0,0,0.55)' });
         }, Text);
         Text.pop();
         // 顶部色卡 HUD（点按打开调色盘）
@@ -1246,59 +1275,98 @@ class Index extends ViewPU {
             // 右上角：构图线开关
             Stack.create();
             // 右上角：构图线开关
-            Stack.width(24);
+            Stack.width(42);
             // 右上角：构图线开关
-            Stack.height(24);
+            Stack.height(42);
             // 右上角：构图线开关
-            Stack.opacity(this.gridOn ? 1 : 0.55);
+            Stack.backgroundColor('rgba(20,20,20,0.58)');
             // 右上角：构图线开关
-            Stack.position({ x: '100%', y: 120 });
+            Stack.border({ width: 0.8, color: 'rgba(255,255,255,0.14)' });
             // 右上角：构图线开关
-            Stack.translate({ x: '-160%' });
+            Stack.borderRadius(21);
+            // 右上角：构图线开关
+            Stack.opacity(this.gridOn ? 1 : 0.68);
+            // 右上角：构图线开关
+            Stack.position({ x: '100%', y: 64 });
+            // 右上角：构图线开关
+            Stack.translate({ x: '-138%' });
             // 右上角：构图线开关
             Stack.onClick(() => {
                 this.gridOn = !this.gridOn;
             });
         }, Stack);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Stack.create();
+            Stack.width(24);
+            Stack.height(24);
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
             Line.create();
             Line.startPoint([8, 2]);
             Line.endPoint([8, 22]);
-            Line.stroke('rgba(255,255,255,0.9)');
-            Line.strokeWidth(1.6);
+            Line.stroke('rgba(255,255,255,0.92)');
+            Line.strokeWidth(1.4);
         }, Line);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Line.create();
             Line.startPoint([16, 2]);
             Line.endPoint([16, 22]);
-            Line.stroke('rgba(255,255,255,0.9)');
-            Line.strokeWidth(1.6);
+            Line.stroke('rgba(255,255,255,0.92)');
+            Line.strokeWidth(1.4);
         }, Line);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Line.create();
             Line.startPoint([2, 8]);
             Line.endPoint([22, 8]);
-            Line.stroke('rgba(255,255,255,0.9)');
-            Line.strokeWidth(1.6);
+            Line.stroke('rgba(255,255,255,0.92)');
+            Line.strokeWidth(1.4);
         }, Line);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Line.create();
             Line.startPoint([2, 16]);
             Line.endPoint([22, 16]);
-            Line.stroke('rgba(255,255,255,0.9)');
-            Line.strokeWidth(1.6);
+            Line.stroke('rgba(255,255,255,0.92)');
+            Line.strokeWidth(1.4);
         }, Line);
+        Stack.pop();
         // 右上角：构图线开关
         Stack.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+            Column.create();
+            // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+            Column.width('100%');
+            // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+            Column.height(32);
+            // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+            Column.linearGradient({
+                direction: GradientDirection.Bottom,
+                colors: [
+                    ['rgba(0,0,0,0)', 0.0],
+                    [Color.Black, 1.0]
+                ] as Array<[
+                    ResourceColor,
+                    number
+                ]>
+            });
+            // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+            Column.position({ x: 0, y: '100%' });
+            // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+            Column.translate({ y: -172 });
+            // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+            Column.hitTestBehavior(HitTestMode.None);
+        }, Column);
+        // 预览到黑色控制区的柔和过渡，不参与 Surface 尺寸计算和触摸命中。
+        Column.pop();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
             Row.create({ space: 12 });
             // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
             Row.width('100%');
             // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
-            Row.height(160);
+            Row.height(140);
             // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
-            Row.padding({ left: 24, right: 24, top: 16, bottom: 28 });
+            Row.padding({ left: 24, right: 24, top: 12, bottom: 22 });
             // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
             Row.backgroundColor(Color.Black);
             // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
@@ -1310,9 +1378,9 @@ class Index extends ViewPU {
             // 左：缩略图 + 今日计数角标
             Stack.create({ alignContent: Alignment.TopEnd });
             // 左：缩略图 + 今日计数角标
-            Stack.width(56);
+            Stack.width(60);
             // 左：缩略图 + 今日计数角标
-            Stack.height(56);
+            Stack.height(60);
         }, Stack);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             If.create();
@@ -1320,11 +1388,11 @@ class Index extends ViewPU {
                 this.ifElseBranchUpdateFunction(0, () => {
                     this.observeComponentCreation2((elmtId, isInitialRender) => {
                         Image.create(`file://${this.latestThumb}`);
-                        Image.width(50);
-                        Image.height(50);
-                        Image.borderRadius(14);
+                        Image.width(52);
+                        Image.height(52);
+                        Image.borderRadius(12);
                         Image.objectFit(ImageFit.Cover);
-                        Image.border({ width: 1.5, color: 'rgba(255,255,255,0.85)' });
+                        Image.border({ width: 1.2, color: 'rgba(255,255,255,0.58)' });
                         Image.onClick(() => {
                             router.pushUrl({ url: 'pages/Gallery' });
                         });
@@ -1335,11 +1403,11 @@ class Index extends ViewPU {
                 this.ifElseBranchUpdateFunction(1, () => {
                     this.observeComponentCreation2((elmtId, isInitialRender) => {
                         Column.create();
-                        Column.width(50);
-                        Column.height(50);
-                        Column.borderRadius(14);
-                        Column.backgroundColor('rgba(255,255,255,0.10)');
-                        Column.border({ width: 1.5, color: 'rgba(255,255,255,0.4)' });
+                        Column.width(52);
+                        Column.height(52);
+                        Column.borderRadius(12);
+                        Column.backgroundColor('rgba(255,255,255,0.08)');
+                        Column.border({ width: 1.2, color: 'rgba(255,255,255,0.42)' });
                         Column.onClick(() => {
                             router.pushUrl({ url: 'pages/Gallery' });
                         });
@@ -1356,7 +1424,8 @@ class Index extends ViewPU {
             Text.padding({ left: 6, right: 6, top: 1, bottom: 1 });
             Text.backgroundColor(this.today.hex);
             Text.borderRadius(9);
-            Text.translate({ x: 6, y: -6 });
+            Text.border({ width: 1, color: Color.Black });
+            Text.translate({ x: 5, y: -5 });
         }, Text);
         Text.pop();
         // 左：缩略图 + 今日计数角标
@@ -1367,28 +1436,32 @@ class Index extends ViewPU {
         Blank.pop();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             // 中：快门
-            Column.create();
+            Stack.create();
             Context.animation({ duration: 120, curve: Curve.EaseOut });
             // 中：快门
-            Column.width(74);
+            Stack.width(78);
             // 中：快门
-            Column.height(74);
+            Stack.height(78);
             // 中：快门
-            Column.borderRadius(37);
-            // 中：快门
-            Column.backgroundColor('rgba(255,255,255,0.14)');
-            // 中：快门
-            Column.border({ width: 3, color: Color.White });
-            // 中：快门
-            Column.scale({ x: this.capBusy ? 0.92 : 1, y: this.capBusy ? 0.92 : 1 });
+            Stack.scale({ x: this.capBusy ? 0.92 : 1, y: this.capBusy ? 0.92 : 1 });
             Context.animation(null);
             // 中：快门
-            Column.onClick(() => {
+            Stack.onClick(() => {
                 this.doCapture();
             });
-        }, Column);
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Circle.create({ width: 78, height: 78 });
+            Circle.fill('rgba(0,0,0,0)');
+            Circle.stroke(Color.White);
+            Circle.strokeWidth(2.5);
+        }, Circle);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Circle.create({ width: 64, height: 64 });
+            Circle.fill(Color.White);
+        }, Circle);
         // 中：快门
-        Column.pop();
+        Stack.pop();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Blank.create();
         }, Blank);
@@ -1397,9 +1470,9 @@ class Index extends ViewPU {
             // 右：前后置摄像头切换
             Column.create();
             // 右：前后置摄像头切换
-            Column.width(56);
+            Column.width(60);
             // 右：前后置摄像头切换
-            Column.height(56);
+            Column.height(60);
             // 右：前后置摄像头切换
             Column.justifyContent(FlexAlign.Center);
             // 右：前后置摄像头切换
@@ -1411,14 +1484,14 @@ class Index extends ViewPU {
         }, Column);
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Text.create('⟳');
-            Text.fontSize(22);
+            Text.fontSize(21);
             Text.fontColor(Color.White);
-            Text.width(50);
-            Text.height(50);
+            Text.width(52);
+            Text.height(52);
             Text.textAlign(TextAlign.Center);
-            Text.backgroundColor('rgba(255,255,255,0.10)');
-            Text.borderRadius(25);
-            Text.border({ width: 1.2, color: 'rgba(255,255,255,0.55)' });
+            Text.backgroundColor('rgba(255,255,255,0.08)');
+            Text.borderRadius(26);
+            Text.border({ width: 1.2, color: 'rgba(255,255,255,0.42)' });
         }, Text);
         Text.pop();
         // 右：前后置摄像头切换
@@ -1468,7 +1541,7 @@ class Index extends ViewPU {
                                     onClose: () => {
                                         this.paletteOpen = false;
                                     }
-                                }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/Index.ets", line: 856, col: 11 });
+                                }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/Index.ets", line: 900, col: 11 });
                                 ViewPU.create(componentCall);
                                 let paramsLambda = () => {
                                     return {
