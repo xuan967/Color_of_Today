@@ -5,6 +5,7 @@ import type common from "@ohos:app.ability.common";
 import { DailyColorManager } from "@normalized:N&&&entry/src/main/ets/manager/DailyColorManager&";
 import { PhotoDao } from "@normalized:N&&&entry/src/main/ets/model/PhotoDao&";
 import type { PhotoInfo } from "@normalized:N&&&entry/src/main/ets/model/PhotoDao&";
+import type { ColorPreset } from '../model/ColorPreset';
 export interface CaptureResult {
     localPath: string;
     albumSaved: boolean;
@@ -57,15 +58,14 @@ export class CaptureService {
         }
     }
     /** 写入照片元数据表 */
-    static async recordPhoto(localPath: string, albumUri: string, width: number, height: number): Promise<void> {
-        const today = DailyColorManager.getInstance().getColor();
+    static async recordPhoto(localPath: string, albumUri: string, width: number, height: number, capturedColor: ColorPreset): Promise<void> {
         const info: PhotoInfo = {
             id: 0,
             uri: albumUri,
             localPath: localPath,
             dateKey: DailyColorManager.getDateKey(new Date()),
-            colorName: today.name,
-            colorHex: today.hex,
+            colorName: capturedColor.name,
+            colorHex: capturedColor.hex,
             width: width,
             height: height,
             createdAt: Date.now()

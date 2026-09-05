@@ -1,4 +1,4 @@
-# Install script for directory: D:/DevEcoProjects/ColorOfToday/entry/src/main/cpp
+# Install script for directory: E:/desktop/Code/harmony/ColorOfToday/Color_of_Today/entry/src/main/cpp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "D:/DevEco Studio/sdk/default/openharmony/native/llvm/bin/llvm-objdump.exe")
+  set(CMAKE_OBJDUMP "D:/local/DevEcoStudio/sdk/default/openharmony/native/llvm/bin/llvm-objdump.exe")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/DevEcoProjects/ColorOfToday/entry/.cxx/default/default/debug/x86_64/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "E:/desktop/Code/harmony/ColorOfToday/Color_of_Today/entry/.cxx/default/default/debug/x86_64/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

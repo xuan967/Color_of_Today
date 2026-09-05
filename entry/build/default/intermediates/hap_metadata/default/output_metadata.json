@@ -1,1 +1,1 @@
-[{"hapName":"entry-default-signed.hap","deviceTypes":["phone","tablet","2in1"],"isSigned":true,"dependRemoteHsps":[]}]
+[{"hapName":"entry-default-unsigned.hap","deviceTypes":["phone","tablet","2in1"],"isSigned":false}]

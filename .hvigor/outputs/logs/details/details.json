@@ -4,17 +4,12 @@
       {
         "MODULE_NAME": "923fe53966c6cd9343e11af776cd4b05be315ea4b200b02e4d5dfb0f929b73bf",
         "API_TYPE": "stageMode",
-        "INCLUDE_IN_BUILD": true,
-        "IS_COMMAND_LINE_ENTRY_MODULE": true,
-        "MODULE_TYPE": "entry",
         "INCREMENTAL_TASKS": {
           "BUILD_NATIVE_WITH_CMAKE": true
-        },
-        "IS_INCREMENTAL_MODULE": true
+        }
       }
     ],
     "NATIVE_COMPILER": "Default",
-    "IS_FULL_BUILD": false,
     "BUILD_MODE": "debug",
     "USE_NORMALIZED_OHMURL": true
   },
@@ -25,31 +20,44 @@
     "IS_HVIGORFILE_TYPE_CHECK": false,
     "TASK_TIME": {
       "923fe53966c6cd9343e11af776cd4b05be315ea4b200b02e4d5dfb0f929b73bf": {
-        "PreBuild": 152440800,
-        "CreateModuleInfo": 918300,
-        "ConfigureCmake": 5414000,
-        "PreCheckSyscap": 484700,
-        "ProcessIntegratedHsp": 999900,
-        "BuildNativeWithCmake": 49886300,
-        "SyscapTransform": 15702900,
-        "ProcessStartupConfig": 5743100,
-        "BuildJS": 5698600,
-        "BuildNativeWithNinja": 2391226800,
-        "ProcessCompiledResources": 927000,
-        "PackingCheck": 6822000,
-        "CollectDebugSymbol": 1431300,
-        "assembleHap": 314900
+        "CreateModuleInfo": 862300,
+        "ConfigureCmake": 1526900,
+        "PreCheckSyscap": 455600,
+        "ProcessIntegratedHsp": 1119100,
+        "BuildNativeWithCmake": 65943500,
+        "SyscapTransform": 6874900,
+        "ProcessStartupConfig": 7670800,
+        "BuildJS": 9229600,
+        "BuildNativeWithNinja": 290095800,
+        "ProcessCompiledResources": 1188500,
+        "PackingCheck": 5438300,
+        "SignHap": 3211600,
+        "CollectDebugSymbol": 1708800,
+        "assembleHap": 218500
       }
     },
     "APIS": [
-      "getProperty"
+      "getHvigorConfig",
+      "getRootNodeDescriptor",
+      "getChildNode",
+      "getNodeByName",
+      "getAllNodes",
+      "getRootNode",
+      "getNodeName",
+      "getNodePath",
+      "subNodes",
+      "getExtraOption",
+      "getExtParam",
+      "getExtParams",
+      "getProperty",
+      "getProperties",
+      "getProductName",
+      "nodesEvaluated",
+      "getParameter",
+      "getCommandEntryTask"
     ],
-    "CONFIG_EXPERIMENT": {
-      "ENABLE_MODULE_SKIP": false,
-      "ENABLE_CPP_FUNCTION_LEVEL_INCREMENTAL": false
-    },
     "CONFIG_PROPERTIES": {},
-    "BUILD_ID": "202608311943165820",
-    "TOTAL_TIME": 7141953400
+    "TOTAL_TIME": 737292400,
+    "BUILD_ID": "202609052024563910"
   }
 }

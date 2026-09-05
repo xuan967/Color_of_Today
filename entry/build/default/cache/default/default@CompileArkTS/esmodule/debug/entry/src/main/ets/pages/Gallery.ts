@@ -87,7 +87,7 @@ class Gallery extends ViewPU {
         this.__today.set(newValue);
     }
     aboutToAppear(): void {
-        this.today = DailyColorManager.getInstance().getColor();
+        this.today = DailyColorManager.getInstance().getActiveColor();
         this.refresh();
         setTimeout(() => {
             Context.animateTo({ duration: 340, curve: Curve.EaseOut }, () => {
