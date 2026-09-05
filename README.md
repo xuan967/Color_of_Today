@@ -1,4 +1,14 @@
-# Empty Ability 最小测试工程模板
+# 今日限定色（Color of Today）
+
+HarmonyOS NEXT 相机应用：Camera Kit 将预览帧写入 `OH_NativeImage`，Native
+OpenGL ES 实时执行限定色色相隔离滤镜，并通过 ArkUI 完成拍照水印、图库和岁月色卡。
+
+相机渲染架构与故障恢复说明见 [docs/camera-pipeline.md](docs/camera-pipeline.md)。
+
+> 仓库不保存个人证书、私钥路径或口令。默认构建 unsigned HAP；需要安装到真机时，
+> 请在本机 DevEco Studio 中生成或选择调试签名。
+
+## 工程来源
 
 该目录是可直接复制的 HarmonyOS NEXT Stage 模型 `Empty Ability` 最小工程，用于 agent 在不打开 DevEco Studio 向导的情况下创建测试 fixture。
 

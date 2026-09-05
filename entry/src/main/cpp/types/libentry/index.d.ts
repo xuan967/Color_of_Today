@@ -4,10 +4,9 @@ export interface CaptureBuffer {
   height: number;
 }
 
-export const attachXComponent: () => boolean;
-export const initFromSurfaceId: (surfaceId: number) => boolean;
+export const startRenderer: (surfaceId: bigint) => boolean;
 export const isRendererReady: () => boolean;
-export const getCameraSurfaceId: () => number;
+export const getCameraSurfaceId: () => string;
 export const setSurfaceGeometry: (widthPx: number, heightPx: number) => void;
 export const setColor: (hue: number, threshold: number, satBoost: number) => void;
 export const setMirror: (mirror: number) => void;

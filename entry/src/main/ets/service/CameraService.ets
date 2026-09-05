@@ -14,9 +14,9 @@ export class CameraService {
   private currentIndex: number = 0;
   private input: camera.CameraInput | null = null;
   private previewOutput: camera.PreviewOutput | null = null;
-  private session: camera.CaptureSession | null = null;
+  private session: camera.PhotoSession | null = null;
   private started: boolean = false;
-  private glSurfaceId: number = 0;
+  private glSurfaceId: string = '';
 
   static async ensureCameraPermission(context: common.Context): Promise<boolean> {
     const atManager = abilityAccessCtrl.createAtManager();
@@ -27,7 +27,8 @@ export class CameraService {
 
   /** 是否存在可切换的其他摄像头 */
   canSwitch(): boolean {
-    return this.devices.length > 1;
+    return this.findIndex(camera.CameraPosition.CAMERA_POSITION_BACK) >= 0
+      && this.findIndex(camera.CameraPosition.CAMERA_POSITION_FRONT) >= 0;
   }
 
   /** 当前是否为前置摄像头（前置预览通常需要镜像） */
@@ -40,7 +41,8 @@ export class CameraService {
 
   /** 启动预览（默认优先后置）。onPreviewSize 回传预览流分辨率（用于 shader 等比裁剪）。 */
   async start(context: common.Context,
-    glSurfaceId: number,
+    glSurfaceId: string,
+    targetAspect: number,
     onPreviewSize: (w: number, h: number) => void): Promise<string | null> {
     this.glSurfaceId = glSurfaceId;
     const err = await this.openManager(context);
@@ -48,31 +50,63 @@ export class CameraService {
       return err;
     }
     this.currentIndex = this.pickDefaultIndex();
-    return this.openCurrent(context, onPreviewSize);
+    return this.openCurrent(targetAspect, onPreviewSize);
   }
 
-  /** 切换到下一个摄像头（前后置循环），返回错误信息或 null */
+  /** 按镜头朝向切换；多后摄设备不会再被误当成“前置”。 */
   async switchTo(context: common.Context,
+    targetAspect: number,
     onPreviewSize: (w: number, h: number) => void): Promise<string | null> {
-    if (this.devices.length < 2) {
+    const managerError = await this.openManager(context);
+    if (managerError !== null) {
+      return managerError;
+    }
+    if (!this.canSwitch()) {
       return '没有可切换的摄像头';
     }
-    await this.stop();
-    this.currentIndex = (this.currentIndex + 1) % this.devices.length;
-    const err = await this.openManager(context);
-    if (err !== null) {
-      return err;
+
+    const oldIndex = this.currentIndex;
+    const oldPosition = this.devices[oldIndex].cameraPosition;
+    const targetPosition = oldPosition === camera.CameraPosition.CAMERA_POSITION_FRONT
+      ? camera.CameraPosition.CAMERA_POSITION_BACK
+      : camera.CameraPosition.CAMERA_POSITION_FRONT;
+    const targetIndex = this.findIndex(targetPosition);
+    if (targetIndex < 0) {
+      return '没有找到目标朝向的摄像头';
     }
-    return this.openCurrent(context, onPreviewSize);
+
+    await this.stop();
+    this.currentIndex = targetIndex;
+    const switchError = await this.openCurrent(targetAspect, onPreviewSize);
+    if (switchError === null) {
+      return null;
+    }
+
+    // 切换失败时尽力恢复原镜头，避免页面停留在永久黑屏状态。
+    const recoveryIndex = this.findIndex(oldPosition);
+    if (recoveryIndex >= 0) {
+      this.currentIndex = recoveryIndex;
+      const recoveryError = await this.openCurrent(targetAspect, onPreviewSize);
+      if (recoveryError === null) {
+        return `${switchError}；已恢复原镜头`;
+      }
+      return `${switchError}；恢复原镜头失败：${recoveryError}`;
+    }
+    return switchError;
   }
 
-  private pickDefaultIndex(): number {
+  private findIndex(position: camera.CameraPosition): number {
     for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].cameraPosition === camera.CameraPosition.CAMERA_POSITION_BACK) {
+      if (this.devices[i].cameraPosition === position) {
         return i;
       }
     }
-    return 0;
+    return -1;
+  }
+
+  private pickDefaultIndex(): number {
+    const backIndex = this.findIndex(camera.CameraPosition.CAMERA_POSITION_BACK);
+    return backIndex >= 0 ? backIndex : 0;
   }
 
   private async openManager(context: common.Context): Promise<string | null> {
@@ -94,32 +128,56 @@ export class CameraService {
     }
   }
 
-  private async openCurrent(context: common.Context,
+  private selectProfile(profiles: camera.Profile[], targetAspect: number): camera.Profile {
+    let best = profiles[0];
+    let bestAspectError = Number.MAX_VALUE;
+    let bestPixels = 0;
+    const safeTarget = targetAspect > 0 ? targetAspect : 9 / 16;
+    for (const profile of profiles) {
+      const width = profile.size.width;
+      const height = profile.size.height;
+      if (width <= 0 || height <= 0) {
+        continue;
+      }
+      const maxSide = Math.max(width, height);
+      const portraitAspect = Math.min(width, height) / maxSide;
+      const aspectError = Math.abs(portraitAspect - safeTarget);
+      const pixels = width * height;
+      const withinBudget = maxSide <= 1920;
+      const bestWithinBudget = Math.max(best.size.width, best.size.height) <= 1920;
+      if ((withinBudget && !bestWithinBudget)
+        || (withinBudget === bestWithinBudget && aspectError < bestAspectError - 0.0001)
+        || (withinBudget === bestWithinBudget && Math.abs(aspectError - bestAspectError) <= 0.0001
+          && pixels > bestPixels)) {
+        best = profile;
+        bestAspectError = aspectError;
+        bestPixels = pixels;
+      }
+    }
+    return best;
+  }
+
+  private async openCurrent(targetAspect: number,
     onPreviewSize: (w: number, h: number) => void): Promise<string | null> {
     try {
       const device = this.devices[this.currentIndex];
-      const capability = this.manager!.getSupportedOutputCapability(device);
+      const sceneMode = camera.SceneMode.NORMAL_PHOTO;
+      const capability = this.manager!.getSupportedOutputCapability(device, sceneMode);
       const profiles: camera.Profile[] = capability.previewProfiles;
       if (profiles.length === 0) {
         return '该相机不支持预览流';
       }
-      // 取不超过 1920 宽的最大分辨率
-      let profile = profiles[0];
-      let bestPixels = 0;
-      for (const p of profiles) {
-        if (p.size.width <= 1920 && p.size.width * p.size.height > bestPixels) {
-          bestPixels = p.size.width * p.size.height;
-          profile = p;
-        }
-      }
+      const profile = this.selectProfile(profiles, targetAspect);
       onPreviewSize(profile.size.width, profile.size.height);
       colorFilter.setPreviewSize(profile.size.width, profile.size.height);
+      console.info(`[TodayColor] camera position=${device.cameraPosition}, profile=` +
+        `${profile.size.width}x${profile.size.height}, targetAspect=${targetAspect}`);
 
-      this.previewOutput = this.manager!.createPreviewOutput(profile, `${this.glSurfaceId}`);
+      this.previewOutput = this.manager!.createPreviewOutput(profile, this.glSurfaceId);
       this.input = this.manager!.createCameraInput(device);
       await this.input.open();
 
-      this.session = this.manager!.createCaptureSession();
+      this.session = this.manager!.createSession(sceneMode) as camera.PhotoSession;
       this.session.beginConfig();
       this.session.addInput(this.input);
       this.session.addOutput(this.previewOutput);
@@ -175,25 +233,42 @@ export class CameraService {
   }
 
   async stop(): Promise<void> {
-    try {
-      if (this.session !== null && this.started) {
-        await this.session.stop();
-      }
-      if (this.session !== null) {
-        await this.session.release();
-        this.session = null;
-      }
-      if (this.input !== null) {
-        await this.input.close();
-        this.input = null;
-      }
-      if (this.previewOutput !== null) {
-        await this.previewOutput.release();
-        this.previewOutput = null;
-      }
-    } catch (err) {
-      console.error(`[TodayColor] camera stop: ${JSON.stringify(err)}`);
-    }
+    const session = this.session;
+    const previewOutput = this.previewOutput;
+    const input = this.input;
+    this.session = null;
+    this.previewOutput = null;
+    this.input = null;
+    const wasStarted = this.started;
     this.started = false;
+
+    if (session !== null && wasStarted) {
+      try {
+        await session.stop();
+      } catch (err) {
+        console.error(`[TodayColor] camera session stop: ${JSON.stringify(err)}`);
+      }
+    }
+    if (session !== null) {
+      try {
+        await session.release();
+      } catch (err) {
+        console.error(`[TodayColor] camera session release: ${JSON.stringify(err)}`);
+      }
+    }
+    if (previewOutput !== null) {
+      try {
+        await previewOutput.release();
+      } catch (err) {
+        console.error(`[TodayColor] preview release: ${JSON.stringify(err)}`);
+      }
+    }
+    if (input !== null) {
+      try {
+        await input.close();
+      } catch (err) {
+        console.error(`[TodayColor] camera input close: ${JSON.stringify(err)}`);
+      }
+    }
   }
 }

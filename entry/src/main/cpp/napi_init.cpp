@@ -1,5 +1,3 @@
-#include <chrono>
-#include <condition_variable>
 #include <cstring>
 #include <mutex>
 #include <atomic>
@@ -9,7 +7,6 @@
 #include <GLES2/gl2ext.h>
 #include <hilog/log.h>
 #include <napi/native_api.h>
-#include <ace/xcomponent/native_interface_xcomponent.h>
 #include <native_window/external_window.h>
 
 #include "include/egl_core.h"
@@ -23,50 +20,52 @@ EglCore g_egl;
 GlRenderer g_renderer;
 
 std::thread g_thread;
-std::mutex g_mtx;
-std::condition_variable g_cv;
-bool g_settled = false;
-bool g_ok = false;
+std::mutex g_lifecycleMtx;
 std::string g_error;
 
 std::atomic<bool> g_running{false};
-std::atomic<bool> g_surfaceResized{false};
+std::atomic<bool> g_ok{false};
 std::atomic<int32_t> g_targetW{0};
 std::atomic<int32_t> g_targetH{0};
 std::atomic<bool> g_geometryDirty{false};
 OHNativeWindow *g_window = nullptr;
-napi_ref g_exportsRef = nullptr;
-bool g_xcAttached = false;
+
+void ReleaseDisplayWindow(OHNativeWindow *window)
+{
+    if (window != nullptr) {
+        OH_NativeWindow_DestroyNativeWindow(window);
+    }
+    g_window = nullptr;
+}
 
 /** 渲染线程入口：在拥有 EGL context 的线程上持续绘制 */
 void RenderLoop()
 {
-    if (!g_egl.Init(g_window)) {
+    OHNativeWindow *window = g_window;
+    if (!g_egl.Init(window)) {
         g_error = "EGL init failed";
-        std::lock_guard<std::mutex> lk(g_mtx);
-        g_settled = true;
-        g_cv.notify_all();
+        g_egl.Release();
+        ReleaseDisplayWindow(window);
+        g_ok = false;
+        g_running = false;
         return;
     }
     // 合成器默认 NO_SCALE_CROP（buffer 1:1 顶格显示），改为拉伸铺满组件区域
-    OH_NativeWindow_NativeWindowSetScalingModeV2(g_window, OH_SCALING_MODE_SCALE_TO_WINDOW_V2);
+    OH_NativeWindow_NativeWindowSetScalingModeV2(window, OH_SCALING_MODE_SCALE_TO_WINDOW_V2);
     if (!g_renderer.Init()) {
         g_error = g_error.empty() ? "GL renderer init failed" : g_error;
-        std::lock_guard<std::mutex> lk(g_mtx);
-        g_settled = true;
-        g_cv.notify_all();
+        g_renderer.Release();
+        g_egl.Release();
+        ReleaseDisplayWindow(window);
+        g_ok = false;
+        g_running = false;
         return;
     }
     uint64_t cameraSurfaceId = 0;
     OH_NativeWindow_GetSurfaceId(g_renderer.CameraWindow(), &cameraSurfaceId);
     LOG("camera surface id = %{public}llu", cameraSurfaceId);
 
-    {
-        std::lock_guard<std::mutex> lk(g_mtx);
-        g_ok = true;
-        g_settled = true;
-    }
-    g_cv.notify_all();
+    g_ok = true;
 
     int lastW = 0;
     int lastH = 0;
@@ -76,20 +75,18 @@ void RenderLoop()
             int32_t tw = g_targetW;
             int32_t th = g_targetH;
             if (tw > 0 && th > 0) {
-                int32_t ret = OH_NativeWindow_NativeWindowHandleOpt(g_window, SET_BUFFER_GEOMETRY, tw, th);
-                bool recreated = g_egl.RecreateSurface(g_window);
+                int32_t ret = OH_NativeWindow_NativeWindowHandleOpt(window, SET_BUFFER_GEOMETRY, tw, th);
+                bool recreated = g_egl.RecreateSurface(window);
                 lastW = 0;
                 lastH = 0;
                 LOG("buffer geometry set to %{public}dx%{public}d ret=%{public}d recreated=%{public}d",
                     tw, th, ret, recreated ? 1 : 0);
+                if (ret != 0 || !recreated) {
+                    g_error = "display surface resize failed";
+                    g_running = false;
+                    break;
+                }
             }
-        }
-        // 组件布局变化后 buffer 几何不会自动跟随，需重建 EGLSurface
-        if (g_surfaceResized.exchange(false)) {
-            LOG("surface resized, recreate EGLSurface");
-            g_egl.RecreateSurface(g_window);
-            lastW = 0;
-            lastH = 0;
         }
         int w = g_egl.SurfaceWidth();
         int h = g_egl.SurfaceHeight();
@@ -104,101 +101,20 @@ void RenderLoop()
 
     g_renderer.Release();
     g_egl.Release();
+    ReleaseDisplayWindow(window);
+    g_ok = false;
+    g_running = false;
     LOG("render loop exit");
 }
 
 void StopRenderLoop()
 {
-    if (g_running) {
-        g_running = false;
-        if (g_thread.joinable()) {
-            g_thread.join();
-        }
+    std::lock_guard<std::mutex> lifecycleLock(g_lifecycleMtx);
+    g_running = false;
+    if (g_thread.joinable()) {
+        g_thread.join();
     }
-    std::lock_guard<std::mutex> lk(g_mtx);
-    g_settled = false;
     g_ok = false;
-}
-
-/* ---------- XComponent 生命周期回调（UI 线程） ---------- */
-
-bool StartWithWindow(void *window);
-
-void OnSurfaceCreatedCB(OH_NativeXComponent *component, void *window)
-{
-    LOG("surface created");
-    StartWithWindow(window);
-}
-
-void OnSurfaceChangedCB(OH_NativeXComponent *component, void *window)
-{
-    g_window = reinterpret_cast<OHNativeWindow *>(window);
-    g_surfaceResized = true;
-}
-
-void OnSurfaceDestroyedCB(OH_NativeXComponent *component, void *window)
-{
-    LOG("surface destroyed");
-    StopRenderLoop();
-}
-
-/** 由 window 启动渲染线程（XComponent 回调与 surfaceId 兜底路径共用），幂等 */
-bool StartWithWindow(void *window)
-{
-    if (g_running) {
-        return g_ok;
-    }
-    if (window == nullptr) {
-        return false;
-    }
-    g_window = reinterpret_cast<OHNativeWindow *>(window);
-    g_error.clear();
-    g_running = true;
-    g_thread = std::thread(RenderLoop);
-    return true;
-}
-
-/**
- * 尝试从 exports 上取回 OH_NativeXComponent 并注册 Surface 生命周期回调。
- * ArkUI 注入 __NATIVE_XCOMPONENT_OBJ__ 的时序在不同设备/版本上有差异，
- * ModuleInit 时可能尚未注入，因此 ArkTS 侧可在组件 onLoad 后再调 attachXComponent 重试。
- */
-bool TryAttachXComponent(napi_env env)
-{
-    if (g_xcAttached) {
-        return true;
-    }
-    if (g_exportsRef == nullptr) {
-        return false;
-    }
-    napi_value exports = nullptr;
-    if (napi_get_reference_value(env, g_exportsRef, &exports) != napi_ok || exports == nullptr) {
-        return false;
-    }
-    napi_value exportInstance = nullptr;
-    if (napi_get_named_property(env, exports, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance) != napi_ok
-        || exportInstance == nullptr) {
-        LOG("attach: xcomponent obj not injected yet");
-        return false;
-    }
-    OH_NativeXComponent *nativeXComponent = nullptr;
-    if (napi_unwrap(env, exportInstance, reinterpret_cast<void **>(&nativeXComponent)) != napi_ok
-        || nativeXComponent == nullptr) {
-        LOG("attach: napi_unwrap failed");
-        return false;
-    }
-    static OH_NativeXComponent_Callback callback;
-    callback.OnSurfaceCreated = OnSurfaceCreatedCB;
-    callback.OnSurfaceChanged = OnSurfaceChangedCB;
-    callback.OnSurfaceDestroyed = OnSurfaceDestroyedCB;
-    callback.DispatchTouchEvent = nullptr;
-    OH_NativeXComponent_RegisterCallback(nativeXComponent, &callback);
-    char id[OH_XCOMPONENT_ID_LEN_MAX + 1] = {0};
-    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
-    OH_NativeXComponent_GetXComponentId(nativeXComponent, id, &idSize);
-    g_xcAttached = true;
-    LOG("xcomponent attached, id = %{public}s", id);
-    return true;
 }
 
 napi_value BoolValue(napi_env env, bool v)
@@ -219,9 +135,10 @@ napi_value GetCameraSurfaceId(napi_env env, napi_callback_info info)
     if (g_renderer.CameraWindow() != nullptr) {
         OH_NativeWindow_GetSurfaceId(g_renderer.CameraWindow(), &sid);
     }
-    // surfaceId 是 64 位值，不能用 uint32 承载（会截断归零）
+    // Camera Kit 接收 string；直接返回十进制字符串，避免经过 JS number 丢失精度。
+    std::string text = std::to_string(sid);
     napi_value out = nullptr;
-    napi_create_int64(env, (int64_t)sid, &out);
+    napi_create_string_utf8(env, text.c_str(), text.size(), &out);
     return out;
 }
 
@@ -325,13 +242,8 @@ napi_value SetSurfaceGeometry(napi_env env, napi_callback_info info)
     return nullptr;
 }
 
-napi_value AttachXComponent(napi_env env, napi_callback_info info)
-{
-    return BoolValue(env, TryAttachXComponent(env));
-}
-
-/** 兜底路径：用 XComponentController 拿到的 surfaceId 直接创建 NativeWindow 启动渲染 */
-napi_value InitFromSurfaceId(napi_env env, napi_callback_info info)
+/** XComponentController 生命周期入口：SurfaceId 以 bigint/uint64_t 无损传递。 */
+napi_value StartRenderer(napi_env env, napi_callback_info info)
 {
     size_t argc = 1;
     napi_value argv[1] = {nullptr};
@@ -339,19 +251,38 @@ napi_value InitFromSurfaceId(napi_env env, napi_callback_info info)
     if (argc < 1) {
         return BoolValue(env, false);
     }
-    uint32_t surfaceId = 0;
-    napi_get_value_uint32(env, argv[0], &surfaceId);
-    if (g_running) {
-        return BoolValue(env, g_ok);
-    }
-    OHNativeWindow *window = nullptr;
-    if (OH_NativeWindow_CreateNativeWindowFromSurfaceId((uint64_t)surfaceId, &window) != 0
-        || window == nullptr) {
-        LOGE("CreateNativeWindowFromSurfaceId(%{public}u) failed", surfaceId);
+    uint64_t surfaceId = 0;
+    bool lossless = false;
+    if (napi_get_value_bigint_uint64(env, argv[0], &surfaceId, &lossless) != napi_ok
+        || !lossless || surfaceId == 0) {
+        LOGE("start renderer: invalid surface id");
         return BoolValue(env, false);
     }
-    LOG("fallback path: start from surfaceId %{public}u", surfaceId);
-    return BoolValue(env, StartWithWindow(window));
+
+    std::lock_guard<std::mutex> lifecycleLock(g_lifecycleMtx);
+    if (g_running) {
+        return BoolValue(env, true);
+    }
+    if (g_thread.joinable()) {
+        g_thread.join();
+    }
+
+    OHNativeWindow *window = nullptr;
+    if (OH_NativeWindow_CreateNativeWindowFromSurfaceId(surfaceId, &window) != 0
+        || window == nullptr) {
+        LOGE("CreateNativeWindowFromSurfaceId(%{public}llu) failed", surfaceId);
+        return BoolValue(env, false);
+    }
+    g_window = window;
+    g_error.clear();
+    g_ok = false;
+    g_running = true;
+    if (g_targetW > 0 && g_targetH > 0) {
+        g_geometryDirty = true;
+    }
+    g_thread = std::thread(RenderLoop);
+    LOG("renderer start requested for surfaceId %{public}llu", surfaceId);
+    return BoolValue(env, true);
 }
 
 napi_value ReleaseRenderer(napi_env env, napi_callback_info info)
@@ -363,8 +294,7 @@ napi_value ReleaseRenderer(napi_env env, napi_callback_info info)
 napi_value Init(napi_env env, napi_value exports)
 {
     napi_property_descriptor desc[] = {
-        {"attachXComponent", nullptr, AttachXComponent, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"initFromSurfaceId", nullptr, InitFromSurfaceId, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"startRenderer", nullptr, StartRenderer, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"isRendererReady", nullptr, IsRendererReady, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"getCameraSurfaceId", nullptr, GetCameraSurfaceId, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"setSurfaceGeometry", nullptr, SetSurfaceGeometry, nullptr, nullptr, nullptr, napi_default, nullptr},
@@ -375,10 +305,6 @@ napi_value Init(napi_env env, napi_value exports)
         {"releaseRenderer", nullptr, ReleaseRenderer, nullptr, nullptr, nullptr, napi_default, nullptr},
     };
     napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
-
-    // 保存 exports 引用，供组件创建后延迟 attach；此时顺带尝试一次
-    napi_create_reference(env, exports, 1, &g_exportsRef);
-    TryAttachXComponent(env);
     return exports;
 }
 

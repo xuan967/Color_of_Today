@@ -1,5 +1,6 @@
 #include "include/gl_renderer.h"
 
+#include <cmath>
 #include <cstring>
 #include <hilog/log.h>
 
@@ -23,11 +24,7 @@ uniform float uMirror;
 out vec2 vUV;
 void main() {
     gl_Position = vec4(aPos, 0.0, 1.0);
-    vec2 uv = aUV;
-    if (uMirror > 0.5) {
-        uv.x = 1.0 - uv.x;
-    }
-    vUV = uv;
+    vUV = aUV;
 })";
 
 const char *FSH = R"(#version 300 es
@@ -188,6 +185,14 @@ bool GlRenderer::BuildProgram()
 
 void GlRenderer::Release()
 {
+    {
+        std::lock_guard<std::mutex> lk(capMtx_);
+        capPending_ = false;
+        capData_.clear();
+        capW_ = 0;
+        capH_ = 0;
+    }
+    capCv_.notify_all();
     if (image_ != nullptr) {
         OH_NativeImage_Destroy(&image_);
         image_ = nullptr;
@@ -213,12 +218,14 @@ void GlRenderer::Release()
 
 void GlRenderer::SetSurfaceSize(int w, int h)
 {
+    std::lock_guard<std::mutex> lk(paramMtx_);
     surfW_ = w;
     surfH_ = h;
 }
 
 void GlRenderer::SetColor(float hue, float threshold, float satBoost)
 {
+    std::lock_guard<std::mutex> lk(paramMtx_);
     hue_ = hue;
     threshold_ = threshold;
     satBoost_ = satBoost;
@@ -227,6 +234,7 @@ void GlRenderer::SetColor(float hue, float threshold, float satBoost)
 
 void GlRenderer::SetPreviewSize(int w, int h)
 {
+    std::lock_guard<std::mutex> lk(paramMtx_);
     bufW_ = w;
     bufH_ = h;
     padComputed_ = false;
@@ -234,6 +242,7 @@ void GlRenderer::SetPreviewSize(int w, int h)
 
 void GlRenderer::SetMirror(int mirror)
 {
+    std::lock_guard<std::mutex> lk(paramMtx_);
     mirror_ = mirror > 0 ? 1.0f : 0.0f;
 }
 
@@ -266,6 +275,7 @@ bool GlRenderer::WaitForCapture(uint64_t token, std::vector<uint8_t> &out, int &
  */
 void GlRenderer::EnsureTexturePad()
 {
+    std::lock_guard<std::mutex> lk(paramMtx_);
     if (padComputed_ || bufW_ <= 0 || bufH_ <= 0) {
         return;
     }
@@ -301,7 +311,7 @@ void GlRenderer::DrawFrame()
     if (image_ != nullptr) {
         OH_NativeImage_UpdateSurfaceImage(image_);
         float m[16];
-        OH_NativeImage_GetTransformMatrix(image_, m);
+        OH_NativeImage_GetTransformMatrixV2(image_, m);
         // 列主序 2x2 线性部分：col0=(m0,m1) col1=(m4,m5)
         texLin[0] = m[0];
         texLin[1] = m[1];
@@ -310,7 +320,39 @@ void GlRenderer::DrawFrame()
         EnsureTexturePad();
     }
 
-    glViewport(0, 0, surfW_, surfH_);
+    float hue = 0.62f;
+    float threshold = 0.05f;
+    float satBoost = 1.2f;
+    float mirror = 0.0f;
+    float padUStart = 0.0f;
+    float padUSpan = 1.0f;
+    float padVStart = 0.0f;
+    float padVSpan = 1.0f;
+    int surfaceWidth = 0;
+    int surfaceHeight = 0;
+    int bufferWidth = 0;
+    int bufferHeight = 0;
+    {
+        std::lock_guard<std::mutex> lk(paramMtx_);
+        hue = hue_;
+        threshold = threshold_;
+        satBoost = satBoost_;
+        mirror = mirror_;
+        padUStart = padUStart_;
+        padUSpan = padUSpan_;
+        padVStart = padVStart_;
+        padVSpan = padVSpan_;
+        surfaceWidth = surfW_;
+        surfaceHeight = surfH_;
+        bufferWidth = bufW_;
+        bufferHeight = bufH_;
+    }
+
+    if (surfaceWidth <= 0 || surfaceHeight <= 0) {
+        return;
+    }
+
+    glViewport(0, 0, surfaceWidth, surfaceHeight);
     glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -318,17 +360,17 @@ void GlRenderer::DrawFrame()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_EXTERNAL_OES, oesTex_);
     glUniform1i(locTex_, 0);
-    glUniform1f(locHue_, hue_);
-    glUniform1f(locThreshold_, threshold_);
-    glUniform1f(locBoost_, satBoost_);
+    glUniform1f(locHue_, hue);
+    glUniform1f(locThreshold_, threshold);
+    glUniform1f(locBoost_, satBoost);
 
     // cover：旋转后有效宽高比 vs Surface 宽高比（TexM 含 90° 旋转时轴互换）
     float sx = 1.f, sy = 1.f;
-    if (bufW_ > 0 && bufH_ > 0 && surfW_ > 0 && surfH_ > 0) {
+    if (bufferWidth > 0 && bufferHeight > 0) {
         bool rotated = std::fabs(texLin[1]) + std::fabs(texLin[2]) > std::fabs(texLin[0]) + std::fabs(texLin[3]);
-        float effW = rotated ? (float)bufH_ : (float)bufW_;
-        float effH = rotated ? (float)bufW_ : (float)bufH_;
-        float sa = (float)surfW_ / (float)surfH_;
+        float effW = rotated ? (float)bufferHeight : (float)bufferWidth;
+        float effH = rotated ? (float)bufferWidth : (float)bufferHeight;
+        float sa = (float)surfaceWidth / (float)surfaceHeight;
         float ba = effW / effH;
         if (ba > sa) {
             sx = sa / ba;
@@ -339,34 +381,34 @@ void GlRenderer::DrawFrame()
 
     glUniform2f(locCover_, sx, sy);
     glUniform4f(locTexLin_, texLin[0], texLin[1], texLin[2], texLin[3]);
-    glUniform4f(locPad_, padUStart_, padUSpan_, padVStart_, padVSpan_);
-    glUniform1f(locMirror_, mirror_);
+    glUniform4f(locPad_, padUStart, padUSpan, padVStart, padVSpan);
+    glUniform1f(locMirror_, mirror);
 
     glBindVertexArray(vao_);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 
-    HandleCapture();
+    HandleCapture(surfaceWidth, surfaceHeight);
 }
 
-void GlRenderer::HandleCapture()
+void GlRenderer::HandleCapture(int surfaceWidth, int surfaceHeight)
 {
     std::unique_lock<std::mutex> lk(capMtx_, std::try_to_lock);
     if (!lk.owns_lock() || !capPending_) {
         return;
     }
-    if (surfW_ <= 0 || surfH_ <= 0) {
+    if (surfaceWidth <= 0 || surfaceHeight <= 0) {
         return;
     }
-    std::vector<uint8_t> rgba(surfW_ * surfH_ * 4);
-    glReadPixels(0, 0, surfW_, surfH_, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
+    std::vector<uint8_t> rgba(surfaceWidth * surfaceHeight * 4);
+    glReadPixels(0, 0, surfaceWidth, surfaceHeight, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
     // glReadPixels 自下而上、RGBA —— 翻转并转换为自上而下 BGRA（PixelMap BGRA_8888 直接可用）
     std::vector<uint8_t> bgra(rgba.size());
-    int rowBytes = surfW_ * 4;
-    for (int y = 0; y < surfH_; y++) {
-        const uint8_t *src = rgba.data() + (surfH_ - 1 - y) * rowBytes;
+    int rowBytes = surfaceWidth * 4;
+    for (int y = 0; y < surfaceHeight; y++) {
+        const uint8_t *src = rgba.data() + (surfaceHeight - 1 - y) * rowBytes;
         uint8_t *dst = bgra.data() + y * rowBytes;
-        for (int x = 0; x < surfW_; x++) {
+        for (int x = 0; x < surfaceWidth; x++) {
             dst[x * 4 + 0] = src[x * 4 + 2];
             dst[x * 4 + 1] = src[x * 4 + 1];
             dst[x * 4 + 2] = src[x * 4 + 0];
@@ -374,8 +416,8 @@ void GlRenderer::HandleCapture()
         }
     }
     capData_ = std::move(bgra);
-    capW_ = surfW_;
-    capH_ = surfH_;
+    capW_ = surfaceWidth;
+    capH_ = surfaceHeight;
     capPending_ = false;
     lk.unlock();
     capCv_.notify_all();

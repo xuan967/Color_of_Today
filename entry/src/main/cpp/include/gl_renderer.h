@@ -42,7 +42,7 @@ public:
 private:
     bool BuildProgram();
     void EnsureTexturePad();
-    void HandleCapture();
+    void HandleCapture(int surfaceWidth, int surfaceHeight);
 
     GLuint program_ = 0;
     GLuint vao_ = 0;
@@ -74,6 +74,7 @@ private:
     float padUSpan_ = 1.0f;
     float padVStart_ = 0.0f;
     float padVSpan_ = 1.0f;
+    std::mutex paramMtx_;
 
     std::mutex capMtx_;
     std::condition_variable capCv_;

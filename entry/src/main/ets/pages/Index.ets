@@ -15,6 +15,35 @@ import { CollectionService } from '../service/CollectionService';
 import { EchoService, EchoResult } from '../service/EchoService';
 import { ColorPaletteSheet } from '../components/ColorPalette';
 
+/** API 12 官方 Surface 生命周期入口；SurfaceId 以 bigint 无损传入 Native。 */
+class CameraPreviewController extends XComponentController {
+  private surfaceId: string = '';
+
+  onSurfaceCreated(surfaceId: string): void {
+    this.surfaceId = surfaceId;
+    colorFilter.startRenderer(BigInt(surfaceId));
+  }
+
+  onSurfaceChanged(_surfaceId: string, rect: SurfaceRect): void {
+    colorFilter.setSurfaceGeometry(rect.surfaceWidth, rect.surfaceHeight);
+  }
+
+  onSurfaceDestroyed(_surfaceId: string): void {
+    this.surfaceId = '';
+    colorFilter.releaseRenderer();
+  }
+
+  ensureRenderer(): boolean {
+    if (colorFilter.isRendererReady()) {
+      return true;
+    }
+    if (this.surfaceId === '') {
+      return false;
+    }
+    return colorFilter.startRenderer(BigInt(this.surfaceId));
+  }
+}
+
 /**
  * 相机取景页（App 主页）：
  * 全屏实时颜色隔离取景；顶部今日色卡（点按开调色盘），底部玻璃控制条。
@@ -43,8 +72,9 @@ struct Index {
   @State echoNumber: number = 0;
   @State displayNumber: number = 0;
   @State echoReady: boolean = false;
+  @State captureAspect: number = 9 / 16;
 
-  private xcController: XComponentController = new XComponentController();
+  private xcController: CameraPreviewController = new CameraPreviewController();
   private cameraService: CameraService = new CameraService();
   private pipelineStarted: boolean = false;
   private capBusy: boolean = false;
@@ -56,14 +86,27 @@ struct Index {
   private focusTimer: number = -1;
   private zoomTimer: number = -1;
   private echoTimer: number = -1;
+  private previewAspect: number = 9 / 16;
+  private previewWidthVp: number = 1;
+  private previewHeightVp: number = 1;
+  private pageActive: boolean = true;
 
   aboutToAppear(): void {
+    this.pageActive = true;
     this.loadData();
   }
 
   aboutToDisappear(): void {
+    this.pageActive = false;
+    this.pipelineStarted = false;
     if (this.echoTimer >= 0) {
       clearInterval(this.echoTimer);
+    }
+    if (this.focusTimer >= 0) {
+      clearTimeout(this.focusTimer);
+    }
+    if (this.zoomTimer >= 0) {
+      clearTimeout(this.zoomTimer);
     }
     this.cameraService.stop();
     colorFilter.releaseRenderer();
@@ -131,11 +174,20 @@ struct Index {
     this.latestThumb = latest !== null ? latest.localPath : '';
   }
 
-  private async startPipeline(): Promise<void> {
+  private startPipeline(): void {
     if (this.pipelineStarted) {
       return;
     }
     this.pipelineStarted = true;
+    this.startPipelineInternal().catch((err: Error) => {
+      console.error(`[TodayColor] pipeline start: ${err.message}`);
+      this.pipelineStarted = false;
+      this.starting = false;
+      this.camError = '相机初始化异常，点击重试';
+    });
+  }
+
+  private async startPipelineInternal(): Promise<void> {
     const context = getContext(this);
     await DailyColorManager.getInstance().init(context);
     await PhotoDao.getInstance().init(context);
@@ -146,37 +198,29 @@ struct Index {
     if (!granted) {
       this.camError = '需要相机权限才能取景，请在设置中开启';
       this.starting = false;
+      this.pipelineStarted = false;
       return;
     }
 
-    // 路径一：XComponent 生命周期回调（组件 onLoad 后 attach 一次，覆盖注入时序差异）
-    colorFilter.attachXComponent();
+    // Controller 的 onSurfaceCreated 负责首次启动；重试时复用仍有效的 SurfaceId。
+    this.xcController.ensureRenderer();
     let ready = false;
     for (let i = 0; i < 20 && !ready; i++) {
       await this.sleep(200);
       ready = colorFilter.isRendererReady();
-      if (!ready && i === 5) {
-        colorFilter.attachXComponent();
-      }
-    }
-    // 路径二兜底：surfaceId 直接创建 NativeWindow（官方推荐路径，部分设备回调注入异常时可用）
-    if (!ready) {
-      const sid: string = await this.xcController.getXComponentSurfaceId();
-      ready = colorFilter.initFromSurfaceId(Number(sid));
-      for (let i = 0; i < 15 && !ready; i++) {
-        await this.sleep(200);
-        ready = colorFilter.isRendererReady();
-      }
     }
     if (!ready) {
-      this.camError = '渲染管线初始化失败';
+      this.camError = '渲染管线初始化失败，点击重试';
       this.starting = false;
+      this.pipelineStarted = false;
       return;
     }
 
-    colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
-    const camSurfaceId = colorFilter.getCameraSurfaceId();
-    const err = await this.cameraService.start(context, camSurfaceId, () => {});
+    if (!this.pageActive) {
+      return;
+    }
+    const camSurfaceId: string = colorFilter.getCameraSurfaceId();
+    const err = await this.cameraService.start(context, camSurfaceId, this.previewAspect, () => {});
     this.starting = false;
     this.canSwitch = this.cameraService.canSwitch();
     const range = this.cameraService.zoomRange();
@@ -184,6 +228,9 @@ struct Index {
     this.zoomMax = range[1];
     if (err !== null) {
       this.camError = `相机启动失败：${err}`;
+      this.pipelineStarted = false;
+    } else {
+      colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
     }
   }
 
@@ -194,7 +241,7 @@ struct Index {
     }
     this.switching = true;
     const context = getContext(this);
-    const err = await this.cameraService.switchTo(context, () => {});
+    const err = await this.cameraService.switchTo(context, this.previewAspect, () => {});
     this.switching = false;
     if (err !== null) {
       promptAction.showToast({ message: `切换失败：${err}` });
@@ -202,13 +249,16 @@ struct Index {
     }
     colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
     this.zoomRatio = 1;
+    const range = this.cameraService.zoomRange();
+    this.zoomMin = range[0];
+    this.zoomMax = range[1];
   }
 
   /** 点击对焦：归一化坐标下发相机 + 显示对焦环 */
   private handleTapFocus(e: ClickEvent): void {
-    const w = Number(px2vp(display.getDefaultDisplaySync().width));
-    const h = Number(px2vp(display.getDefaultDisplaySync().height));
-    this.cameraService.tapFocus(e.x / w, e.y / h);
+    const x = Math.min(1, Math.max(0, e.x / this.previewWidthVp));
+    const y = Math.min(1, Math.max(0, e.y / this.previewHeightVp));
+    this.cameraService.tapFocus(x, y);
     this.focusX = e.x;
     this.focusY = e.y;
     this.focusShow = true;
@@ -240,6 +290,7 @@ struct Index {
     }
     this.capBusy = true;
     try {
+      const capturedColor = this.today;
       vibrator.startVibration({ type: 'time', duration: 40 }, { id: 0, usage: 'touch' });
       this.flashOpacity = 0.9;
       animateTo({ duration: 280, curve: Curve.EaseOut }, () => {
@@ -258,21 +309,23 @@ struct Index {
       const pm = await image.createPixelMap(frame.data, options);
 
       // 显示浮层（照片 + 水印），等待渲染后整体截图合成
+      this.captureAspect = frame.height > 0 ? frame.width / frame.height : 9 / 16;
       this.capturedPm = pm;
       this.showCapture = true;
       await this.sleep(380);
       const snap = await componentSnapshot.get('captureOverlay');
+      const snapInfo = await snap.getImageInfo();
 
       const context = getContext(this);
-      const localPath = await CaptureService.persistSnapshot(context, snap, this.today.name);
+      const localPath = await CaptureService.persistSnapshot(context, snap, capturedColor.name);
       if (localPath === null) {
         promptAction.showToast({ message: '保存失败' });
       } else {
         this.currentPhotoPath = localPath;
-        await CaptureService.recordPhoto(localPath, '', frame.width, frame.height);
+        await CaptureService.recordPhoto(localPath, '', snapInfo.size.width, snapInfo.size.height, capturedColor);
         // 图鉴收集：按当前取景色相匹配传统色，首次命中即点亮
         const unlockedColor = await CollectionService.onPhotoCaptured(context,
-          this.today.hue, DailyColorManager.getDateKey(new Date()));
+          capturedColor.hue, DailyColorManager.getDateKey(new Date()));
         if (unlockedColor !== null) {
           promptAction.showToast({ message: `点亮图鉴 · ${unlockedColor.name}`, duration: 2400 });
         }
@@ -330,7 +383,7 @@ struct Index {
     Stack() {
       // 预览窗：固定 16:9（与相机流一致），初始布局即最终布局，规避 surface 尺寸同步问题
       Column() {
-        XComponent({ id: 'cameraPreview', type: 'surface', libraryname: 'entry', controller: this.xcController })
+        XComponent({ id: 'cameraPreview', type: 'surface', controller: this.xcController })
           .width('100%')
           .aspectRatio(9 / 16)
           .borderRadius(18)
@@ -355,17 +408,17 @@ struct Index {
           .onAreaChange((_oldArea: Area, newArea: Area) => {
             // 16:9 窗口首次布局即稳定；同步 buffer 几何保证各设备一致
             const density = display.getDefaultDisplaySync().densityPixels;
-            const wPx = Math.round(Number(newArea.width) * density);
-            const hPx = Math.round(Number(newArea.height) * density);
+            this.previewWidthVp = Number(newArea.width);
+            this.previewHeightVp = Number(newArea.height);
+            const wPx = Math.round(this.previewWidthVp * density);
+            const hPx = Math.round(this.previewHeightVp * density);
             if (wPx > 0 && hPx > 0) {
+              this.previewAspect = wPx / hPx;
               colorFilter.setSurfaceGeometry(wPx, hPx);
             }
           })
           .onLoad(() => {
             this.startPipeline();
-          })
-          .onDestroy(() => {
-            colorFilter.releaseRenderer();
           })
       }
       .width('100%')
@@ -425,10 +478,18 @@ struct Index {
             Text('正在唤醒相机…').fontSize(13).fontColor('rgba(255,255,255,0.85)')
           } else {
             Text(this.camError).fontSize(14).fontColor('rgba(255,255,255,0.9)').textAlign(TextAlign.Center)
+            Text('点击重试').fontSize(13).fontColor('rgba(255,255,255,0.65)')
           }
         }
         .width('100%')
         .padding({ left: 40, right: 40 })
+        .onClick(() => {
+          if (!this.starting && this.camError !== '') {
+            this.camError = '';
+            this.starting = true;
+            this.startPipeline();
+          }
+        })
       }
 
       // 变焦提示
@@ -639,7 +700,7 @@ struct Index {
             }
             .id('captureOverlay')
             .width('100%')
-            .aspectRatio(9 / 16)
+            .aspectRatio(this.captureAspect)
             .borderRadius(18)
             .clip(true)
           }
