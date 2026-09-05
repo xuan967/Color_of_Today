@@ -1,8 +1,0 @@
-{
-  "src": [
-    "pages/Index",
-    "pages/Gallery",
-    "pages/TimePalette",
-    "pages/Collection"
-  ]
-}

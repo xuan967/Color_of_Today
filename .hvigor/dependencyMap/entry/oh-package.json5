@@ -1,1 +1,0 @@
-{"name":"entry","version":"1.0.0","description":"今日限定色主模块","main":"","author":"","license":"UNLICENSED","dependencies":{"libentry.so":"file:./src/main/cpp/types/libentry"}}

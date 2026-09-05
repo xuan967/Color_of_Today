@@ -1,0 +1,21 @@
+# DevEco Studio / IntelliJ local state
+.idea/
+
+# Hvigor build cache, reports, and generated artifacts
+.hvigor/
+build/
+**/build/
+**/.cxx/
+
+# Local build and diagnostic logs
+build*.log
+*.log
+*.htrace
+*.ftrace
+*.trace
+
+# Native build system files
+*.ninja
+.ninja_*
+CMakeCache.txt
+CMakeFiles/
