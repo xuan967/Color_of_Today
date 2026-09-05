@@ -18,14 +18,38 @@ export default class EntryAbility extends UIAbility {
     }
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage): void {
-    console.info('[TodayColor][Ability] window stage created, loading pages/Index');
+  private async configureImmersiveWindow(windowStage: window.WindowStage): Promise<void> {
+    try {
+      const mainWindow = windowStage.getMainWindowSync();
+      await mainWindow.setWindowLayoutFullScreen(true);
+      console.info('[TodayColor][Window] immersive layout enabled');
+      await mainWindow.setWindowSystemBarProperties({
+        statusBarColor: '#00000000',
+        navigationBarColor: '#00000000',
+        statusBarContentColor: '#FFFFFFFF',
+        navigationBarContentColor: '#FFFFFFFF'
+      });
+      console.info('[TodayColor][Window] transparent system bars applied');
+    } catch (err) {
+      console.error(`[TodayColor][Window] immersive setup failed: ${JSON.stringify(err)}`);
+    }
+  }
+
+  private loadIndexPage(windowStage: window.WindowStage): void {
+    console.info('[TodayColor][Ability] loading pages/Index');
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
         console.error(`[TodayColor][Ability] loadContent failed: ${JSON.stringify(err)}`);
       } else {
         console.info('[TodayColor][Ability] pages/Index loaded');
       }
+    });
+  }
+
+  onWindowStageCreate(windowStage: window.WindowStage): void {
+    console.info('[TodayColor][Ability] window stage created, configuring immersive layout');
+    this.configureImmersiveWindow(windowStage).then(() => {
+      this.loadIndexPage(windowStage);
     });
   }
 }

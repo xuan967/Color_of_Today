@@ -29,11 +29,12 @@ OHNativeWindow 在渲染线程结束后显式释放。
 
 ## 几何规则
 
-1. XComponent 铺满页面，其实际像素尺寸决定 EGL buffer geometry；页面不再人为保留顶部黑区。
-2. Camera Profile 优先匹配旋转到竖屏后的目标宽高比，再比较像素数。
-3. NativeImage V2 变换矩阵负责生产端旋转；Shader 的纹理坐标负责等比 cover。
-4. 拍照 PixelMap 使用 framebuffer 实际宽高，水印节点使用同一宽高比。
-5. 数据库记录最终水印快照尺寸和快门时生效的颜色。
+1. 主窗口采用透明系统栏的沉浸式布局，XComponent 铺满完整窗口，其实际像素尺寸决定 EGL buffer geometry。
+2. 顶部颜色/节气信息和底部不透明黑色控制区都是 Stack 浮层，不参与 XComponent 尺寸计算。
+3. Camera Profile 优先匹配旋转到竖屏后的目标宽高比，再比较像素数。
+4. API 12 NativeImage V2 的完整 4×4 矩阵负责生产端旋转和平移；Shader 先在屏幕坐标执行等比 cover，再映射到纹理坐标。
+5. 拍照 PixelMap 使用 framebuffer 实际宽高，水印节点使用同一宽高比。
+6. 数据库记录最终水印快照尺寸和快门时生效的颜色。
 
 ## 生命周期
 

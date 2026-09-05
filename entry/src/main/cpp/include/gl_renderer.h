@@ -18,9 +18,9 @@
  * DrawFrame 必须在 EGL context 所在线程调用；参数 Setter 可从 JS 线程调用。
  *
  * 几何自适应策略（不同设备纹理对齐行为不同，禁止写死 crop）：
- * - 旋转/镜像：取系统 GetTransformMatrix 的 2x2 线性部分，绕中心旋转（规避个别实现平移缺失）
+ * - 旋转/平移：完整保留 API 12 NativeImage V2 的 4x4 变换矩阵
  * - 纹理对齐黑边：首帧后查询纹理实际分配尺寸，与 buffer 尺寸求比值得内容矩形
- * - 铺满裁剪：按旋转后的有效宽高比 vs Surface 宽高比计算 cover
+ * - 铺满裁剪：在屏幕坐标系等比 cover 后，再映射到相机纹理坐标
  */
 class GlRenderer {
 public:
@@ -59,14 +59,19 @@ private:
     std::atomic<uint64_t> frameAvailableSequence_{0};
     uint64_t consumedFrameSequence_ = 0;
     uint64_t failedFrameConsumeCount_ = 0;
-    float textureTransform_[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+    float textureTransform_[16] = {
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
 
     GLint locTex_ = -1;
     GLint locHue_ = -1;
     GLint locThreshold_ = -1;
     GLint locBoost_ = -1;
     GLint locCover_ = -1;
-    GLint locTexLin_ = -1;
+    GLint locTexMatrix_ = -1;
     GLint locPad_ = -1;
     GLint locMirror_ = -1;
 

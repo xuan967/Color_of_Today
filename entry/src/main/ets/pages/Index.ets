@@ -725,8 +725,8 @@ struct Index {
           .shadow({ radius: 6, color: 'rgba(0,0,0,0.45)' })
       }
       .width('100%')
-      .padding({ top: 64 })
-      .hitTestBehavior(HitTestMode.None)
+      .padding({ top: 64, left: 24, right: 24 })
+      .position({ x: 0, y: 0 })
 
       // 右上角：构图线开关
       Stack() {
@@ -748,7 +748,7 @@ struct Index {
         this.gridOn = !this.gridOn;
       })
 
-      // 底部玻璃控制条：缩略图 | 快门 | 前后置切换
+      // 底部不透明控制区：作为全屏 Surface 上方的浮层，不参与预览布局。
       Row({ space: 12 }) {
         // 左：缩略图 + 今日计数角标
         Stack({ alignContent: Alignment.TopEnd }) {
@@ -821,13 +821,12 @@ struct Index {
           this.doSwitchCamera();
         })
       }
-      .width('calc(100% - 40vp)')
-      .padding({ left: 20, right: 20, top: 14, bottom: 14 })
-      .backgroundColor('rgba(0,0,0,0.30)')
-      .borderRadius(40)
-      .backdropBlur(12)
-      .position({ x: 20, y: '100%' })
-      .translate({ y: '-130%' })
+      .width('100%')
+      .height(160)
+      .padding({ left: 24, right: 24, top: 16, bottom: 28 })
+      .backgroundColor(Color.Black)
+      .position({ x: 0, y: '100%' })
+      .translate({ y: '-100%' })
 
       // 调色盘底部面板
       if (this.paletteOpen) {

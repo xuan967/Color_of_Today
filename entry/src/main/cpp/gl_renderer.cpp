@@ -33,7 +33,7 @@ precision mediump float;
 in vec2 vUV;
 uniform samplerExternalOES uTexture;
 uniform vec2 uCover;
-uniform vec4 uTexLin;     // 系统 TexMatrix 的 2x2 线性部分（旋转/镜像，列主序 m0,m1,m4,m5）
+uniform mat4 uTexMatrix;   // API 12 NativeImage V2 完整变换：旋转 + 平移
 uniform vec4 uPad;        // 纹理对齐黑边：uStart, uSpan, vStart, vSpan
 uniform float uMirror;
 uniform float uTargetHue;
@@ -51,20 +51,17 @@ vec3 rgb2hsv(vec3 c) {
 }
 
 void main() {
-    // 1. 镜像 + 绕中心应用系统旋转/镜像（线性部分），平移自己补，规避个别实现的缺平移问题
-    vec2 uv = vUV;
+    // 1. 镜像和 cover 都属于屏幕坐标；必须先执行，再映射到相机纹理坐标。
+    vec2 displayUV = vUV;
     if (uMirror > 0.5) {
-        uv.x = 1.0 - uv.x;
+        displayUV.x = 1.0 - displayUV.x;
     }
-    vec2 p;
-    p.x = uTexLin.x * (uv.x - 0.5) + uTexLin.z * (uv.y - 0.5) + 0.5;
-    p.y = uTexLin.y * (uv.x - 0.5) + uTexLin.w * (uv.y - 0.5) + 0.5;
+    displayUV = (displayUV - 0.5) * uCover + 0.5;
+    vec2 transformedUV = (uTexMatrix * vec4(displayUV, 0.0, 1.0)).xy;
 
-    // 2. 纹理对齐黑边裁剪：映射到帧内容有效矩形
-    vec2 st = vec2(uPad.x + p.x * uPad.y, uPad.z + p.y * uPad.w);
-
-    // 3. cover 铺满：等比缩放、居中裁切
-    vec2 tc = clamp((st - 0.5) * uCover + 0.5, vec2(0.0), vec2(1.0));
+    // 2. 可选的纹理分配 padding 属于纹理坐标，最后应用。
+    vec2 tc = clamp(vec2(uPad.x + transformedUV.x * uPad.y,
+        uPad.z + transformedUV.y * uPad.w), vec2(0.0), vec2(1.0));
 
     vec3 rgb = texture(uTexture, tc).rgb;
     vec3 hsv = rgb2hsv(rgb);
@@ -124,10 +121,11 @@ bool GlRenderer::Init()
     frameAvailableSequence_.store(0, std::memory_order_relaxed);
     consumedFrameSequence_ = 0;
     failedFrameConsumeCount_ = 0;
+    std::memset(textureTransform_, 0, sizeof(textureTransform_));
     textureTransform_[0] = 1.0f;
-    textureTransform_[1] = 0.0f;
-    textureTransform_[2] = 0.0f;
-    textureTransform_[3] = 1.0f;
+    textureTransform_[5] = 1.0f;
+    textureTransform_[10] = 1.0f;
+    textureTransform_[15] = 1.0f;
     LOG("[op=%{public}d] GL renderer init begin", operationId_);
     if (!BuildProgram()) {
         LOGE("[op=%{public}d] GL program build failed", operationId_);
@@ -208,7 +206,7 @@ bool GlRenderer::BuildProgram()
     locThreshold_ = glGetUniformLocation(program_, "uThreshold");
     locBoost_ = glGetUniformLocation(program_, "uSatBoost");
     locCover_ = glGetUniformLocation(program_, "uCover");
-    locTexLin_ = glGetUniformLocation(program_, "uTexLin");
+    locTexMatrix_ = glGetUniformLocation(program_, "uTexMatrix");
     locPad_ = glGetUniformLocation(program_, "uPad");
     locMirror_ = glGetUniformLocation(program_, "uMirror");
     LOG("[op=%{public}d] shader compile/link completed program=%{public}u", operationId_, program_);
@@ -375,10 +373,7 @@ void GlRenderer::DrawFrame()
             int32_t matrixResult = OH_NativeImage_GetTransformMatrixV2(image_, m);
             if (matrixResult == 0) {
                 // 只有完整成功消费的帧才能替换方向；失败/无新帧始终沿用最后一个有效矩阵。
-                textureTransform_[0] = m[0];
-                textureTransform_[1] = m[1];
-                textureTransform_[2] = m[4];
-                textureTransform_[3] = m[5];
+                std::memcpy(textureTransform_, m, sizeof(textureTransform_));
             } else {
                 LOGE("[op=%{public}d] transform query failed code=%{public}d; retaining cached transform",
                     operationId_, matrixResult);
@@ -393,9 +388,8 @@ void GlRenderer::DrawFrame()
         }
     }
 
-    float texLin[4] = {
-        textureTransform_[0], textureTransform_[1], textureTransform_[2], textureTransform_[3]
-    };
+    float texMatrix[16];
+    std::memcpy(texMatrix, textureTransform_, sizeof(texMatrix));
 
     float hue = 0.62f;
     float threshold = 0.05f;
@@ -444,7 +438,8 @@ void GlRenderer::DrawFrame()
     // cover：旋转后有效宽高比 vs Surface 宽高比（TexM 含 90° 旋转时轴互换）
     float sx = 1.f, sy = 1.f;
     if (bufferWidth > 0 && bufferHeight > 0) {
-        bool rotated = std::fabs(texLin[1]) + std::fabs(texLin[2]) > std::fabs(texLin[0]) + std::fabs(texLin[3]);
+        bool rotated = std::fabs(texMatrix[1]) + std::fabs(texMatrix[4]) >
+            std::fabs(texMatrix[0]) + std::fabs(texMatrix[5]);
         float effW = rotated ? (float)bufferHeight : (float)bufferWidth;
         float effH = rotated ? (float)bufferWidth : (float)bufferHeight;
         float sa = (float)surfaceWidth / (float)surfaceHeight;
@@ -459,12 +454,15 @@ void GlRenderer::DrawFrame()
     if (!firstFrameLogged_ && imageUpdated && bufferWidth > 0 && bufferHeight > 0) {
         firstFrameLogged_ = true;
         LOG("[op=%{public}d] first GL frame surface=%{public}dx%{public}d buffer=%{public}dx%{public}d "
-            "cover=%{public}.4fx%{public}.4f", operationId_, surfaceWidth, surfaceHeight,
-            bufferWidth, bufferHeight, sx, sy);
+            "cover=%{public}.4fx%{public}.4f matrix=[%{public}.3f,%{public}.3f,%{public}.3f,%{public}.3f] "
+            "translate=[%{public}.3f,%{public}.3f] pad=[%{public}.3f,%{public}.3f,%{public}.3f,%{public}.3f]",
+            operationId_, surfaceWidth, surfaceHeight, bufferWidth, bufferHeight, sx, sy,
+            texMatrix[0], texMatrix[1], texMatrix[4], texMatrix[5], texMatrix[12], texMatrix[13],
+            padUStart, padUSpan, padVStart, padVSpan);
     }
 
     glUniform2f(locCover_, sx, sy);
-    glUniform4f(locTexLin_, texLin[0], texLin[1], texLin[2], texLin[3]);
+    glUniformMatrix4fv(locTexMatrix_, 1, GL_FALSE, texMatrix);
     glUniform4f(locPad_, padUStart, padUSpan, padVStart, padVSpan);
     glUniform1f(locMirror_, mirror);
 
