@@ -7,17 +7,18 @@
 
 bool EglCore::Init(OHNativeWindow *window)
 {
+    LOG("[op=%{public}d] EGL init begin windowValid=%{public}d", operationId_, window != nullptr ? 1 : 0);
     display_ = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (display_ == EGL_NO_DISPLAY) {
-        LOGE("eglGetDisplay failed");
+        LOGE("[op=%{public}d] eglGetDisplay failed error=0x%{public}x", operationId_, eglGetError());
         return false;
     }
     EGLint major = 0, minor = 0;
     if (!eglInitialize(display_, &major, &minor)) {
-        LOGE("eglInitialize failed");
+        LOGE("[op=%{public}d] eglInitialize failed error=0x%{public}x", operationId_, eglGetError());
         return false;
     }
-    LOG("EGL %{d}.%{d}", major, minor);
+    LOG("[op=%{public}d] EGL version %{public}d.%{public}d", operationId_, major, minor);
 
     const EGLint configAttribs[] = {
         EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
@@ -30,20 +31,20 @@ bool EglCore::Init(OHNativeWindow *window)
     };
     EGLint numConfigs = 0;
     if (!eglChooseConfig(display_, configAttribs, &config_, 1, &numConfigs) || numConfigs < 1) {
-        LOGE("eglChooseConfig failed");
+        LOGE("[op=%{public}d] eglChooseConfig failed error=0x%{public}x", operationId_, eglGetError());
         return false;
     }
 
     const EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE };
     context_ = eglCreateContext(display_, config_, EGL_NO_CONTEXT, contextAttribs);
     if (context_ == EGL_NO_CONTEXT) {
-        LOGE("eglCreateContext failed");
+        LOGE("[op=%{public}d] eglCreateContext failed error=0x%{public}x", operationId_, eglGetError());
         return false;
     }
 
     eglSurface_ = eglCreateWindowSurface(display_, config_, (EGLNativeWindowType)window, nullptr);
     if (eglSurface_ == EGL_NO_SURFACE) {
-        LOGE("eglCreateWindowSurface failed 0x%{public}x", eglGetError());
+        LOGE("[op=%{public}d] eglCreateWindowSurface failed error=0x%{public}x", operationId_, eglGetError());
         return false;
     }
     return MakeCurrent();
@@ -51,7 +52,9 @@ bool EglCore::Init(OHNativeWindow *window)
 
 bool EglCore::RecreateSurface(OHNativeWindow *window)
 {
+    LOG("[op=%{public}d] EGL recreate surface begin", operationId_);
     if (display_ == EGL_NO_DISPLAY || context_ == EGL_NO_CONTEXT) {
+        LOGE("[op=%{public}d] EGL recreate rejected: display/context unavailable", operationId_);
         return false;
     }
     if (eglSurface_ != EGL_NO_SURFACE) {
@@ -60,28 +63,35 @@ bool EglCore::RecreateSurface(OHNativeWindow *window)
     }
     eglSurface_ = eglCreateWindowSurface(display_, config_, (EGLNativeWindowType)window, nullptr);
     if (eglSurface_ == EGL_NO_SURFACE) {
-        LOGE("RecreateSurface failed 0x%{public}x", eglGetError());
+        LOGE("[op=%{public}d] EGL recreate failed error=0x%{public}x", operationId_, eglGetError());
         return false;
     }
-    return MakeCurrent();
+    bool current = MakeCurrent();
+    LOG("[op=%{public}d] EGL recreate completed current=%{public}d", operationId_, current ? 1 : 0);
+    return current;
 }
 
 bool EglCore::MakeCurrent()
 {
     if (!eglMakeCurrent(display_, eglSurface_, eglSurface_, context_)) {
-        LOGE("eglMakeCurrent failed 0x%{public}x", eglGetError());
+        LOGE("[op=%{public}d] eglMakeCurrent failed error=0x%{public}x", operationId_, eglGetError());
         return false;
     }
     return true;
 }
 
-void EglCore::SwapBuffers()
+bool EglCore::SwapBuffers()
 {
-    eglSwapBuffers(display_, eglSurface_);
+    if (!eglSwapBuffers(display_, eglSurface_)) {
+        LOGE("[op=%{public}d] eglSwapBuffers failed error=0x%{public}x", operationId_, eglGetError());
+        return false;
+    }
+    return true;
 }
 
 void EglCore::Release()
 {
+    LOG("[op=%{public}d] EGL release begin", operationId_);
     if (display_ != EGL_NO_DISPLAY) {
         eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         if (eglSurface_ != EGL_NO_SURFACE) {
@@ -95,6 +105,7 @@ void EglCore::Release()
         eglTerminate(display_);
         display_ = EGL_NO_DISPLAY;
     }
+    LOG("[op=%{public}d] EGL release completed", operationId_);
 }
 
 int EglCore::SurfaceWidth() const

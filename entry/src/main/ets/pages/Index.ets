@@ -9,38 +9,65 @@ import colorFilter from 'libentry.so';
 import { COLOR_PRESETS, ColorPreset } from '../model/ColorPreset';
 import { DailyColorManager } from '../manager/DailyColorManager';
 import { PhotoDao } from '../model/PhotoDao';
-import { CameraService } from '../service/CameraService';
+import { CameraService, CameraStartCallbacks, CameraSwitchResult } from '../service/CameraService';
 import { CaptureService } from '../service/CaptureService';
 import { CollectionService } from '../service/CollectionService';
 import { EchoService, EchoResult } from '../service/EchoService';
 import { ColorPaletteSheet } from '../components/ColorPalette';
 
 /** API 12 官方 Surface 生命周期入口；SurfaceId 以 bigint 无损传入 Native。 */
+enum CameraUiPhase {
+  IDLE,
+  RENDERER_STARTING,
+  CAMERA_OPENING,
+  PREVIEWING,
+  SWITCHING,
+  ERROR
+}
+
 class CameraPreviewController extends XComponentController {
   private surfaceId: string = '';
+  private operationId: number = 0;
+
+  setOperationId(operationId: number): void {
+    this.operationId = operationId;
+  }
 
   onSurfaceCreated(surfaceId: string): void {
     this.surfaceId = surfaceId;
-    colorFilter.startRenderer(BigInt(surfaceId));
+    console.info(`[TodayColor][CameraUI][op=${this.operationId}] surface created`);
+    if (this.operationId > 0) {
+      colorFilter.startRenderer(BigInt(surfaceId), this.operationId);
+    } else {
+      console.info('[TodayColor][CameraUI][op=0] waiting for camera operation before renderer start');
+    }
   }
 
   onSurfaceChanged(_surfaceId: string, rect: SurfaceRect): void {
+    console.info(`[TodayColor][CameraUI][op=${this.operationId}] surface changed ` +
+      `${rect.surfaceWidth}x${rect.surfaceHeight}`);
     colorFilter.setSurfaceGeometry(rect.surfaceWidth, rect.surfaceHeight);
   }
 
   onSurfaceDestroyed(_surfaceId: string): void {
+    console.info(`[TodayColor][CameraUI][op=${this.operationId}] surface destroyed`);
     this.surfaceId = '';
     colorFilter.releaseRenderer();
   }
 
-  ensureRenderer(): boolean {
+  ensureRenderer(operationId: number): boolean {
+    this.setOperationId(operationId);
     if (colorFilter.isRendererReady()) {
+      console.info(`[TodayColor][CameraUI][op=${operationId}] renderer already ready`);
       return true;
     }
     if (this.surfaceId === '') {
+      console.error(`[TodayColor][CameraUI][op=${operationId}] renderer start skipped: surface unavailable`);
       return false;
     }
-    return colorFilter.startRenderer(BigInt(this.surfaceId));
+    const requested = colorFilter.startRenderer(BigInt(this.surfaceId), operationId);
+    console.info(`[TodayColor][CameraUI][op=${operationId}] renderer start requested=${requested}`);
+    return requested;
   }
 }
 
@@ -59,7 +86,7 @@ struct Index {
   @State capturedPm: image.PixelMap | null = null;
   @State showCapture: boolean = false;
   @State camError: string = '';
-  @State starting: boolean = true;
+  @State cameraPhase: CameraUiPhase = CameraUiPhase.IDLE;
   @State canSwitch: boolean = false;
   @State gridOn: boolean = false;
   @State paletteOpen: boolean = false;
@@ -72,7 +99,6 @@ struct Index {
   @State echoNumber: number = 0;
   @State displayNumber: number = 0;
   @State echoReady: boolean = false;
-  @State captureAspect: number = 9 / 16;
 
   private xcController: CameraPreviewController = new CameraPreviewController();
   private cameraService: CameraService = new CameraService();
@@ -86,10 +112,12 @@ struct Index {
   private focusTimer: number = -1;
   private zoomTimer: number = -1;
   private echoTimer: number = -1;
+  private firstFrameTimer: number = -1;
   private previewAspect: number = 9 / 16;
   private previewWidthVp: number = 1;
   private previewHeightVp: number = 1;
   private pageActive: boolean = true;
+  private cameraOperationId: number = 0;
 
   aboutToAppear(): void {
     this.pageActive = true;
@@ -99,6 +127,9 @@ struct Index {
   aboutToDisappear(): void {
     this.pageActive = false;
     this.pipelineStarted = false;
+    this.cameraOperationId++;
+    this.xcController.setOperationId(this.cameraOperationId);
+    console.info(`[TodayColor][CameraUI][op=${this.cameraOperationId}] page disappearing`);
     if (this.echoTimer >= 0) {
       clearInterval(this.echoTimer);
     }
@@ -108,7 +139,10 @@ struct Index {
     if (this.zoomTimer >= 0) {
       clearTimeout(this.zoomTimer);
     }
-    this.cameraService.stop();
+    this.clearFirstFrameTimer();
+    this.cameraPhase = CameraUiPhase.IDLE;
+    this.camError = '';
+    this.cameraService.stop(this.cameraOperationId);
     colorFilter.releaseRenderer();
   }
 
@@ -174,63 +208,177 @@ struct Index {
     this.latestThumb = latest !== null ? latest.localPath : '';
   }
 
+  private phaseName(phase: CameraUiPhase): string {
+    switch (phase) {
+      case CameraUiPhase.IDLE:
+        return 'idle';
+      case CameraUiPhase.RENDERER_STARTING:
+        return 'rendererStarting';
+      case CameraUiPhase.CAMERA_OPENING:
+        return 'cameraOpening';
+      case CameraUiPhase.PREVIEWING:
+        return 'previewing';
+      case CameraUiPhase.SWITCHING:
+        return 'switching';
+      default:
+        return 'error';
+    }
+  }
+
+  private nextCameraOperation(reason: string): number {
+    this.cameraOperationId++;
+    this.xcController.setOperationId(this.cameraOperationId);
+    console.info(`[TodayColor][CameraUI][op=${this.cameraOperationId}] operation begin reason=${reason}`);
+    return this.cameraOperationId;
+  }
+
+  private isOperationActive(operationId: number): boolean {
+    return this.pageActive && operationId === this.cameraOperationId;
+  }
+
+  private setCameraPhase(operationId: number, phase: CameraUiPhase, error: string = ''): void {
+    if (!this.isOperationActive(operationId)) {
+      console.info(`[TodayColor][CameraUI][op=${operationId}] stale phase ignored ` +
+        `target=${this.phaseName(phase)}, activeOp=${this.cameraOperationId}`);
+      return;
+    }
+    const previous = this.phaseName(this.cameraPhase);
+    this.cameraPhase = phase;
+    this.camError = phase === CameraUiPhase.ERROR ? error : '';
+    console.info(`[TodayColor][CameraUI][op=${operationId}] phase ${previous} -> ` +
+      `${this.phaseName(phase)}${error === '' ? '' : `, reason=${error}`}`);
+  }
+
+  private clearFirstFrameTimer(): void {
+    if (this.firstFrameTimer >= 0) {
+      clearTimeout(this.firstFrameTimer);
+      this.firstFrameTimer = -1;
+    }
+  }
+
+  private refreshCameraControls(): void {
+    this.canSwitch = this.cameraService.canSwitch();
+    const range = this.cameraService.zoomRange();
+    this.zoomMin = range[0];
+    this.zoomMax = range[1];
+  }
+
+  private isCameraLoading(): boolean {
+    return this.cameraPhase === CameraUiPhase.RENDERER_STARTING
+      || this.cameraPhase === CameraUiPhase.CAMERA_OPENING
+      || this.cameraPhase === CameraUiPhase.SWITCHING;
+  }
+
+  private createCameraCallbacks(operationId: number): CameraStartCallbacks {
+    return {
+      onPreviewSize: (width: number, height: number) => {
+        console.info(`[TodayColor][CameraUI][op=${operationId}] preview profile ${width}x${height}`);
+      },
+      onFirstFrame: () => {
+        if (!this.isOperationActive(operationId)) {
+          console.info(`[TodayColor][CameraUI][op=${operationId}] stale first frame ignored`);
+          return;
+        }
+        this.clearFirstFrameTimer();
+        colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+        this.refreshCameraControls();
+        this.setCameraPhase(operationId, CameraUiPhase.PREVIEWING);
+      },
+      onRuntimeError: (message: string) => {
+        if (!this.isOperationActive(operationId)) {
+          return;
+        }
+        this.clearFirstFrameTimer();
+        this.pipelineStarted = false;
+        this.setCameraPhase(operationId, CameraUiPhase.ERROR, message);
+        this.cameraService.stop(operationId);
+      }
+    };
+  }
+
+  private waitForFirstFrame(operationId: number): void {
+    this.clearFirstFrameTimer();
+    this.firstFrameTimer = setTimeout(() => {
+      if (!this.isOperationActive(operationId) || this.cameraPhase === CameraUiPhase.PREVIEWING) {
+        return;
+      }
+      console.error(`[TodayColor][CameraUI][op=${operationId}] first frame timeout`);
+      this.pipelineStarted = false;
+      this.setCameraPhase(operationId, CameraUiPhase.ERROR, '相机已启动但未收到预览画面，点击重试');
+      this.cameraService.stop(operationId);
+    }, 8000);
+  }
+
   private startPipeline(): void {
     if (this.pipelineStarted) {
+      console.info(`[TodayColor][CameraUI][op=${this.cameraOperationId}] duplicate start ignored`);
       return;
     }
     this.pipelineStarted = true;
-    this.startPipelineInternal().catch((err: Error) => {
-      console.error(`[TodayColor] pipeline start: ${err.message}`);
+    const operationId = this.nextCameraOperation('start-or-retry');
+    this.setCameraPhase(operationId, CameraUiPhase.RENDERER_STARTING);
+    this.startPipelineInternal(operationId).catch((err: Error) => {
+      console.error(`[TodayColor][CameraUI][op=${operationId}] pipeline exception: ${err.message}`);
+      if (!this.isOperationActive(operationId)) {
+        return;
+      }
       this.pipelineStarted = false;
-      this.starting = false;
-      this.camError = '相机初始化异常，点击重试';
+      this.setCameraPhase(operationId, CameraUiPhase.ERROR, '相机初始化异常，点击重试');
     });
   }
 
-  private async startPipelineInternal(): Promise<void> {
+  private async startPipelineInternal(operationId: number): Promise<void> {
     const context = getContext(this);
     await DailyColorManager.getInstance().init(context);
     await PhotoDao.getInstance().init(context);
     this.today = DailyColorManager.getInstance().getActiveColor();
     colorFilter.setColor(this.today.hue, this.today.threshold, this.today.saturationBoost);
 
-    const granted = await CameraService.ensureCameraPermission(context);
+    const granted = await CameraService.ensureCameraPermission(context, operationId);
     if (!granted) {
-      this.camError = '需要相机权限才能取景，请在设置中开启';
-      this.starting = false;
       this.pipelineStarted = false;
+      this.setCameraPhase(operationId, CameraUiPhase.ERROR, '需要相机权限才能取景，请在设置中开启');
       return;
     }
 
-    // Controller 的 onSurfaceCreated 负责首次启动；重试时复用仍有效的 SurfaceId。
-    this.xcController.ensureRenderer();
+    this.xcController.ensureRenderer(operationId);
     let ready = false;
     for (let i = 0; i < 20 && !ready; i++) {
       await this.sleep(200);
+      if (!this.isOperationActive(operationId)) {
+        return;
+      }
       ready = colorFilter.isRendererReady();
     }
     if (!ready) {
-      this.camError = '渲染管线初始化失败，点击重试';
-      this.starting = false;
       this.pipelineStarted = false;
+      this.setCameraPhase(operationId, CameraUiPhase.ERROR, '渲染管线初始化失败，点击重试');
       return;
     }
 
-    if (!this.pageActive) {
+    if (!this.isOperationActive(operationId)) {
       return;
     }
+    // 重试可能发生在旧会话已经出画面但 UI 状态失败的场景，先关闭旧会话再重新绑定。
+    await this.cameraService.stop(operationId);
+    if (!this.isOperationActive(operationId)) {
+      return;
+    }
+    this.setCameraPhase(operationId, CameraUiPhase.CAMERA_OPENING);
     const camSurfaceId: string = colorFilter.getCameraSurfaceId();
-    const err = await this.cameraService.start(context, camSurfaceId, this.previewAspect, () => {});
-    this.starting = false;
-    this.canSwitch = this.cameraService.canSwitch();
-    const range = this.cameraService.zoomRange();
-    this.zoomMin = range[0];
-    this.zoomMax = range[1];
+    const err = await this.cameraService.start(context, camSurfaceId, this.previewAspect,
+      operationId, this.createCameraCallbacks(operationId));
+    if (!this.isOperationActive(operationId)) {
+      return;
+    }
+    this.refreshCameraControls();
     if (err !== null) {
-      this.camError = `相机启动失败：${err}`;
       this.pipelineStarted = false;
-    } else {
-      colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+      this.setCameraPhase(operationId, CameraUiPhase.ERROR, `相机启动失败：${err}`);
+      return;
+    }
+    if (this.cameraPhase !== CameraUiPhase.PREVIEWING) {
+      this.waitForFirstFrame(operationId);
     }
   }
 
@@ -239,19 +387,35 @@ struct Index {
     if (this.switching) {
       return;
     }
-    this.switching = true;
-    const context = getContext(this);
-    const err = await this.cameraService.switchTo(context, this.previewAspect, () => {});
-    this.switching = false;
-    if (err !== null) {
-      promptAction.showToast({ message: `切换失败：${err}` });
+    if (!this.canSwitch) {
+      const reason = this.cameraService.switchUnavailableReason();
+      console.info(`[TodayColor][CameraUI][op=${this.cameraOperationId}] switch unavailable: ${reason}`);
+      promptAction.showToast({ message: reason });
       return;
     }
-    colorFilter.setMirror(this.cameraService.isFront() ? 1 : 0);
+    this.switching = true;
+    const operationId = this.nextCameraOperation('switch-facing');
+    this.setCameraPhase(operationId, CameraUiPhase.SWITCHING);
+    const context = getContext(this);
+    const result: CameraSwitchResult = await this.cameraService.switchTo(context, this.previewAspect,
+      operationId, this.createCameraCallbacks(operationId));
+    this.switching = false;
+    if (!this.isOperationActive(operationId)) {
+      return;
+    }
+    if (result.error !== null) {
+      promptAction.showToast({ message: `切换失败：${result.error}` });
+      if (!result.recovered) {
+        this.pipelineStarted = false;
+        this.setCameraPhase(operationId, CameraUiPhase.ERROR, `镜头切换失败：${result.error}`);
+        return;
+      }
+    }
     this.zoomRatio = 1;
-    const range = this.cameraService.zoomRange();
-    this.zoomMin = range[0];
-    this.zoomMax = range[1];
+    this.refreshCameraControls();
+    if (this.cameraPhase !== CameraUiPhase.PREVIEWING) {
+      this.waitForFirstFrame(operationId);
+    }
   }
 
   /** 点击对焦：归一化坐标下发相机 + 显示对焦环 */
@@ -284,11 +448,13 @@ struct Index {
     if (this.capBusy || this.showCapture) {
       return;
     }
-    if (this.camError !== '') {
-      promptAction.showToast({ message: this.camError });
+    if (this.cameraPhase !== CameraUiPhase.PREVIEWING) {
+      promptAction.showToast({ message: this.camError === '' ? '相机尚未就绪' : this.camError });
       return;
     }
     this.capBusy = true;
+    const operationId = this.cameraOperationId;
+    console.info(`[TodayColor][CameraUI][op=${operationId}] capture begin color=${this.today.name}`);
     try {
       const capturedColor = this.today;
       vibrator.startVibration({ type: 'time', duration: 40 }, { id: 0, usage: 'touch' });
@@ -299,9 +465,12 @@ struct Index {
 
       const frame = colorFilter.captureFrame();
       if (frame === null || frame.data.byteLength === 0) {
+        console.error(`[TodayColor][CameraUI][op=${operationId}] capture frame unavailable`);
         promptAction.showToast({ message: '拍照失败，请稍后重试' });
         return;
       }
+      console.info(`[TodayColor][CameraUI][op=${operationId}] capture frame ` +
+        `${frame.width}x${frame.height}, bytes=${frame.data.byteLength}`);
       const options: image.InitializationOptions = {
         size: { width: frame.width, height: frame.height },
         srcPixelFormat: image.PixelMapFormat.BGRA_8888
@@ -309,16 +478,18 @@ struct Index {
       const pm = await image.createPixelMap(frame.data, options);
 
       // 显示浮层（照片 + 水印），等待渲染后整体截图合成
-      this.captureAspect = frame.height > 0 ? frame.width / frame.height : 9 / 16;
       this.capturedPm = pm;
       this.showCapture = true;
       await this.sleep(380);
       const snap = await componentSnapshot.get('captureOverlay');
       const snapInfo = await snap.getImageInfo();
+      console.info(`[TodayColor][CameraUI][op=${operationId}] watermark snapshot ` +
+        `${snapInfo.size.width}x${snapInfo.size.height}`);
 
       const context = getContext(this);
       const localPath = await CaptureService.persistSnapshot(context, snap, capturedColor.name);
       if (localPath === null) {
+        console.error(`[TodayColor][CameraUI][op=${operationId}] persist snapshot failed`);
         promptAction.showToast({ message: '保存失败' });
       } else {
         this.currentPhotoPath = localPath;
@@ -330,8 +501,12 @@ struct Index {
           promptAction.showToast({ message: `点亮图鉴 · ${unlockedColor.name}`, duration: 2400 });
         }
         this.refreshStats();
+        console.info(`[TodayColor][CameraUI][op=${operationId}] capture persisted and metadata recorded`);
         // 浮层常驻：由用户选择“存入相册”(SaveButton 安全控件) 或“完成”
       }
+    } catch (err) {
+      console.error(`[TodayColor][CameraUI][op=${operationId}] capture exception: ${JSON.stringify(err)}`);
+      promptAction.showToast({ message: '拍照处理失败，请稍后重试' });
     } finally {
       this.capBusy = false;
     }
@@ -381,12 +556,11 @@ struct Index {
 
   build() {
     Stack() {
-      // 预览窗：固定 16:9（与相机流一致），初始布局即最终布局，规避 surface 尺寸同步问题
+      // 系统相机式全屏预览；Shader 根据相机有效比例执行等比 cover。
       Column() {
         XComponent({ id: 'cameraPreview', type: 'surface', controller: this.xcController })
           .width('100%')
-          .aspectRatio(9 / 16)
-          .borderRadius(18)
+          .height('100%')
           .clip(true)
           .onClick((e: ClickEvent) => {
             this.handleTapFocus(e);
@@ -406,7 +580,7 @@ struct Index {
               })
           )
           .onAreaChange((_oldArea: Area, newArea: Area) => {
-            // 16:9 窗口首次布局即稳定；同步 buffer 几何保证各设备一致
+            // 同步真实全屏像素尺寸；Native 只按该尺寸创建 EGL buffer，不进行非等比缩放。
             const density = display.getDefaultDisplaySync().densityPixels;
             this.previewWidthVp = Number(newArea.width);
             this.previewHeightVp = Number(newArea.height);
@@ -423,7 +597,6 @@ struct Index {
       }
       .width('100%')
       .height('100%')
-      .padding({ top: 46 })
 
       // 九宫格构图线
       if (this.gridOn) {
@@ -471,11 +644,13 @@ struct Index {
         .hitTestBehavior(HitTestMode.None)
 
       // 取景浮层（错误提示 / 加载中）
-      if (this.starting || this.camError !== '') {
+      if (this.isCameraLoading() || this.cameraPhase === CameraUiPhase.ERROR) {
         Column({ space: 10 }) {
-          if (this.starting) {
+          if (this.isCameraLoading()) {
             LoadingProgress().width(36).height(36).color(Color.White)
-            Text('正在唤醒相机…').fontSize(13).fontColor('rgba(255,255,255,0.85)')
+            Text(this.cameraPhase === CameraUiPhase.SWITCHING ? '正在切换镜头…' : '正在唤醒相机…')
+              .fontSize(13)
+              .fontColor('rgba(255,255,255,0.85)')
           } else {
             Text(this.camError).fontSize(14).fontColor('rgba(255,255,255,0.9)').textAlign(TextAlign.Center)
             Text('点击重试').fontSize(13).fontColor('rgba(255,255,255,0.65)')
@@ -484,9 +659,7 @@ struct Index {
         .width('100%')
         .padding({ left: 40, right: 40 })
         .onClick(() => {
-          if (!this.starting && this.camError !== '') {
-            this.camError = '';
-            this.starting = true;
+          if (this.cameraPhase === CameraUiPhase.ERROR) {
             this.startPipeline();
           }
         })
@@ -675,7 +848,7 @@ struct Index {
         .translate({ y: '-100%' })
       }
 
-      // 拍照浮层（截图合成根节点 = captureOverlay，与预览窗同为 16:9）
+      // 拍照浮层（截图合成根节点 = captureOverlay，与全屏预览采用同一几何）
       if (this.showCapture && this.capturedPm !== null) {
         Stack() {
           Column() {
@@ -700,13 +873,11 @@ struct Index {
             }
             .id('captureOverlay')
             .width('100%')
-            .aspectRatio(this.captureAspect)
-            .borderRadius(18)
+            .height('100%')
             .clip(true)
           }
           .width('100%')
           .height('100%')
-          .padding({ top: 46 })
 
           // 浮层控件（不进入截图）
           Row({ space: 14 }) {

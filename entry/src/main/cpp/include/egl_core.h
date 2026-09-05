@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <EGL/egl.h>
 #include <native_window/external_window.h>
 
@@ -8,10 +9,11 @@
  */
 class EglCore {
 public:
+    void SetOperationId(int32_t operationId) { operationId_ = operationId; }
     bool Init(OHNativeWindow *window);
     void Release();
     bool MakeCurrent();
-    void SwapBuffers();
+    bool SwapBuffers();
     /** 尺寸变化后销毁并重建 WindowSurface（buffer 几何不会自动跟随组件 resize） */
     bool RecreateSurface(OHNativeWindow *window);
     EGLSurface Surface() const { return eglSurface_; }
@@ -23,4 +25,5 @@ private:
     EGLContext context_ = EGL_NO_CONTEXT;
     EGLSurface eglSurface_ = EGL_NO_SURFACE;
     EGLConfig config_ = nullptr;
+    int32_t operationId_ = 0;
 };

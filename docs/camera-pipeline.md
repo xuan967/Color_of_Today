@@ -29,7 +29,7 @@ OHNativeWindow 在渲染线程结束后显式释放。
 
 ## 几何规则
 
-1. XComponent 实际像素尺寸决定 EGL buffer geometry。
+1. XComponent 铺满页面，其实际像素尺寸决定 EGL buffer geometry；页面不再人为保留顶部黑区。
 2. Camera Profile 优先匹配旋转到竖屏后的目标宽高比，再比较像素数。
 3. NativeImage V2 变换矩阵负责生产端旋转；Shader 的纹理坐标负责等比 cover。
 4. 拍照 PixelMap 使用 framebuffer 实际宽高，水印节点使用同一宽高比。
@@ -45,7 +45,32 @@ SurfaceDestroyed/page exit → stop camera → join render thread → release GL
 ```
 
 初始化失败会完整复位 Native 状态；页面的“点击重试”会使用当前仍有效的 64 位
-Surface ID 重新创建渲染线程。镜头切换失败时 CameraService 会尝试恢复原朝向。
+Surface ID 重新创建渲染线程。`session.start()` 只代表启动请求完成，页面必须收到
+`PreviewOutput.frameStart` 才进入 `previewing` 并清除历史错误。镜头切换失败时
+CameraService 会尝试恢复原朝向。
+
+## 模拟器与日志
+
+模拟器不保证提供真实的前后两个可用朝向。切换能力同时要求前置和后置设备都能查询到
+`NORMAL_PHOTO` 的 Preview Profile；否则按钮保持禁用，点击时会显示具体缺失原因。
+
+一次启动或切换使用同一个 `op` 关联 ArkTS 日志：
+
+```text
+[TodayColor][CameraUI][op=3] phase cameraOpening -> previewing
+[TodayColor][CameraService][op=3] preview first frame received
+```
+
+Native/EGL/GL 生命周期使用 `ColorFilter` tag，并包含启动渲染器时的 operation ID：
+
+```text
+[ColorFilter][op=3] EGL init begin
+[ColorFilter][op=3] camera consumer surface ready
+[ColorFilter][op=3] first GL frame surface=... buffer=... cover=...
+```
+
+DevEco Studio 的 Log 窗口可分别过滤 `TodayColor` 和 `ColorFilter`。HDC 连接正常时也可使用
+有界日志查询，避免持续输出逐帧日志。
 
 ## 验证矩阵
 

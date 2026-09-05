@@ -28,6 +28,7 @@ std::atomic<bool> g_ok{false};
 std::atomic<int32_t> g_targetW{0};
 std::atomic<int32_t> g_targetH{0};
 std::atomic<bool> g_geometryDirty{false};
+std::atomic<int32_t> g_operationId{0};
 OHNativeWindow *g_window = nullptr;
 
 void ReleaseDisplayWindow(OHNativeWindow *window)
@@ -41,13 +42,16 @@ void ReleaseDisplayWindow(OHNativeWindow *window)
 /** 渲染线程入口：在拥有 EGL context 的线程上持续绘制 */
 void RenderLoop()
 {
+    int32_t operationId = g_operationId.load();
     OHNativeWindow *window = g_window;
+    LOG("[op=%{public}d] render loop entered", operationId);
     if (!g_egl.Init(window)) {
         g_error = "EGL init failed";
         g_egl.Release();
         ReleaseDisplayWindow(window);
         g_ok = false;
         g_running = false;
+        LOGE("[op=%{public}d] render loop failed during EGL init", operationId);
         return;
     }
     // 合成器默认 NO_SCALE_CROP（buffer 1:1 顶格显示），改为拉伸铺满组件区域
@@ -59,13 +63,16 @@ void RenderLoop()
         ReleaseDisplayWindow(window);
         g_ok = false;
         g_running = false;
+        LOGE("[op=%{public}d] render loop failed during GL init", operationId);
         return;
     }
     uint64_t cameraSurfaceId = 0;
     OH_NativeWindow_GetSurfaceId(g_renderer.CameraWindow(), &cameraSurfaceId);
-    LOG("camera surface id = %{public}llu", cameraSurfaceId);
+    LOG("[op=%{public}d] camera consumer surface ready valid=%{public}d",
+        operationId, cameraSurfaceId != 0 ? 1 : 0);
 
     g_ok = true;
+    LOG("[op=%{public}d] renderer ready", operationId);
 
     int lastW = 0;
     int lastH = 0;
@@ -79,8 +86,8 @@ void RenderLoop()
                 bool recreated = g_egl.RecreateSurface(window);
                 lastW = 0;
                 lastH = 0;
-                LOG("buffer geometry set to %{public}dx%{public}d ret=%{public}d recreated=%{public}d",
-                    tw, th, ret, recreated ? 1 : 0);
+                LOG("[op=%{public}d] display geometry=%{public}dx%{public}d ret=%{public}d recreated=%{public}d",
+                    operationId, tw, th, ret, recreated ? 1 : 0);
                 if (ret != 0 || !recreated) {
                     g_error = "display surface resize failed";
                     g_running = false;
@@ -96,7 +103,10 @@ void RenderLoop()
             g_renderer.SetSurfaceSize(w, h);
         }
         g_renderer.DrawFrame();
-        g_egl.SwapBuffers();
+        if (!g_egl.SwapBuffers()) {
+            g_error = "eglSwapBuffers failed";
+            g_running = false;
+        }
     }
 
     g_renderer.Release();
@@ -104,17 +114,20 @@ void RenderLoop()
     ReleaseDisplayWindow(window);
     g_ok = false;
     g_running = false;
-    LOG("render loop exit");
+    LOG("[op=%{public}d] render loop exit error=%{public}s", operationId,
+        g_error.empty() ? "none" : g_error.c_str());
 }
 
 void StopRenderLoop()
 {
     std::lock_guard<std::mutex> lifecycleLock(g_lifecycleMtx);
+    LOG("[op=%{public}d] renderer stop requested", g_operationId.load());
     g_running = false;
     if (g_thread.joinable()) {
         g_thread.join();
     }
     g_ok = false;
+    LOG("[op=%{public}d] renderer stopped", g_operationId.load());
 }
 
 napi_value BoolValue(napi_env env, bool v)
@@ -137,6 +150,7 @@ napi_value GetCameraSurfaceId(napi_env env, napi_callback_info info)
     }
     // Camera Kit 接收 string；直接返回十进制字符串，避免经过 JS number 丢失精度。
     std::string text = std::to_string(sid);
+    LOG("[op=%{public}d] camera surface requested valid=%{public}d", g_operationId.load(), sid != 0 ? 1 : 0);
     napi_value out = nullptr;
     napi_create_string_utf8(env, text.c_str(), text.size(), &out);
     return out;
@@ -239,28 +253,34 @@ napi_value SetSurfaceGeometry(napi_env env, napi_callback_info info)
     g_targetW = (int32_t)w;
     g_targetH = (int32_t)h;
     g_geometryDirty = true;
+    LOG("[op=%{public}d] geometry update queued %{public}ux%{public}u", g_operationId.load(), w, h);
     return nullptr;
 }
 
 /** XComponentController 生命周期入口：SurfaceId 以 bigint/uint64_t 无损传递。 */
 napi_value StartRenderer(napi_env env, napi_callback_info info)
 {
-    size_t argc = 1;
-    napi_value argv[1] = {nullptr};
+    size_t argc = 2;
+    napi_value argv[2] = {nullptr, nullptr};
     napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
     if (argc < 1) {
         return BoolValue(env, false);
     }
     uint64_t surfaceId = 0;
+    uint32_t operationId = 0;
     bool lossless = false;
+    if (argc >= 2) {
+        napi_get_value_uint32(env, argv[1], &operationId);
+    }
     if (napi_get_value_bigint_uint64(env, argv[0], &surfaceId, &lossless) != napi_ok
         || !lossless || surfaceId == 0) {
-        LOGE("start renderer: invalid surface id");
+        LOGE("[op=%{public}u] start renderer rejected: invalid surface id", operationId);
         return BoolValue(env, false);
     }
 
     std::lock_guard<std::mutex> lifecycleLock(g_lifecycleMtx);
     if (g_running) {
+        LOG("[op=%{public}u] renderer already running", operationId);
         return BoolValue(env, true);
     }
     if (g_thread.joinable()) {
@@ -270,9 +290,12 @@ napi_value StartRenderer(napi_env env, napi_callback_info info)
     OHNativeWindow *window = nullptr;
     if (OH_NativeWindow_CreateNativeWindowFromSurfaceId(surfaceId, &window) != 0
         || window == nullptr) {
-        LOGE("CreateNativeWindowFromSurfaceId(%{public}llu) failed", surfaceId);
+        LOGE("[op=%{public}u] CreateNativeWindowFromSurfaceId failed", operationId);
         return BoolValue(env, false);
     }
+    g_operationId = static_cast<int32_t>(operationId);
+    g_egl.SetOperationId(static_cast<int32_t>(operationId));
+    g_renderer.SetOperationId(static_cast<int32_t>(operationId));
     g_window = window;
     g_error.clear();
     g_ok = false;
@@ -281,7 +304,7 @@ napi_value StartRenderer(napi_env env, napi_callback_info info)
         g_geometryDirty = true;
     }
     g_thread = std::thread(RenderLoop);
-    LOG("renderer start requested for surfaceId %{public}llu", surfaceId);
+    LOG("[op=%{public}u] renderer thread start requested", operationId);
     return BoolValue(env, true);
 }
 

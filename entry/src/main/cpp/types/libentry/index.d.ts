@@ -4,7 +4,7 @@ export interface CaptureBuffer {
   height: number;
 }
 
-export const startRenderer: (surfaceId: bigint) => boolean;
+export const startRenderer: (surfaceId: bigint, operationId: number) => boolean;
 export const isRendererReady: () => boolean;
 export const getCameraSurfaceId: () => string;
 export const setSurfaceGeometry: (widthPx: number, heightPx: number) => void;

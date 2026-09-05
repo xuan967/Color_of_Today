@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <GLES3/gl3.h>
 #include <GLES2/gl2ext.h>
 #include <condition_variable>
@@ -22,6 +23,7 @@
  */
 class GlRenderer {
 public:
+    void SetOperationId(int32_t operationId) { operationId_ = operationId; }
     bool Init();
     void Release();
 
@@ -83,4 +85,7 @@ private:
     std::vector<uint8_t> capData_;
     int capW_ = 0;
     int capH_ = 0;
+    int32_t operationId_ = 0;
+    bool firstFrameLogged_ = false;
+    bool imageUpdateErrorLogged_ = false;
 };

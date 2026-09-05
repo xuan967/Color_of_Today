@@ -89,7 +89,7 @@ void main() {
     outColor = vec4(mix(gray, colored, keep), 1.0);
 })";
 
-GLuint CompileShader(GLenum type, const char *src)
+GLuint CompileShader(GLenum type, const char *src, int32_t operationId)
 {
     GLuint sh = glCreateShader(type);
     glShaderSource(sh, 1, &src, nullptr);
@@ -99,7 +99,7 @@ GLuint CompileShader(GLenum type, const char *src)
     if (!ok) {
         char log[512] = {0};
         glGetShaderInfoLog(sh, sizeof(log), nullptr, log);
-        LOGE("shader compile error: %{public}s", log);
+        LOGE("[op=%{public}d] shader compile error: %{public}s", operationId, log);
         glDeleteShader(sh);
         return 0;
     }
@@ -109,7 +109,11 @@ GLuint CompileShader(GLenum type, const char *src)
 
 bool GlRenderer::Init()
 {
+    firstFrameLogged_ = false;
+    imageUpdateErrorLogged_ = false;
+    LOG("[op=%{public}d] GL renderer init begin", operationId_);
     if (!BuildProgram()) {
+        LOGE("[op=%{public}d] GL program build failed", operationId_);
         return false;
     }
 
@@ -139,22 +143,23 @@ bool GlRenderer::Init()
 
     image_ = OH_NativeImage_Create(oesTex_, GL_TEXTURE_EXTERNAL_OES);
     if (image_ == nullptr) {
-        LOGE("OH_NativeImage_Create failed");
+        LOGE("[op=%{public}d] OH_NativeImage_Create failed", operationId_);
         return false;
     }
     imageWindow_ = OH_NativeImage_AcquireNativeWindow(image_);
     if (imageWindow_ == nullptr) {
-        LOGE("AcquireNativeWindow failed");
+        LOGE("[op=%{public}d] AcquireNativeWindow failed", operationId_);
         return false;
     }
-    LOG("renderer init ok");
+    LOG("[op=%{public}d] GL renderer init completed", operationId_);
     return true;
 }
 
 bool GlRenderer::BuildProgram()
 {
-    GLuint vsh = CompileShader(GL_VERTEX_SHADER, VSH);
-    GLuint fsh = CompileShader(GL_FRAGMENT_SHADER, FSH);
+    LOG("[op=%{public}d] shader compile/link begin", operationId_);
+    GLuint vsh = CompileShader(GL_VERTEX_SHADER, VSH, operationId_);
+    GLuint fsh = CompileShader(GL_FRAGMENT_SHADER, FSH, operationId_);
     if (vsh == 0 || fsh == 0) {
         return false;
     }
@@ -169,7 +174,7 @@ bool GlRenderer::BuildProgram()
     if (!ok) {
         char log[512] = {0};
         glGetProgramInfoLog(program_, sizeof(log), nullptr, log);
-        LOGE("program link error: %{public}s", log);
+        LOGE("[op=%{public}d] program link error: %{public}s", operationId_, log);
         return false;
     }
     locTex_ = glGetUniformLocation(program_, "uTexture");
@@ -180,11 +185,13 @@ bool GlRenderer::BuildProgram()
     locTexLin_ = glGetUniformLocation(program_, "uTexLin");
     locPad_ = glGetUniformLocation(program_, "uPad");
     locMirror_ = glGetUniformLocation(program_, "uMirror");
+    LOG("[op=%{public}d] shader compile/link completed program=%{public}u", operationId_, program_);
     return true;
 }
 
 void GlRenderer::Release()
 {
+    LOG("[op=%{public}d] GL renderer release begin", operationId_);
     {
         std::lock_guard<std::mutex> lk(capMtx_);
         capPending_ = false;
@@ -214,6 +221,9 @@ void GlRenderer::Release()
         glDeleteProgram(program_);
         program_ = 0;
     }
+    firstFrameLogged_ = false;
+    imageUpdateErrorLogged_ = false;
+    LOG("[op=%{public}d] GL renderer release completed", operationId_);
 }
 
 void GlRenderer::SetSurfaceSize(int w, int h)
@@ -238,6 +248,7 @@ void GlRenderer::SetPreviewSize(int w, int h)
     bufW_ = w;
     bufH_ = h;
     padComputed_ = false;
+    LOG("[op=%{public}d] camera buffer size=%{public}dx%{public}d", operationId_, w, h);
 }
 
 void GlRenderer::SetMirror(int mirror)
@@ -250,7 +261,9 @@ uint64_t GlRenderer::RequestCapture()
 {
     std::lock_guard<std::mutex> lk(capMtx_);
     capPending_ = true;
-    return ++capSeq_;
+    uint64_t token = ++capSeq_;
+    LOG("[op=%{public}d] capture requested token=%{public}llu", operationId_, token);
+    return token;
 }
 
 bool GlRenderer::WaitForCapture(uint64_t token, std::vector<uint8_t> &out, int &w, int &h, int timeoutMs)
@@ -259,12 +272,15 @@ bool GlRenderer::WaitForCapture(uint64_t token, std::vector<uint8_t> &out, int &
     bool done = capCv_.wait_for(lk, std::chrono::milliseconds(timeoutMs),
         [this, token] { return !capPending_ && capSeq_ >= token; });
     if (!done) {
+        LOGE("[op=%{public}d] capture wait timeout token=%{public}llu", operationId_, token);
         return false;
     }
     out = std::move(capData_);
     capData_.clear();
     w = capW_;
     h = capH_;
+    LOG("[op=%{public}d] capture delivered token=%{public}llu size=%{public}dx%{public}d bytes=%{public}zu",
+        operationId_, token, w, h, out.size());
     return !out.empty();
 }
 
@@ -289,7 +305,8 @@ void GlRenderer::EnsureTexturePad()
     GLint th = 0;
     glGetTexLevelParameteriv(GL_TEXTURE_EXTERNAL_OES, 0, GL_TEXTURE_WIDTH, &tw);
     glGetTexLevelParameteriv(GL_TEXTURE_EXTERNAL_OES, 0, GL_TEXTURE_HEIGHT, &th);
-    LOG("texture level params: %{public}dx%{public}d, buffer %{public}dx%{public}d", tw, th, bufW_, bufH_);
+    LOG("[op=%{public}d] texture allocation=%{public}dx%{public}d cameraBuffer=%{public}dx%{public}d",
+        operationId_, tw, th, bufW_, bufH_);
     if (tw <= 0 || th <= 0) {
         return;
     }
@@ -301,23 +318,30 @@ void GlRenderer::EnsureTexturePad()
         padVSpan_ = (float)bufH_ / (float)th;
         padVStart_ = (float)(th - bufH_) / 2.0f / (float)th;
     }
-    LOG("pad: u=[%{public}.3f +%{public}.3f] v=[%{public}.3f +%{public}.3f]",
-        padUStart_, padUSpan_, padVStart_, padVSpan_);
+    LOG("[op=%{public}d] texture pad u=[%{public}.3f +%{public}.3f] v=[%{public}.3f +%{public}.3f]",
+        operationId_, padUStart_, padUSpan_, padVStart_, padVSpan_);
 }
 
 void GlRenderer::DrawFrame()
 {
     float texLin[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+    bool imageUpdated = false;
     if (image_ != nullptr) {
-        OH_NativeImage_UpdateSurfaceImage(image_);
-        float m[16];
-        OH_NativeImage_GetTransformMatrixV2(image_, m);
-        // 列主序 2x2 线性部分：col0=(m0,m1) col1=(m4,m5)
-        texLin[0] = m[0];
-        texLin[1] = m[1];
-        texLin[2] = m[4];
-        texLin[3] = m[5];
-        EnsureTexturePad();
+        int32_t updateResult = OH_NativeImage_UpdateSurfaceImage(image_);
+        imageUpdated = updateResult == 0;
+        if (imageUpdated) {
+            float m[16];
+            OH_NativeImage_GetTransformMatrixV2(image_, m);
+            // 列主序 2x2 线性部分：col0=(m0,m1) col1=(m4,m5)
+            texLin[0] = m[0];
+            texLin[1] = m[1];
+            texLin[2] = m[4];
+            texLin[3] = m[5];
+            EnsureTexturePad();
+        } else if (!imageUpdateErrorLogged_) {
+            imageUpdateErrorLogged_ = true;
+            LOGE("[op=%{public}d] NativeImage first update failed code=%{public}d", operationId_, updateResult);
+        }
     }
 
     float hue = 0.62f;
@@ -377,6 +401,13 @@ void GlRenderer::DrawFrame()
         } else {
             sy = ba / sa;
         }
+    }
+
+    if (!firstFrameLogged_ && imageUpdated && bufferWidth > 0 && bufferHeight > 0) {
+        firstFrameLogged_ = true;
+        LOG("[op=%{public}d] first GL frame surface=%{public}dx%{public}d buffer=%{public}dx%{public}d "
+            "cover=%{public}.4fx%{public}.4f", operationId_, surfaceWidth, surfaceHeight,
+            bufferWidth, bufferHeight, sx, sy);
     }
 
     glUniform2f(locCover_, sx, sy);
