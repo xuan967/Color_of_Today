@@ -54,8 +54,15 @@ void RenderLoop()
         LOGE("[op=%{public}d] render loop failed during EGL init", operationId);
         return;
     }
-    // 合成器默认 NO_SCALE_CROP（buffer 1:1 顶格显示），改为拉伸铺满组件区域
-    OH_NativeWindow_NativeWindowSetScalingModeV2(window, OH_SCALING_MODE_SCALE_TO_WINDOW_V2);
+    // EGL buffer 与窗口短暂不一致时也必须等比裁切，禁止系统合成器分别拉伸宽高。
+    int32_t scalingResult = OH_NativeWindow_NativeWindowSetScalingModeV2(
+        window, OH_SCALING_MODE_SCALE_CROP_V2);
+    if (scalingResult == 0) {
+        LOG("[op=%{public}d] display scaling mode=aspect-preserving crop", operationId);
+    } else {
+        LOGE("[op=%{public}d] display scaling mode setup failed code=%{public}d; "
+            "renderer will continue with exact-size buffers", operationId, scalingResult);
+    }
     if (!g_renderer.Init()) {
         g_error = g_error.empty() ? "GL renderer init failed" : g_error;
         g_renderer.Release();

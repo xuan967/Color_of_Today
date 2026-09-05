@@ -116,6 +116,8 @@ struct Index {
   private previewAspect: number = 9 / 16;
   private previewWidthVp: number = 1;
   private previewHeightVp: number = 1;
+  private requestedSurfaceWidthPx: number = 0;
+  private requestedSurfaceHeightPx: number = 0;
   private pageActive: boolean = true;
   private cameraOperationId: number = 0;
 
@@ -579,6 +581,7 @@ struct Index {
           .width('100%')
           .height('100%')
           .clip(true)
+          .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
           .onClick((e: ClickEvent) => {
             this.handleTapFocus(e);
           })
@@ -597,7 +600,7 @@ struct Index {
               })
           )
           .onAreaChange((_oldArea: Area, newArea: Area) => {
-            // 同步真实全屏像素尺寸；Native 只按该尺寸创建 EGL buffer，不进行非等比缩放。
+            // ArkUI 区域只负责请求沉浸式 SurfaceRect；真实像素尺寸统一由 onSurfaceChanged 下发 Native。
             const density = display.getDefaultDisplaySync().densityPixels;
             this.previewWidthVp = Number(newArea.width);
             this.previewHeightVp = Number(newArea.height);
@@ -605,7 +608,19 @@ struct Index {
             const hPx = Math.round(this.previewHeightVp * density);
             if (wPx > 0 && hPx > 0) {
               this.previewAspect = wPx / hPx;
-              colorFilter.setSurfaceGeometry(wPx, hPx);
+              if (wPx !== this.requestedSurfaceWidthPx || hPx !== this.requestedSurfaceHeightPx) {
+                this.requestedSurfaceWidthPx = wPx;
+                this.requestedSurfaceHeightPx = hPx;
+                console.info(`[TodayColor][CameraUI][op=${this.cameraOperationId}] component area ` +
+                  `${this.previewWidthVp}x${this.previewHeightVp}vp density=${density.toFixed(3)}, ` +
+                  `request surface=${wPx}x${hPx}px aspect=${this.previewAspect.toFixed(4)}`);
+                this.xcController.setXComponentSurfaceRect({
+                  surfaceWidth: wPx,
+                  surfaceHeight: hPx,
+                  offsetX: 0,
+                  offsetY: 0
+                });
+              }
             }
           })
           .onLoad(() => {

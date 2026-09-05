@@ -261,6 +261,11 @@ void GlRenderer::Release()
 void GlRenderer::SetSurfaceSize(int w, int h)
 {
     std::lock_guard<std::mutex> lk(paramMtx_);
+    if (surfW_ != w || surfH_ != h) {
+        float aspect = h > 0 ? static_cast<float>(w) / static_cast<float>(h) : 0.0f;
+        LOG("[op=%{public}d] EGL surface size=%{public}dx%{public}d aspect=%{public}.4f",
+            operationId_, w, h, aspect);
+    }
     surfW_ = w;
     surfH_ = h;
 }
@@ -437,26 +442,30 @@ void GlRenderer::DrawFrame()
 
     // cover：旋转后有效宽高比 vs Surface 宽高比（TexM 含 90° 旋转时轴互换）
     float sx = 1.f, sy = 1.f;
+    float surfaceAspect = 0.f;
+    float bufferAspect = 0.f;
     if (bufferWidth > 0 && bufferHeight > 0) {
         bool rotated = std::fabs(texMatrix[1]) + std::fabs(texMatrix[4]) >
             std::fabs(texMatrix[0]) + std::fabs(texMatrix[5]);
         float effW = rotated ? (float)bufferHeight : (float)bufferWidth;
         float effH = rotated ? (float)bufferWidth : (float)bufferHeight;
-        float sa = (float)surfaceWidth / (float)surfaceHeight;
-        float ba = effW / effH;
-        if (ba > sa) {
-            sx = sa / ba;
+        surfaceAspect = (float)surfaceWidth / (float)surfaceHeight;
+        bufferAspect = effW / effH;
+        if (bufferAspect > surfaceAspect) {
+            sx = surfaceAspect / bufferAspect;
         } else {
-            sy = ba / sa;
+            sy = bufferAspect / surfaceAspect;
         }
     }
 
     if (!firstFrameLogged_ && imageUpdated && bufferWidth > 0 && bufferHeight > 0) {
         firstFrameLogged_ = true;
         LOG("[op=%{public}d] first GL frame surface=%{public}dx%{public}d buffer=%{public}dx%{public}d "
-            "cover=%{public}.4fx%{public}.4f matrix=[%{public}.3f,%{public}.3f,%{public}.3f,%{public}.3f] "
+            "aspect=surface:%{public}.4f/buffer:%{public}.4f cover=%{public}.4fx%{public}.4f "
+            "matrix=[%{public}.3f,%{public}.3f,%{public}.3f,%{public}.3f] "
             "translate=[%{public}.3f,%{public}.3f] pad=[%{public}.3f,%{public}.3f,%{public}.3f,%{public}.3f]",
-            operationId_, surfaceWidth, surfaceHeight, bufferWidth, bufferHeight, sx, sy,
+            operationId_, surfaceWidth, surfaceHeight, bufferWidth, bufferHeight,
+            surfaceAspect, bufferAspect, sx, sy,
             texMatrix[0], texMatrix[1], texMatrix[4], texMatrix[5], texMatrix[12], texMatrix[13],
             padUStart, padUSpan, padVStart, padVSpan);
     }
