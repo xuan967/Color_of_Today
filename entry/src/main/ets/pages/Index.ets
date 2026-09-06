@@ -227,6 +227,16 @@ struct Index {
     }
   }
 
+  private rendererStatusSummary(): string {
+    try {
+      const status = colorFilter.getRendererStatus();
+      return `nativeOp=${status.operationId}, stage=${status.stage}, message=${status.message}, ` +
+        `eglError=0x${status.eglError.toString(16)}, running=${status.running}, ready=${status.ready}`;
+    } catch (err) {
+      return `native status unavailable: ${(err as Error).message}`;
+    }
+  }
+
   private nextCameraOperation(reason: string): number {
     this.cameraOperationId++;
     this.xcController.setOperationId(this.cameraOperationId);
@@ -321,7 +331,8 @@ struct Index {
       if (!this.isOperationActive(operationId) || this.cameraPhase === CameraUiPhase.PREVIEWING) {
         return;
       }
-      console.error(`[TodayColor][CameraUI][op=${operationId}] first frame timeout`);
+      console.error(`[TodayColor][CameraUI][op=${operationId}] first frame timeout; ` +
+        this.rendererStatusSummary());
       this.pipelineStarted = false;
       this.setCameraPhase(operationId, CameraUiPhase.ERROR, '相机已启动但未收到预览画面，点击重试');
       this.cameraService.stop(operationId);
@@ -337,7 +348,8 @@ struct Index {
     const operationId = this.nextCameraOperation('start-or-retry');
     this.setCameraPhase(operationId, CameraUiPhase.RENDERER_STARTING);
     this.startPipelineInternal(operationId).catch((err: Error) => {
-      console.error(`[TodayColor][CameraUI][op=${operationId}] pipeline exception: ${err.message}`);
+      console.error(`[TodayColor][CameraUI][op=${operationId}] pipeline exception: ${err.message}; ` +
+        this.rendererStatusSummary());
       if (!this.isOperationActive(operationId)) {
         return;
       }
@@ -360,16 +372,24 @@ struct Index {
       return;
     }
 
-    this.xcController.ensureRenderer(operationId);
+    const rendererRequested = this.xcController.ensureRenderer(operationId);
+    console.info(`[TodayColor][CameraUI][op=${operationId}] renderer request completed ` +
+      `requested=${rendererRequested}; ${this.rendererStatusSummary()}`);
     let ready = false;
+    let readinessChecks = 0;
     for (let i = 0; i < 20 && !ready; i++) {
       await this.sleep(200);
       if (!this.isOperationActive(operationId)) {
         return;
       }
+      readinessChecks++;
       ready = colorFilter.isRendererReady();
     }
+    console.info(`[TodayColor][CameraUI][op=${operationId}] renderer readiness completed ` +
+      `checks=${readinessChecks}, ready=${ready}; ${this.rendererStatusSummary()}`);
     if (!ready) {
+      console.error(`[TodayColor][CameraUI][op=${operationId}] renderer initialization failed; ` +
+        this.rendererStatusSummary());
       this.pipelineStarted = false;
       this.setCameraPhase(operationId, CameraUiPhase.ERROR, '渲染管线初始化失败，点击重试');
       return;
@@ -385,6 +405,8 @@ struct Index {
     }
     this.setCameraPhase(operationId, CameraUiPhase.CAMERA_OPENING);
     const camSurfaceId: string = colorFilter.getCameraSurfaceId();
+    console.info(`[TodayColor][CameraUI][op=${operationId}] camera consumer surface ` +
+      `valid=${camSurfaceId !== '' && camSurfaceId !== '0'}; ${this.rendererStatusSummary()}`);
     const err = await this.cameraService.start(context, camSurfaceId, this.previewAspect,
       operationId, this.createCameraCallbacks(operationId));
     if (!this.isOperationActive(operationId)) {

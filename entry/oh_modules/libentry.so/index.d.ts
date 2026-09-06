@@ -4,8 +4,18 @@ export interface CaptureBuffer {
   height: number;
 }
 
+export interface RendererStatus {
+  operationId: number;
+  stage: string;
+  message: string;
+  eglError: number;
+  running: boolean;
+  ready: boolean;
+}
+
 export const startRenderer: (surfaceId: bigint, operationId: number) => boolean;
 export const isRendererReady: () => boolean;
+export const getRendererStatus: () => RendererStatus;
 export const getCameraSurfaceId: () => string;
 export const setSurfaceGeometry: (widthPx: number, heightPx: number) => void;
 export const setColor: (hue: number, threshold: number, satBoost: number) => void;

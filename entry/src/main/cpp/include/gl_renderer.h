@@ -27,6 +27,7 @@ public:
     void SetOperationId(int32_t operationId) { operationId_ = operationId; }
     bool Init();
     void Release();
+    const std::string &LastError() const { return lastError_; }
 
     void SetSurfaceSize(int w, int h);
     void SetColor(float hue, float threshold, float satBoost);
@@ -98,6 +99,7 @@ private:
     int capW_ = 0;
     int capH_ = 0;
     int32_t operationId_ = 0;
+    std::string lastError_;
     bool firstFrameLogged_ = false;
     bool firstFrameNotificationLogged_ = false;
 };

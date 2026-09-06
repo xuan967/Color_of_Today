@@ -12,8 +12,10 @@
 #include "include/egl_core.h"
 #include "include/gl_renderer.h"
 
-#define LOG(fmt, ...) OH_LOG_Print(LOG_APP, LOG_INFO, 0xC0DE, "ColorFilter", fmt, ##__VA_ARGS__)
-#define LOGE(fmt, ...) OH_LOG_Print(LOG_APP, LOG_ERROR, 0xC0DE, "ColorFilter", fmt, ##__VA_ARGS__)
+#define LOG(fmt, ...) OH_LOG_Print(LOG_APP, LOG_INFO, 0xC0DE, "TodayColorNative", \
+    "[TodayColor][NativeRenderer] " fmt, ##__VA_ARGS__)
+#define LOGE(fmt, ...) OH_LOG_Print(LOG_APP, LOG_ERROR, 0xC0DE, "TodayColorNative", \
+    "[TodayColor][NativeRenderer] " fmt, ##__VA_ARGS__)
 
 namespace {
 EglCore g_egl;
@@ -31,6 +33,33 @@ std::atomic<bool> g_geometryDirty{false};
 std::atomic<int32_t> g_operationId{0};
 OHNativeWindow *g_window = nullptr;
 
+struct RendererStatusSnapshot {
+    int32_t operationId = 0;
+    std::string stage = "idle";
+    std::string message = "not started";
+    uint32_t eglError = 0;
+};
+
+std::mutex g_statusMtx;
+RendererStatusSnapshot g_status;
+
+void UpdateRendererStatus(int32_t operationId, const char *stage, const char *message, uint32_t eglError = 0)
+{
+    std::lock_guard<std::mutex> statusLock(g_statusMtx);
+    g_status.operationId = operationId;
+    g_status.stage = stage;
+    g_status.message = message;
+    g_status.eglError = eglError;
+    LOG("[op=%{public}d] status stage=%{public}s message=%{public}s eglError=0x%{public}x",
+        operationId, stage, message, eglError);
+}
+
+RendererStatusSnapshot ReadRendererStatus()
+{
+    std::lock_guard<std::mutex> statusLock(g_statusMtx);
+    return g_status;
+}
+
 void ReleaseDisplayWindow(OHNativeWindow *window)
 {
     if (window != nullptr) {
@@ -45,8 +74,11 @@ void RenderLoop()
     int32_t operationId = g_operationId.load();
     OHNativeWindow *window = g_window;
     LOG("[op=%{public}d] render loop entered", operationId);
+    UpdateRendererStatus(operationId, "eglInitializing", "initializing EGL display and surface");
     if (!g_egl.Init(window)) {
         g_error = "EGL init failed";
+        UpdateRendererStatus(operationId, "eglFailed", g_error.c_str(),
+            static_cast<uint32_t>(g_egl.LastError()));
         g_egl.Release();
         ReleaseDisplayWindow(window);
         g_ok = false;
@@ -63,8 +95,10 @@ void RenderLoop()
         LOGE("[op=%{public}d] display scaling mode setup failed code=%{public}d; "
             "renderer will continue with exact-size buffers", operationId, scalingResult);
     }
+    UpdateRendererStatus(operationId, "glInitializing", "initializing GL renderer and camera consumer");
     if (!g_renderer.Init()) {
-        g_error = g_error.empty() ? "GL renderer init failed" : g_error;
+        g_error = g_renderer.LastError().empty() ? "GL renderer init failed" : g_renderer.LastError();
+        UpdateRendererStatus(operationId, "glFailed", g_error.c_str());
         g_renderer.Release();
         g_egl.Release();
         ReleaseDisplayWindow(window);
@@ -78,7 +112,18 @@ void RenderLoop()
     LOG("[op=%{public}d] camera consumer surface ready valid=%{public}d",
         operationId, cameraSurfaceId != 0 ? 1 : 0);
 
+    if (cameraSurfaceId == 0) {
+        g_error = "camera consumer surface id unavailable";
+        UpdateRendererStatus(operationId, "cameraSurfaceFailed", g_error.c_str());
+        g_renderer.Release();
+        g_egl.Release();
+        ReleaseDisplayWindow(window);
+        g_ok = false;
+        g_running = false;
+        return;
+    }
     g_ok = true;
+    UpdateRendererStatus(operationId, "ready", "renderer and camera consumer are ready");
     LOG("[op=%{public}d] renderer ready", operationId);
 
     int lastW = 0;
@@ -97,6 +142,8 @@ void RenderLoop()
                     operationId, tw, th, ret, recreated ? 1 : 0);
                 if (ret != 0 || !recreated) {
                     g_error = "display surface resize failed";
+                    UpdateRendererStatus(operationId, "surfaceResizeFailed", g_error.c_str(),
+                        static_cast<uint32_t>(g_egl.LastError()));
                     g_running = false;
                     break;
                 }
@@ -112,6 +159,8 @@ void RenderLoop()
         g_renderer.DrawFrame();
         if (!g_egl.SwapBuffers()) {
             g_error = "eglSwapBuffers failed";
+            UpdateRendererStatus(operationId, "swapFailed", g_error.c_str(),
+                static_cast<uint32_t>(g_egl.LastError()));
             g_running = false;
         }
     }
@@ -121,6 +170,9 @@ void RenderLoop()
     ReleaseDisplayWindow(window);
     g_ok = false;
     g_running = false;
+    if (g_error.empty()) {
+        UpdateRendererStatus(operationId, "stopped", "renderer stopped without runtime error");
+    }
     LOG("[op=%{public}d] render loop exit error=%{public}s", operationId,
         g_error.empty() ? "none" : g_error.c_str());
 }
@@ -134,6 +186,9 @@ void StopRenderLoop()
         g_thread.join();
     }
     g_ok = false;
+    if (g_error.empty()) {
+        UpdateRendererStatus(g_operationId.load(), "stopped", "renderer stopped by lifecycle request");
+    }
     LOG("[op=%{public}d] renderer stopped", g_operationId.load());
 }
 
@@ -160,6 +215,38 @@ napi_value GetCameraSurfaceId(napi_env env, napi_callback_info info)
     LOG("[op=%{public}d] camera surface requested valid=%{public}d", g_operationId.load(), sid != 0 ? 1 : 0);
     napi_value out = nullptr;
     napi_create_string_utf8(env, text.c_str(), text.size(), &out);
+    return out;
+}
+
+napi_value GetRendererStatus(napi_env env, napi_callback_info info)
+{
+    RendererStatusSnapshot status = ReadRendererStatus();
+    napi_value out = nullptr;
+    napi_create_object(env, &out);
+
+    napi_value operationId = nullptr;
+    napi_create_int32(env, status.operationId, &operationId);
+    napi_set_named_property(env, out, "operationId", operationId);
+
+    napi_value stage = nullptr;
+    napi_create_string_utf8(env, status.stage.c_str(), status.stage.size(), &stage);
+    napi_set_named_property(env, out, "stage", stage);
+
+    napi_value message = nullptr;
+    napi_create_string_utf8(env, status.message.c_str(), status.message.size(), &message);
+    napi_set_named_property(env, out, "message", message);
+
+    napi_value eglError = nullptr;
+    napi_create_uint32(env, status.eglError, &eglError);
+    napi_set_named_property(env, out, "eglError", eglError);
+
+    napi_value running = nullptr;
+    napi_get_boolean(env, g_running.load(), &running);
+    napi_set_named_property(env, out, "running", running);
+
+    napi_value ready = nullptr;
+    napi_get_boolean(env, g_running.load() && g_ok.load(), &ready);
+    napi_set_named_property(env, out, "ready", ready);
     return out;
 }
 
@@ -281,13 +368,16 @@ napi_value StartRenderer(napi_env env, napi_callback_info info)
     }
     if (napi_get_value_bigint_uint64(env, argv[0], &surfaceId, &lossless) != napi_ok
         || !lossless || surfaceId == 0) {
+        UpdateRendererStatus(static_cast<int32_t>(operationId), "invalidSurface",
+            "renderer start rejected because display surface id is invalid");
         LOGE("[op=%{public}u] start renderer rejected: invalid surface id", operationId);
         return BoolValue(env, false);
     }
 
     std::lock_guard<std::mutex> lifecycleLock(g_lifecycleMtx);
     if (g_running) {
-        LOG("[op=%{public}u] renderer already running", operationId);
+        LOG("[op=%{public}u] renderer already running activeOp=%{public}d",
+            operationId, g_operationId.load());
         return BoolValue(env, true);
     }
     if (g_thread.joinable()) {
@@ -297,6 +387,8 @@ napi_value StartRenderer(napi_env env, napi_callback_info info)
     OHNativeWindow *window = nullptr;
     if (OH_NativeWindow_CreateNativeWindowFromSurfaceId(surfaceId, &window) != 0
         || window == nullptr) {
+        UpdateRendererStatus(static_cast<int32_t>(operationId), "nativeWindowFailed",
+            "failed to create display NativeWindow from XComponent surface");
         LOGE("[op=%{public}u] CreateNativeWindowFromSurfaceId failed", operationId);
         return BoolValue(env, false);
     }
@@ -307,6 +399,8 @@ napi_value StartRenderer(napi_env env, napi_callback_info info)
     g_error.clear();
     g_ok = false;
     g_running = true;
+    UpdateRendererStatus(static_cast<int32_t>(operationId), "threadStarting",
+        "display NativeWindow created; renderer thread starting");
     if (g_targetW > 0 && g_targetH > 0) {
         g_geometryDirty = true;
     }
@@ -326,6 +420,7 @@ napi_value Init(napi_env env, napi_value exports)
     napi_property_descriptor desc[] = {
         {"startRenderer", nullptr, StartRenderer, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"isRendererReady", nullptr, IsRendererReady, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"getRendererStatus", nullptr, GetRendererStatus, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"getCameraSurfaceId", nullptr, GetCameraSurfaceId, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"setSurfaceGeometry", nullptr, SetSurfaceGeometry, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"setColor", nullptr, SetColor, nullptr, nullptr, nullptr, napi_default, nullptr},

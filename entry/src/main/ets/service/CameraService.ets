@@ -22,6 +22,7 @@ export class CameraService {
   private currentIndex: number = -1;
   private usableBackIndex: number = -1;
   private usableFrontIndex: number = -1;
+  private deviceEnumerationCompleted: boolean = false;
   private input: camera.CameraInput | null = null;
   private previewOutput: camera.PreviewOutput | null = null;
   private session: camera.PhotoSession | null = null;
@@ -82,7 +83,14 @@ export class CameraService {
     return this.usableBackIndex >= 0 && this.usableFrontIndex >= 0;
   }
 
+  hasEnumeratedDevices(): boolean {
+    return this.deviceEnumerationCompleted;
+  }
+
   switchUnavailableReason(): string {
+    if (!this.deviceEnumerationCompleted) {
+      return '相机管线尚未就绪';
+    }
     if (this.devices.length === 0) {
       return '当前设备没有可用摄像头';
     }
@@ -205,19 +213,28 @@ export class CameraService {
   private async openManager(context: common.Context, operationId: number): Promise<string | null> {
     try {
       if (this.manager === null) {
+        this.log(operationId, 'acquiring CameraManager');
         this.manager = camera.getCameraManager(context);
         this.log(operationId, 'CameraManager created');
       }
+      this.deviceEnumerationCompleted = false;
+      this.log(operationId, 'camera enumeration begin');
       this.devices = this.manager.getSupportedCameras();
+      this.deviceEnumerationCompleted = true;
+      this.log(operationId, `camera enumeration completed count=${this.devices.length}`);
       if (this.devices.length === 0) {
+        this.log(operationId, 'camera enumeration returned no devices');
         return '未找到可用相机';
       }
       this.refreshCapabilities(operationId);
       if (this.usableBackIndex < 0 && this.usableFrontIndex < 0) {
+        this.log(operationId, 'camera enumeration found devices but no NORMAL_PHOTO preview capability');
         return '没有支持普通拍照预览的摄像头';
       }
+      this.log(operationId, `default camera index=${this.pickDefaultIndex()}`);
       return null;
     } catch (err) {
+      this.deviceEnumerationCompleted = false;
       const error = err as BusinessError;
       this.logError(operationId, 'open camera manager', error);
       return `相机管理失败 ${error.code}: ${error.message}`;

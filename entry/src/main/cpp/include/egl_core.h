@@ -17,6 +17,7 @@ public:
     /** 尺寸变化后销毁并重建 WindowSurface（buffer 几何不会自动跟随组件 resize） */
     bool RecreateSurface(OHNativeWindow *window);
     EGLSurface Surface() const { return eglSurface_; }
+    EGLint LastError() const { return lastError_; }
     int SurfaceWidth() const;
     int SurfaceHeight() const;
 
@@ -25,5 +26,6 @@ private:
     EGLContext context_ = EGL_NO_CONTEXT;
     EGLSurface eglSurface_ = EGL_NO_SURFACE;
     EGLConfig config_ = nullptr;
+    EGLint lastError_ = EGL_SUCCESS;
     int32_t operationId_ = 0;
 };

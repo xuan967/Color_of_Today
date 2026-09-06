@@ -6,6 +6,7 @@
 build/
 **/build/
 **/.cxx/
+**/.test/
 
 # Local build and diagnostic logs
 build*.log

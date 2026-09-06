@@ -4,8 +4,10 @@
 #include <cstring>
 #include <hilog/log.h>
 
-#define LOG(fmt, ...) OH_LOG_Print(LOG_APP, LOG_INFO, 0xC0DE, "ColorFilter", fmt, ##__VA_ARGS__)
-#define LOGE(fmt, ...) OH_LOG_Print(LOG_APP, LOG_ERROR, 0xC0DE, "ColorFilter", fmt, ##__VA_ARGS__)
+#define LOG(fmt, ...) OH_LOG_Print(LOG_APP, LOG_INFO, 0xC0DE, "TodayColorNative", \
+    "[TodayColor][NativeRenderer] " fmt, ##__VA_ARGS__)
+#define LOGE(fmt, ...) OH_LOG_Print(LOG_APP, LOG_ERROR, 0xC0DE, "TodayColorNative", \
+    "[TodayColor][NativeRenderer] " fmt, ##__VA_ARGS__)
 
 // 本 SDK 头文件缺失的 ES 核心常量与函数（GLES 规范值，链接期由 libGLESv3 解析）
 #ifndef GL_TEXTURE_WIDTH
@@ -116,6 +118,7 @@ void GlRenderer::OnFrameAvailable(void *context)
 
 bool GlRenderer::Init()
 {
+    lastError_.clear();
     firstFrameLogged_ = false;
     firstFrameNotificationLogged_ = false;
     frameAvailableSequence_.store(0, std::memory_order_relaxed);
@@ -126,8 +129,16 @@ bool GlRenderer::Init()
     textureTransform_[5] = 1.0f;
     textureTransform_[10] = 1.0f;
     textureTransform_[15] = 1.0f;
-    LOG("[op=%{public}d] GL renderer init begin", operationId_);
+    const char *glVersion = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+    const char *extensions = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
+    bool externalEssl3Supported = extensions != nullptr
+        && std::strstr(extensions, "GL_OES_EGL_image_external_essl3") != nullptr;
+    LOG("[op=%{public}d] GL renderer init begin version=%{public}s externalEssl3=%{public}d",
+        operationId_, glVersion == nullptr ? "unavailable" : glVersion, externalEssl3Supported ? 1 : 0);
     if (!BuildProgram()) {
+        if (lastError_.empty()) {
+            lastError_ = "shader program build failed";
+        }
         LOGE("[op=%{public}d] GL program build failed", operationId_);
         return false;
     }
@@ -158,12 +169,14 @@ bool GlRenderer::Init()
 
     image_ = OH_NativeImage_Create(oesTex_, GL_TEXTURE_EXTERNAL_OES);
     if (image_ == nullptr) {
+        lastError_ = "OH_NativeImage_Create failed";
         LOGE("[op=%{public}d] OH_NativeImage_Create failed", operationId_);
         return false;
     }
     OH_OnFrameAvailableListener listener = {this, &GlRenderer::OnFrameAvailable};
     int32_t listenerResult = OH_NativeImage_SetOnFrameAvailableListener(image_, listener);
     if (listenerResult != 0) {
+        lastError_ = "NativeImage frame listener registration failed";
         LOGE("[op=%{public}d] frame listener registration failed code=%{public}d",
             operationId_, listenerResult);
         return false;
@@ -172,6 +185,7 @@ bool GlRenderer::Init()
     LOG("[op=%{public}d] frame listener registered", operationId_);
     imageWindow_ = OH_NativeImage_AcquireNativeWindow(image_);
     if (imageWindow_ == nullptr) {
+        lastError_ = "OH_NativeImage_AcquireNativeWindow failed";
         LOGE("[op=%{public}d] AcquireNativeWindow failed", operationId_);
         return false;
     }
@@ -185,6 +199,7 @@ bool GlRenderer::BuildProgram()
     GLuint vsh = CompileShader(GL_VERTEX_SHADER, VSH, operationId_);
     GLuint fsh = CompileShader(GL_FRAGMENT_SHADER, FSH, operationId_);
     if (vsh == 0 || fsh == 0) {
+        lastError_ = "shader compilation failed";
         return false;
     }
     program_ = glCreateProgram();
@@ -196,6 +211,7 @@ bool GlRenderer::BuildProgram()
     GLint ok = 0;
     glGetProgramiv(program_, GL_LINK_STATUS, &ok);
     if (!ok) {
+        lastError_ = "shader program link failed";
         char log[512] = {0};
         glGetProgramInfoLog(program_, sizeof(log), nullptr, log);
         LOGE("[op=%{public}d] program link error: %{public}s", operationId_, log);
